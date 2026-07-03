@@ -1,15 +1,855 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nisa's Page</title>
-    <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-        iframe { width: 100%; height: 100%; border: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nisa - Perkenalan Diri</title>
+  <meta name="description" content="Hi, this is Nisa!">
+  <base target="_top">
+  <style>
+    :root{
+      --pink-1:#fff0f5;
+      --pink-2:#ffd6e8;
+      --pink-3:#ff9ebb;
+      --pink-4:#ff6fa5;
+      --pink-dark:#d63e79;
+      --text:#5c2a3d;
+      --card-bg:rgba(255,255,255,0.85);
+    }
+    body.dark{
+      --pink-1:#3a2230;
+      --pink-2:#2b1a26;
+      --pink-3:#7a3f5c;
+      --pink-4:#ff6fa5;
+      --pink-dark:#ff9ebb;
+      --text:#f6dce8;
+      --card-bg:rgba(35,20,30,0.85);
+      background:linear-gradient(160deg,#241119,#33172a 60%,#3a2230);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));
+      min-height:100vh;
+      color:var(--text);
+      display:flex;
+      justify-content:center;
+      padding:24px 14px;
+      overflow-x:hidden;
+    }
+    .app{ width:100%; max-width:420px; position:relative; z-index:2; }
+
+    /* ===== Floating petals background ===== */
+    #petals{
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      pointer-events:none;
+      z-index:1;
+    }
+    .petal{
+      position:absolute;
+      top:-40px;
+      font-size:18px;
+      opacity:0.75;
+      animation:petalFall linear infinite;
+    }
+    @keyframes petalFall{
+      0%{ transform:translateY(-40px) translateX(0) rotate(0deg); }
+      100%{ transform:translateY(110vh) translateX(20px) rotate(360deg); }
+    }
+
+    /* ===== Floating action buttons (top corner) ===== */
+    .fab-row{
+      position:fixed;
+      top:14px;
+      right:14px;
+      display:flex;
+      gap:8px;
+      z-index:20;
+    }
+    .fab-btn{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      border:none;
+      background:var(--card-bg);
+      backdrop-filter:blur(6px);
+      box-shadow:0 4px 12px rgba(214,62,121,0.25);
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:transform .15s ease;
+    }
+    .fab-btn:active{ transform:scale(0.9); }
+
+    /* ===== Splash / Intro ===== */
+    #splash{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));
+      z-index:999;
+      animation:splashOut .9s ease forwards;
+      animation-delay:1.1s;
+    }
+    #splash .splash-emoji{
+      font-size:52px;
+      animation:splashPop .7s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+    @keyframes splashPop{
+      0%{ transform:scale(0.15); opacity:0; }
+      60%{ transform:scale(1.15); opacity:1; }
+      100%{ transform:scale(1); opacity:1; }
+    }
+    @keyframes splashOut{
+      0%{ opacity:1; visibility:visible; }
+      99%{ opacity:0; visibility:visible; }
+      100%{ opacity:0; visibility:hidden; pointer-events:none; }
+    }
+
+    .card{
+      background:var(--card-bg);
+      backdrop-filter:blur(6px);
+      position:relative;
+      z-index:2;
+      border-radius:22px;
+      padding:28px 22px;
+      box-shadow:0 10px 30px rgba(214,62,121,0.25);
+      transform:scale(0.15);
+      opacity:0;
+      animation:cardGrow .8s cubic-bezier(.34,1.56,.64,1) forwards;
+      animation-delay:1.15s;
+      transform-origin:center center;
+    }
+    @keyframes cardGrow{
+      0%{ opacity:0; transform:scale(0.15); }
+      70%{ opacity:1; transform:scale(1.03); }
+      100%{ opacity:1; transform:scale(1); }
+    }
+
+    .emoji-float{
+      text-align:center;
+      font-size:38px;
+      margin-bottom:6px;
+      animation:float 3s ease-in-out infinite;
+    }
+    @keyframes float{
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-8px);}
+    }
+
+    h1{ text-align:center; font-size:22px; color:var(--pink-dark); margin-bottom:6px; line-height:1.4; }
+    .subtitle{ text-align:center; font-size:13px; color:#a1526f; margin-bottom:24px; }
+    .greeting{
+      text-align:center;
+      font-size:12.5px;
+      color:var(--pink-dark);
+      background:var(--pink-1);
+      border-radius:999px;
+      padding:6px 14px;
+      margin:0 auto 18px;
+      width:fit-content;
+      font-weight:600;
+    }
+
+    .menu-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:6px;
+    }
+    .menu-grid-center{
+      display:flex;
+      justify-content:center;
+      margin-top:12px;
+      margin-bottom:6px;
+    }
+    .menu-btn{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:100%;
+      aspect-ratio:1/0.85;
+      padding:14px 10px;
+      border:none;
+      border-radius:18px;
+      background:linear-gradient(135deg,#ffffff,var(--pink-1));
+      color:var(--pink-dark);
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 4px 12px rgba(255,111,165,0.25);
+      transition:transform .15s ease, box-shadow .15s ease;
+      text-align:center;
+    }
+    .menu-btn:active{ transform:scale(0.96); box-shadow:0 2px 6px rgba(255,111,165,0.3); }
+    .menu-btn .ic{ font-size:26px; }
+    .menu-btn-wide{
+      max-width:200px;
+      aspect-ratio:auto;
+      padding:16px 22px;
+    }
+
+    .back-wrap{ display:flex; justify-content:center; margin-top:22px; }
+    .back-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:11px 22px;
+      border:none;
+      border-radius:999px;
+      background:var(--pink-4);
+      color:#fff;
+      font-weight:600;
+      font-size:14px;
+      cursor:pointer;
+      transition:transform .15s ease, background .15s ease;
+    }
+    .back-btn:active{ transform:scale(0.95); background:var(--pink-dark); }
+
+    .page{ display:none; }
+    .page.active{ display:block; animation:slideIn .35s ease; }
+    @keyframes slideIn{
+      from{ opacity:0; transform:translateX(14px); }
+      to{ opacity:1; transform:translateX(0); }
+    }
+
+    .section-title{ font-size:19px; color:var(--pink-dark); margin-bottom:16px; text-align:center; }
+
+    .profile-photos{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-bottom:18px;
+    }
+    .profile-photos img{
+      width:100%;
+      aspect-ratio:1/1;
+      object-fit:cover;
+      border-radius:14px;
+      border:2px solid #fff;
+      box-shadow:0 4px 10px rgba(255,111,165,0.3);
+      cursor:pointer;
+      transition:transform .2s ease;
+      loading:lazy;
+    }
+    .profile-photos img:active{ transform:scale(0.95); }
+
+    .info-row{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      padding:12px 14px;
+      background:var(--pink-1);
+      border-radius:14px;
+      margin-bottom:10px;
+      border-left:4px solid var(--pink-3);
+    }
+    .info-label{ font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:#b45a7e; font-weight:700; }
+    .info-value{ font-size:14.5px; line-height:1.5; }
+
+    ul.list{ list-style:none; }
+    ul.list li{
+      background:var(--pink-1);
+      padding:11px 14px;
+      border-radius:12px;
+      margin-bottom:8px;
+      font-size:14.5px;
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+    }
+    ul.list li::before{ content:"🌸"; flex-shrink:0; }
+
+    .lk-block{ margin-bottom:16px; }
+    .lk-title{ font-weight:700; font-size:15px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+    .yikes li::before{ content:"🚫"; }
+
+    .acc-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      background:var(--pink-1);
+      padding:12px 14px;
+      border-radius:14px;
+      margin-bottom:10px;
+      text-decoration:none;
+      color:inherit;
+      transition:transform .15s ease;
+      position:relative;
+    }
+    .acc-item:active{ transform:scale(0.97); }
+    .acc-ic{ font-size:20px; width:26px; text-align:center; }
+    .acc-text{ font-size:14px; flex:1; }
+    .acc-platform{ font-size:11px; color:#b45a7e; font-weight:700; text-transform:uppercase; }
+
+    footer{ text-align:center; font-size:11px; color:#c17b95; margin-top:18px; }
+    .footer-date{
+      text-align:center;
+      font-size:11px;
+      color:#b45a7e;
+      margin-top:4px;
+      font-weight:600;
+    }
+
+    /* Scroll to top */
+    #toTop{
+      position:fixed;
+      right:18px;
+      bottom:70px;
+      background:var(--pink-4);
+      color:#fff;
+      border:none;
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      font-size:16px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index:15;
+    }
+    #toTop.show{ display:flex; }
+
+    .audio-hint{
+      position:fixed;
+      bottom:16px;
+      left:50%;
+      transform:translateX(-50%);
+      background:var(--pink-4);
+      color:#fff;
+      font-size:12px;
+      font-weight:600;
+      padding:8px 16px;
+      border-radius:999px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+      z-index:10;
+      transition:opacity .3s ease;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .audio-hint.hide{ opacity:0; pointer-events:none; }
+
+    .toast{
+      position:fixed;
+      top:20px;
+      left:50%;
+      transform:translateX(-50%) translateY(-40px);
+      background:var(--pink-dark);
+      color:#fff;
+      font-size:12.5px;
+      font-weight:600;
+      padding:9px 18px;
+      border-radius:999px;
+      z-index:50;
+      opacity:0;
+      transition:all .3s ease;
+      white-space:nowrap;
+    }
+    .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* ===== Share modal ===== */
+    #shareOverlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.45);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      z-index:60;
+    }
+    #shareOverlay.show{ display:flex; }
+    .share-sheet{
+      width:100%;
+      max-width:420px;
+      background:var(--card-bg);
+      backdrop-filter:blur(10px);
+      border-radius:22px 22px 0 0;
+      padding:20px 20px 26px;
+      animation:sheetUp .3s ease;
+    }
+    @keyframes sheetUp{
+      from{ transform:translateY(100%); }
+      to{ transform:translateY(0); }
+    }
+    .share-sheet h3{
+      text-align:center;
+      font-size:15px;
+      color:var(--pink-dark);
+      margin-bottom:16px;
+    }
+    .share-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-bottom:16px;
+    }
+    .share-opt{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:var(--text);
+      font-size:11px;
+      text-decoration:none;
+    }
+    .share-opt .ic-wrap{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      color:#fff;
+    }
+    .share-opt:active .ic-wrap{ transform:scale(0.92); }
+    .sc-wa{ background:#25D366; }
+    .sc-fb{ background:#1877F2; }
+    .sc-tw{ background:#000; }
+    .sc-tg{ background:#26A5E4; }
+    .sc-em{ background:#EA4335; }
+    .sc-cp{ background:var(--pink-4); }
+    .share-close{
+      display:block;
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:14px;
+      background:var(--pink-1);
+      color:var(--pink-dark);
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+    }
+
+    /* ===== Vibe Coding page ===== */
+    .vc-intro{
+      text-align:center;
+      font-size:13.5px;
+      color:var(--text);
+      margin-bottom:20px;
+      line-height:1.6;
+    }
+    .vc-card{
+      background:var(--pink-1);
+      border-radius:16px;
+      margin-bottom:14px;
+      overflow:hidden;
+      border-left:4px solid var(--pink-3);
+    }
+    .vc-card-img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-bottom:2px solid var(--pink-2);
+    }
+    .vc-card-body{ padding:12px 14px; }
+    .vc-card-title{
+      font-weight:700;
+      font-size:15px;
+      color:var(--pink-dark);
+      margin-bottom:4px;
+    }
+    .vc-card-desc{
+      font-size:13px;
+      line-height:1.5;
+      color:var(--text);
+    }
+    .vc-tbc{
+      text-align:center;
+      font-size:13px;
+      color:#b45a7e;
+      font-style:italic;
+      margin-top:6px;
+      margin-bottom:4px;
+    }
+  </style>
 </head>
 <body>
-    <iframe src="https://script.google.com/macros/s/AKfycbzQMxo4RqzjcMVlDAU-zlg1T7kCI5liRxr9ePkQyJSBK8L1x8eSZHh6WIGStCEJSXAi/exec"></iframe>
+  <div id="splash">
+    <div class="splash-emoji">🌷🎀</div>
+  </div>
+
+  <div id="petals"></div>
+
+  <div class="fab-row">
+    <button class="fab-btn" id="themeBtn" onclick="toggleTheme()" title="Ganti tema">🌙</button>
+    <button class="fab-btn" id="musicBtn" onclick="toggleMusic()" title="Musik">🎵</button>
+    <button class="fab-btn" id="shareBtn" onclick="sharePage()" title="Bagikan">🔗</button>
+  </div>
+
+  <div class="app">
+    <div class="card">
+
+      <!-- HOME -->
+      <div id="page-home" class="page active">
+        <div class="emoji-float">🌷🎀</div>
+        <h1>Hai, Selamat Datang di<br>Halaman Si Nisa</h1>
+        <p class="subtitle">Silakan pencet salah satu tombol di bawah ini ya~</p>
+        <div class="greeting" id="greeting"></div>
+        <div class="menu-grid">
+          <button class="menu-btn" onclick="showPage('profil')">
+            <span class="ic">🧕</span> Profil
+          </button>
+          <button class="menu-btn" onclick="showPage('hobi')">
+            <span class="ic">🎨</span> Hobi
+          </button>
+          <button class="menu-btn" onclick="showPage('likes')">
+            <span class="ic">💗</span> Likes & Yikes
+          </button>
+          <button class="menu-btn" onclick="showPage('akun')">
+            <span class="ic">📱</span> Akunku
+          </button>
+        </div>
+        <div class="menu-grid-center">
+          <button class="menu-btn menu-btn-wide" onclick="showPage('vibecoding')">
+            <span class="ic">💻</span> Vibe Coding By Me
+          </button>
+        </div>
+      </div>
+
+      <!-- PROFIL -->
+      <div id="page-profil" class="page">
+        <div class="section-title">🧕 Profil</div>
+        <div class="profile-photos">
+          <img src="https://lh3.googleusercontent.com/d/10KYG-FMao741N49uGy5H5ldeQ3h0MfDL" alt="Foto Nisa 1" loading="lazy">
+          <img src="https://lh3.googleusercontent.com/d/1QqqaYvB38N-Co6jHaZ3RWnX2hm4-oknO" alt="Foto Nisa 2" loading="lazy">
+          <img src="https://lh3.googleusercontent.com/d/1fU5b1BI29OR8akS9tnDyP794WTJzbQNg" alt="Foto Nisa 3" loading="lazy">
+        </div>
+        <div class="info-row">
+          <span class="info-label">Nama</span>
+          <span class="info-value">Mauludiya Annisa Nurhakiki</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Tahun Kelahiran</span>
+          <span class="info-value">2001</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Pendidikan</span>
+          <span class="info-value">SMAN 1 Kedungwaru, Tulungagung<br>Teknik Elektro, Universitas Brawijaya</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Domisili Saat Ini</span>
+          <span class="info-value">Ngawi, Jawa Timur</span>
+        </div>
+        <div class="back-wrap">
+          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
+        </div>
+      </div>
+
+      <!-- HOBI -->
+      <div id="page-hobi" class="page">
+        <div class="section-title">🎨 Hobi</div>
+        <ul class="list">
+          <li>Bernyanyi</li>
+          <li>Menonton dracin, drakor, dan anime</li>
+          <li>Belajar bahasa Korea dan Cina (tapi jangan tanya progressnya gimana wkwk)</li>
+          <li>Dengerin musik</li>
+          <li>Stargazing</li>
+          <li>Vibe coding dengan AI</li>
+          <li>Tutoring mata pelajaran anak sekolah (udah lama nggak jadi tutor sih)</li>
+          <li>Ngebantu nyelesaiin tugas ilmiah (tesis, skripsi, laporan PKL) temen maupun orang-orang random</li>
+        </ul>
+        <div class="back-wrap">
+          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
+        </div>
+      </div>
+
+      <!-- LIKES & YIKES -->
+      <div id="page-likes" class="page">
+        <div class="section-title">💗 Likes & Yikes</div>
+        <div class="lk-block">
+          <div class="lk-title">💕 Likes</div>
+          <ul class="list">
+            <li>Semua yang berkaitan dengan stroberi dan warna merah jambu</li>
+            <li>Air putih</li>
+            <li>Sop iga</li>
+            <li>Sate kambing</li>
+          </ul>
+        </div>
+        <div class="lk-block">
+          <div class="lk-title">😖 Yikes</div>
+          <ul class="list yikes">
+            <li>Durian</li>
+            <li>Durian</li>
+            <li>Durian</li>
+          </ul>
+        </div>
+        <div class="back-wrap">
+          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
+        </div>
+      </div>
+
+      <!-- AKUNKU -->
+      <div id="page-akun" class="page">
+        <div class="section-title">📱 Akunku</div>
+        <a class="acc-item" href="https://www.instagram.com/maulnnisa/?hl=en" target="_blank" rel="noopener">
+          <div class="acc-ic">📸</div>
+          <div class="acc-text">
+            <div class="acc-platform">Instagram</div>
+            @maulnnisa
+          </div>
+        </a>
+        <a class="acc-item" href="https://www.instagram.com/cilantrobook/?hl=en" target="_blank" rel="noopener">
+          <div class="acc-ic">📸</div>
+          <div class="acc-text">
+            <div class="acc-platform">Instagram</div>
+            @cilantrobook
+          </div>
+        </a>
+        <a class="acc-item" href="https://www.facebook.com/nisaya.nisayaa/" target="_blank" rel="noopener">
+          <div class="acc-ic">👥</div>
+          <div class="acc-text">
+            <div class="acc-platform">Facebook</div>
+            Nisaya Nisayaa
+          </div>
+        </a>
+        <a class="acc-item" href="https://www.duolingo.com/profile/maulnnisa?via=share_profile_qr" target="_blank" rel="noopener">
+          <div class="acc-ic">🦉</div>
+          <div class="acc-text">
+            <div class="acc-platform">Duolingo</div>
+            @MAULNNISA
+          </div>
+        </a>
+        <div class="back-wrap">
+          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
+        </div>
+      </div>
+
+      <!-- VIBE CODING BY ME -->
+      <div id="page-vibecoding" class="page">
+        <div class="section-title">💻 Vibe Coding By Me</div>
+        <p class="vc-intro">Di bawah ini adalah hasil vibe coding ku ^^</p>
+        <div class="vc-card">
+          <img class="vc-card-img" src="https://lh3.googleusercontent.com/d/1v3fCOcAMD8AydLXtQ4Go2e_FUx7h8fdO" alt="SODA" loading="lazy">
+          <div class="vc-card-body">
+            <div class="vc-card-title">1. SODA</div>
+            <div class="vc-card-desc">Webpage ini diajukan menjadi inovasi unit kerjaku yeay ^^</div>
+          </div>
+        </div>
+        <div class="vc-card">
+          <img class="vc-card-img" src="https://lh3.googleusercontent.com/d/1IVkeKf_JtdsILbYXcI-qh1QLSpEc1tQl" alt="Lapak Bulanan" loading="lazy">
+          <div class="vc-card-body">
+            <div class="vc-card-title">2. Lapak Bulanan</div>
+            <div class="vc-card-desc">Webpage ini buat mempermudah jobdescku</div>
+          </div>
+        </div>
+        <div class="vc-card">
+          <img class="vc-card-img" src="https://lh3.googleusercontent.com/d/1tqoQTeJCn3Fr75b5h1n2blI6GRhp500X" alt="SIPEKAD" loading="lazy">
+          <div class="vc-card-body">
+            <div class="vc-card-title">3. SIPEKAD</div>
+            <div class="vc-card-desc">Ini webpage dibuat karena temenku yang latsar ga nuntasin tugas dia dan berakhir dgn aku yang ngerjain app ini semuanya 😅</div>
+          </div>
+        </div>
+        <p class="vc-tbc">~ to be continued ~</p>
+        <div class="back-wrap">
+          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
+        </div>
+      </div>
+
+      <footer>
+        made with 🩷 by Nisa
+        <div class="footer-date" id="footerDate"></div>
+      </footer>
+    </div>
+  </div>
+
+  <button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️</button>
+  <div class="toast" id="toast"></div>
+
+  <div id="shareOverlay" onclick="if(event.target===this) closeShareSheet()">
+    <div class="share-sheet">
+      <h3>Bagikan Halamannya Nisa</h3>
+      <div class="share-grid">
+        <a class="share-opt" id="shareWA" target="_blank" rel="noopener">
+          <span class="ic-wrap sc-wa">💬</span> WhatsApp
+        </a>
+        <a class="share-opt" id="shareFB" target="_blank" rel="noopener">
+          <span class="ic-wrap sc-fb">f</span> Facebook
+        </a>
+        <a class="share-opt" id="shareTW" target="_blank" rel="noopener">
+          <span class="ic-wrap sc-tw">𝕏</span> Twitter
+        </a>
+        <a class="share-opt" id="shareTG" target="_blank" rel="noopener">
+          <span class="ic-wrap sc-tg">✈️</span> Telegram
+        </a>
+        <a class="share-opt" id="shareEM" target="_blank" rel="noopener">
+          <span class="ic-wrap sc-em">✉️</span> Email
+        </a>
+        <button class="share-opt" onclick="copyShareLink()">
+          <span class="ic-wrap sc-cp">🔗</span> Copy Link
+        </button>
+      </div>
+      <button class="share-close" onclick="closeShareSheet()">Tutup</button>
+    </div>
+  </div>
+
+  <div id="audioHint" class="audio-hint" onclick="manualPlay()">🎵 Tap di sini untuk nyalain musik</div>
+
+  <!-- Audio langsung dari Google Drive, preload=none agar tidak memperlambat load awal -->
+  <audio id="bgAudio" loop preload="none"
+    src="https://drive.google.com/uc?export=download&id=1LgZ_yyydqcjMpFR1i7w9UiVbRKO7CIFf">
+  </audio>
+
+  <script>
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+      document.getElementById('page-' + name).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    // ===== Live date (Indonesian) in footer =====
+    (function setFooterDate(){
+      var hariList = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+      var bulanList = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+      var now = new Date();
+      var text = hariList[now.getDay()] + ", " + now.getDate() + " " + bulanList[now.getMonth()] + " " + now.getFullYear();
+      document.getElementById('footerDate').textContent = "📅 " + text;
+
+      var h = now.getHours();
+      var greet = "Selamat malam";
+      if (h >= 4 && h < 11) greet = "Selamat pagi";
+      else if (h >= 11 && h < 15) greet = "Selamat siang";
+      else if (h >= 15 && h < 18) greet = "Selamat sore";
+      document.getElementById('greeting').textContent = "✨ " + greet + ", makasih udah mampir di webku~~";
+    })();
+
+    // ===== Toast helper =====
+    function showToast(msg){
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 1800);
+    }
+
+    // ===== Copy link on long-press of account items =====
+    document.querySelectorAll('.acc-item').forEach(function(item){
+      item.addEventListener('contextmenu', function(e){
+        e.preventDefault();
+        navigator.clipboard && navigator.clipboard.writeText(item.href).then(function(){
+          showToast('Link disalin! 📋');
+        });
+      });
+    });
+
+    // ===== Scroll-to-top button visibility =====
+    window.addEventListener('scroll', function(){
+      var btn = document.getElementById('toTop');
+      if (window.scrollY > 200) btn.classList.add('show');
+      else btn.classList.remove('show');
+    });
+
+    // ===== Tap photo to view larger =====
+    document.querySelectorAll('.profile-photos img').forEach(function(img){
+      img.addEventListener('click', function(){ window.open(img.src, '_blank'); });
+    });
+
+    // ===== Audio =====
+    var audio = document.getElementById('bgAudio');
+    var audioStarted = false;
+    var musicBtn = document.getElementById('musicBtn');
+
+    function manualPlay() {
+      if (audioStarted) return;
+      audio.play().then(function () {
+        audioStarted = true;
+        document.getElementById('audioHint').classList.add('hide');
+        musicBtn.textContent = '🎵';
+      }).catch(function () {});
+    }
+
+    function toggleMusic(){
+      if (!audioStarted) { manualPlay(); return; }
+      if (audio.paused) {
+        audio.play();
+        musicBtn.textContent = '🎵';
+      } else {
+        audio.pause();
+        musicBtn.textContent = '🔇';
+      }
+    }
+
+    window.addEventListener('load', manualPlay);
+    document.addEventListener('click', manualPlay, { once:true });
+    document.addEventListener('touchstart', manualPlay, { once:true });
+
+    // ===== Dark / light theme toggle =====
+    function toggleTheme(){
+      document.body.classList.toggle('dark');
+      var isDark = document.body.classList.contains('dark');
+      document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+      showToast(isDark ? 'Mode gelap aktif 🌙' : 'Mode terang aktif ☀️');
+    }
+
+    var PUBLIC_URL = 'https://nisapage.github.io/me/';
+
+    // ===== Share button =====
+    function sharePage(){
+      var url = PUBLIC_URL;
+      var text = 'Ini webpagenya Nisa!';
+      if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        navigator.share({ title: 'Halamannya Nisa', text: text, url: url }).catch(function(){});
+        return;
+      }
+      document.getElementById('shareWA').href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + url);
+      document.getElementById('shareFB').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+      document.getElementById('shareTW').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url);
+      document.getElementById('shareTG').href = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
+      document.getElementById('shareEM').href = 'mailto:?subject=' + encodeURIComponent('Halamannya Nisa') + '&body=' + encodeURIComponent(text + ' ' + url);
+      document.getElementById('shareOverlay').classList.add('show');
+    }
+
+    function closeShareSheet(){
+      document.getElementById('shareOverlay').classList.remove('show');
+    }
+
+    function copyShareLink(){
+      var url = PUBLIC_URL;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function(){
+          showToast('Link disalin! 📋');
+          closeShareSheet();
+        });
+      }
+    }
+
+    // ===== Floating petals background ===== (dikurangi jadi 8)
+    (function initPetals(){
+      var emojis = ['🌸','🌷','🎀','💮'];
+      var container = document.getElementById('petals');
+      var count = 8;
+      for (var i = 0; i < count; i++) {
+        var p = document.createElement('div');
+        p.className = 'petal';
+        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.fontSize = (14 + Math.random() * 14) + 'px';
+        var duration = 9 + Math.random() * 10;
+        p.style.animationDuration = duration + 's';
+        p.style.animationDelay = (Math.random() * duration) + 's';
+        container.appendChild(p);
+      }
+    })();
+
+    // Remove splash from flow after animation
+    setTimeout(function(){
+      var s = document.getElementById('splash');
+      if (s) s.style.display = 'none';
+    }, 2100);
+  </script>
 </body>
 </html>
