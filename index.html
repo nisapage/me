@@ -532,7 +532,7 @@
       var div = document.createElement('div');
       div.className = 'gb-card-new';
       div.id = 'gbDraftCard';
-      div.innerHTML = '<div class="gb-card-new-q">🙋 '+escHtml(pesan)+'</div><div class="gb-card-new-status">⏳ Pesanmu terkirim! Tunggu jawaban dari Nisa ya~ 🌸</div>';
+      div.innerHTML = '<div class="gb-card-new-q">🙋 '+escHtml(pesan)+'</div><div class="gb-card-new-status">⏳ Pesanmu terkirim!~ 🌸</div>';
       el.insertBefore(div, el.firstChild);
     }
 
@@ -684,7 +684,7 @@ function tampilTombolMore() {
   if (item.jawaban) {
     jawabanHtml = '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>';
   } else if (!isAdmin) {
-    jawabanHtml = '<div class="gb-card-a" style="color:#b45a7e;font-style:italic;font-size:12.5px;">⏳ Belum dijawab Nisa~</div>';
+    jawabanHtml = '<div class="gb-card-a" style="color:#b45a7e;font-style:italic;font-size:12.5px;">⏳ Belum dijawab~</div>';
   }
 
   var adminHtml = '';
