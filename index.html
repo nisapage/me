@@ -207,7 +207,6 @@
     .vc-card-title{font-weight:700;font-size:15px;color:var(--pink-dark);margin-bottom:4px;}
     .vc-card-desc{font-size:13px;line-height:1.5;color:var(--text);}
     .vc-tbc{text-align:center;font-size:13px;color:#b45a7e;font-style:italic;margin-top:6px;margin-bottom:4px;}
-
     /* ===== Guestbook ===== */
     .gb-intro{
       text-align:center;font-size:13px;color:var(--text);
@@ -246,7 +245,6 @@
     .gb-card-date{font-size:10.5px;color:#c17b95;margin-top:8px;text-align:right;}
     .gb-empty{text-align:center;font-size:13px;color:#c17b95;padding:20px 0;font-style:italic;}
     .gb-loading{text-align:center;font-size:13px;color:#b45a7e;padding:16px 0;}
-
     /* Skeleton loading */
     .gb-skeleton{
       background:var(--pink-1);border-radius:16px;margin-bottom:12px;
@@ -267,7 +265,6 @@
       0%,100%{opacity:1;}
       50%{opacity:0.45;}
     }
-
     /* Pesan baru yang baru dikirim (tampil lokal dulu) */
     .gb-card-new{
       background:var(--pink-1);border-radius:16px;margin-bottom:12px;
@@ -276,8 +273,7 @@
     }
     .gb-card-new-q{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:8px;}
     .gb-card-new-status{font-size:11.5px;color:#b45a7e;font-style:italic;}
-
-    /* ===== Admin mode (disembunyikan di dalam kartu) ===== */
+    /* ===== Admin mode ===== */
     .gb-admin-inline{
       display:none;margin-top:10px;border-top:1px dashed var(--pink-2);padding-top:10px;
     }
@@ -303,8 +299,6 @@
     }
     .gb-badge-show{background:#d4edda;color:#155724;}
     .gb-badge-hide{background:#f8d7da;color:#721c24;}
-
-    /* Login bar di atas */
     .gb-login-bar{
       display:flex;align-items:center;gap:8px;
       background:var(--pink-1);border-radius:14px;padding:10px 14px;
@@ -335,13 +329,11 @@
 <body>
   <div id="splash"><div class="splash-emoji">🌷🎀</div></div>
   <div id="petals"></div>
-
   <div class="fab-row">
     <button class="fab-btn" id="themeBtn" onclick="toggleTheme()" title="Ganti tema">🌙</button>
     <button class="fab-btn" id="musicBtn" onclick="toggleMusic()" title="Musik">🎵</button>
     <button class="fab-btn" id="shareBtn" onclick="sharePage()" title="Bagikan">🔗</button>
   </div>
-
   <div class="app">
     <div class="card">
 
@@ -458,36 +450,29 @@
       <!-- GUESTBOOK / QNA -->
       <div id="page-guestbook" class="page">
         <div class="section-title">💌 QnA</div>
-
         <div class="gb-intro">
           Mau nanya sesuatu? Kirim aja anonim di sini<br>
           Nanti jawaban akan dikirim di bawah pertanyaannya 🌸
         </div>
-
         <!-- Form kirim pesan -->
         <div class="gb-form">
           <textarea class="gb-textarea" id="gbPesan" placeholder="Tulis pertanyaan atau pesanmu di sini..."></textarea>
           <button class="gb-send" id="gbSendBtn" onclick="kirimPesan()">Kirim Anonim 💌</button>
         </div>
-
-        <!-- ===== SECTION LOGIN NISA ===== -->
-        <!-- Kalau belum login: tampil input PIN kecil -->
+        <!-- Login Nisa -->
         <div id="gbLoginSection">
           <div class="gb-login-bar" id="gbLoginBar">
             <input type="password" id="gbPinInput" placeholder="Masukkan sandi..." onkeydown="if(event.key==='Enter') loginAdmin()">
             <button onclick="loginAdmin()">🔑 Masuk</button>
           </div>
-          <!-- Kalau sudah login: tampil bar nama + tombol logout -->
           <div class="gb-admin-bar" id="gbAdminBar" style="display:none">
             <span>✅ Halo Nisa! Mode admin aktif~</span>
             <button class="gb-logout-btn" onclick="logoutAdmin()">Keluar</button>
           </div>
         </div>
-
-        <!-- Pesan publik yang sudah dijawab -->
+        <!-- Pesan publik -->
         <div class="gb-divider">💬 Jawaban Ada di Sini</div>
         <div id="gbPublikList"><div class="gb-loading">Memuat pesan... 🌸</div></div>
-
         <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
       </div>
 
@@ -495,7 +480,6 @@
         made with 🩷 by Nisa
         <div class="footer-date" id="footerDate"></div>
       </footer>
-
     </div>
   </div>
 
@@ -525,10 +509,45 @@
 
   <audio id="bgAudio" loop preload="none" src="aa.mp3"></audio>
 
+  <!-- ======================================================= -->
+  <!-- FIREBASE SDK (type=module, expose ke window)            -->
+  <!-- ======================================================= -->
+  <script type="module">
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc,
+      query, where, orderBy, limit, getDocs, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOaG8b2eRXTYjBf77rokYk2h-_bZ5H-C4",
+      authDomain: "nisa-guestbook.firebaseapp.com",
+      projectId: "nisa-guestbook",
+      storageBucket: "nisa-guestbook.firebasestorage.app",
+      messagingSenderId: "35103453074",
+      appId: "1:35103453074:web:3252b2d5f68831a9049b4b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // Expose ke script global (non-module)
+    window._db = db;
+    window._fb = { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp };
+
+    // Setelah Firebase siap, baru jalankan init utama
+    window.dispatchEvent(new Event('firebaseReady'));
+  </script>
+
+  <!-- ======================================================= -->
+  <!-- SCRIPT UTAMA                                            -->
+  <!-- ======================================================= -->
   <script>
+    // GAS URL — tetap dipakai HANYA untuk fungsi admin
     var GAS_URL = 'https://script.google.com/macros/s/AKfycbwAUZkNvaMnuf77gdg6G98ncuaPT3ULd0j0iAYy6zgWZCQIWfntnuO9RKg0FZZ-0-fp/exec';
     var adminPin = '';
-    var isAdmin = false;
+    var isAdmin  = false;
 
     // ===== Page navigation =====
     function showPage(name) {
@@ -540,10 +559,11 @@
 
     // ===== Footer date & greeting =====
     (function(){
-      var hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-      var bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-      var now = new Date();
-      document.getElementById('footerDate').textContent = "📅 " + hari[now.getDay()] + ", " + now.getDate() + " " + bulan[now.getMonth()] + " " + now.getFullYear();
+      var hari   = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+      var bulan  = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+      var now    = new Date();
+      document.getElementById('footerDate').textContent =
+        "📅 " + hari[now.getDay()] + ", " + now.getDate() + " " + bulan[now.getMonth()] + " " + now.getFullYear();
       var h = now.getHours();
       var greet = h>=4&&h<11?"Selamat pagi":h>=11&&h<15?"Selamat siang":h>=15&&h<18?"Selamat sore":"Selamat malam";
       document.getElementById('greeting').textContent = "✨ " + greet + ", semoga harimu menyenangkan~~";
@@ -571,11 +591,11 @@
     });
 
     // ===== Audio & Now Playing =====
-    var audio = document.getElementById('bgAudio');
+    var audio        = document.getElementById('bgAudio');
     var audioStarted = false;
-    var musicBtn = document.getElementById('musicBtn');
-    var npEl = document.getElementById('nowPlaying');
-    var npIcon = document.getElementById('npIcon');
+    var musicBtn     = document.getElementById('musicBtn');
+    var npEl         = document.getElementById('nowPlaying');
+    var npIcon       = document.getElementById('npIcon');
 
     function manualPlay(){
       if (audioStarted) return;
@@ -632,17 +652,17 @@
 
     // ===== Petals =====
     (function(){
-      var emojis = ['🌸','🌷','🎀','💮'];
+      var emojis    = ['🌸','🌷','🎀','💮'];
       var container = document.getElementById('petals');
       for (var i = 0; i < 8; i++){
         var p = document.createElement('div');
-        p.className = 'petal';
+        p.className   = 'petal';
         p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-        p.style.left = Math.random()*100 + 'vw';
+        p.style.left  = Math.random()*100 + 'vw';
         p.style.fontSize = (14+Math.random()*14) + 'px';
         var d = 9+Math.random()*10;
         p.style.animationDuration = d + 's';
-        p.style.animationDelay = (Math.random()*d) + 's';
+        p.style.animationDelay   = (Math.random()*d) + 's';
         container.appendChild(p);
       }
     })();
@@ -657,66 +677,19 @@
       });
     });
 
-    // ============================================
-    // GUESTBOOK
-    // ============================================
+    // ============================================================
+    // GUESTBOOK — baca & kirim pakai Firebase, admin tetap GAS
+    // ============================================================
 
+    // ── Helper GAS post (hanya untuk admin) ──────────────────────
     function gasPost(payload, cb){
-      fetch(GAS_URL, {
-        method:'POST',
-        body: JSON.stringify(payload)
-      })
-      .then(function(r){ return r.json(); })
-      .then(cb)
-      .catch(function(){ showToast('Koneksi gagal, coba lagi 😢'); });
+      fetch(GAS_URL, { method:'POST', body: JSON.stringify(payload) })
+        .then(function(r){ return r.json(); })
+        .then(cb)
+        .catch(function(){ showToast('Koneksi gagal, coba lagi 😢'); });
     }
 
-    // ─── Kirim pesan anonim ───
-    // Pesan langsung muncul di bawah tanpa perlu reload
-    function kirimPesan(){
-      var pesan = document.getElementById('gbPesan').value.trim();
-      if (!pesan){ showToast('Pesannya kosong nih! 🌸'); return; }
-
-      var btn = document.getElementById('gbSendBtn');
-      btn.disabled = true;
-      btn.textContent = 'Mengirim... 🌸';
-
-      // Tampilkan dulu di atas daftar (optimistic UI)
-      tampilPesanBaru(pesan);
-
-      gasPost({ action:'kirim', pesan:pesan }, function(res){
-        btn.disabled = false;
-        btn.textContent = 'Kirim Anonim 💌';
-        if (res.ok){
-          document.getElementById('gbPesan').value = '';
-          showToast(res.msg || 'Pesanmu terkirim! 🌸');
-        } else {
-          // Kalau gagal, hapus kartu yang sudah ditampilkan
-          var draft = document.getElementById('gbDraftCard');
-          if (draft) draft.remove();
-          showToast(res.msg || 'Gagal kirim 😢');
-        }
-      });
-    }
-
-    // Tampilkan pesan yang baru dikirim langsung (sebelum dijawab)
-    function tampilPesanBaru(pesan){
-      // Hapus draft lama kalau ada
-      var old = document.getElementById('gbDraftCard');
-      if (old) old.remove();
-
-      var el = document.getElementById('gbPublikList');
-      var div = document.createElement('div');
-      div.className = 'gb-card-new';
-      div.id = 'gbDraftCard';
-      div.innerHTML =
-        '<div class="gb-card-new-q">🙋 ' + escHtml(pesan) + '</div>' +
-        '<div class="gb-card-new-status">⏳ Pesanmu terkirim! Tunggu jawaban dari Nisa ya~ 🌸</div>';
-      // Sisipkan sebelum daftar publik
-      el.insertBefore(div, el.firstChild);
-    }
-
-    // ─── Skeleton placeholder ───
+    // ── Skeleton placeholder ─────────────────────────────────────
     function skelHtml(){
       return '<div class="gb-skeleton">' +
                '<div class="skel-line w80"></div>' +
@@ -725,41 +698,120 @@
              '</div>';
     }
 
-    // ─── Load pesan publik (hanya 3 terbaru untuk cepat) ───
-    function loadPublik(){
-  var el = document.getElementById('gbPublikList');
-  el.innerHTML = skelHtml() + skelHtml() + skelHtml();
+    // ── escHtml ───────────────────────────────────────────────────
+    function escHtml(str){
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
-  // Pakai GET bukan POST
-  fetch(GAS_URL)
-    .then(function(r){ return r.json(); })
-    .then(function(res){
-      el.innerHTML = '';
-      if (!res.ok || !res.data || res.data.length === 0){
-        el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
+    // ── Tampilkan kartu optimistic (sebelum dijawab) ──────────────
+    function tampilPesanBaru(pesan){
+      var old = document.getElementById('gbDraftCard');
+      if (old) old.remove();
+      var el  = document.getElementById('gbPublikList');
+      var div = document.createElement('div');
+      div.className = 'gb-card-new';
+      div.id        = 'gbDraftCard';
+      div.innerHTML =
+        '<div class="gb-card-new-q">🙋 ' + escHtml(pesan) + '</div>' +
+        '<div class="gb-card-new-status">⏳ Pesanmu terkirim! Tunggu jawaban dari Nisa ya~ 🌸</div>';
+      el.insertBefore(div, el.firstChild);
+    }
+
+    // ── Kirim pesan → Firestore ───────────────────────────────────
+    function kirimPesan(){
+      var pesan = document.getElementById('gbPesan').value.trim();
+      if (!pesan){ showToast('Pesannya kosong nih! 🌸'); return; }
+
+      // Tunggu Firebase siap
+      if (!window._fb){
+        showToast('Koneksi sedang disiapkan, coba lagi 🌸');
         return;
       }
-      res.data.forEach(function(item){
-        el.appendChild(buatKartuPublik(item));
-      });
-    })
-    .catch(function(){ el.innerHTML = '<div class="gb-empty">Gagal memuat pesan 😢</div>'; });
-}
 
-    // Buat elemen kartu publik (bisa dengan tombol admin kalau mode admin aktif)
+      var btn = document.getElementById('gbSendBtn');
+      btn.disabled    = true;
+      btn.textContent = 'Mengirim... 🌸';
+      tampilPesanBaru(pesan);
+
+      var _f = window._fb;
+      _f.addDoc(_f.collection(window._db, 'messages'), {
+        pesan  : pesan,
+        waktu  : _f.serverTimestamp(),
+        tampil : false,
+        jawaban: ''
+      }).then(function(){
+        btn.disabled    = false;
+        btn.textContent = 'Kirim Anonim 💌';
+        document.getElementById('gbPesan').value = '';
+        showToast('Pesanmu terkirim! 🌸');
+      }).catch(function(err){
+        btn.disabled    = false;
+        btn.textContent = 'Kirim Anonim 💌';
+        var draft = document.getElementById('gbDraftCard');
+        if (draft) draft.remove();
+        showToast('Koneksi gagal, coba lagi 😢');
+        console.error('Firestore kirim error:', err);
+      });
+    }
+
+    // ── Load pesan publik ← Firestore ────────────────────────────
+    function loadPublik(){
+      var el = document.getElementById('gbPublikList');
+      el.innerHTML = skelHtml() + skelHtml() + skelHtml();
+
+      // Tunggu Firebase siap
+      if (!window._fb){
+        window.addEventListener('firebaseReady', function(){ loadPublik(); }, { once:true });
+        return;
+      }
+
+      var _f = window._fb;
+      var q  = _f.query(
+        _f.collection(window._db, 'messages'),
+        _f.where('tampil', '==', true),
+        _f.orderBy('waktu', 'desc'),
+        _f.limit(20)
+      );
+
+      _f.getDocs(q).then(function(snap){
+        el.innerHTML = '';
+        if (snap.empty){
+          el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
+          return;
+        }
+        snap.forEach(function(doc){
+          var item = doc.data();
+          item.id  = doc.id;
+          // Format Timestamp Firestore → string tanggal Indonesia
+          if (item.waktu && item.waktu.toDate){
+            var d = item.waktu.toDate();
+            item.waktu = d.toLocaleDateString('id-ID',{ day:'numeric', month:'long', year:'numeric' });
+          }
+          el.appendChild(buatKartuPublik(item));
+        });
+      }).catch(function(err){
+        el.innerHTML = '<div class="gb-empty">Gagal memuat pesan 😢</div>';
+        console.error('Firestore loadPublik error:', err);
+      });
+    }
+
+    // ── Buat kartu publik ─────────────────────────────────────────
     function buatKartuPublik(item){
       var div = document.createElement('div');
       div.className = 'gb-card';
-      div.id = 'pubcard-' + item.row;
+      // Firestore pakai doc.id (string), bukan row number
+      div.id = 'pubcard-' + (item.row || item.id);
 
       var adminSection = '';
       if (isAdmin){
+        var rowRef = item.row || item.id;
         adminSection =
-          '<div class="gb-admin-inline show" id="ainline-' + item.row + '">' +
-            '<textarea class="gb-reply-area" id="reply-' + item.row + '" placeholder="Tulis atau edit jawaban...">' + escHtml(item.jawaban) + '</textarea>' +
+          '<div class="gb-admin-inline show" id="ainline-' + rowRef + '">' +
+            '<textarea class="gb-reply-area" id="reply-' + rowRef + '" placeholder="Tulis atau edit jawaban...">' + escHtml(item.jawaban) + '</textarea>' +
             '<div class="gb-reply-row">' +
-              '<button class="gb-reply-save" onclick="simpanJawaban(' + item.row + ')">💾 Simpan & Tampilkan</button>' +
-              '<button class="gb-reply-hide" onclick="sembunyikan(' + item.row + ')">🙈 Sembunyikan</button>' +
+              '<button class="gb-reply-save" onclick="simpanJawaban(' + rowRef + ')">💾 Simpan & Tampilkan</button>' +
+              '<button class="gb-reply-hide" onclick="sembunyikan(' + rowRef + ')">🙈 Sembunyikan</button>' +
             '</div>' +
           '</div>';
       }
@@ -767,26 +819,23 @@
       div.innerHTML =
         '<div class="gb-card-q">🙋 ' + escHtml(item.pesan) + '</div>' +
         '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>' + escHtml(item.jawaban) + '</div>' +
-        '<div class="gb-card-date">📅 ' + item.waktu + '</div>' +
+        '<div class="gb-card-date">📅 ' + (item.waktu || '') + '</div>' +
         adminSection;
-
       return div;
     }
 
-    // ─── Admin: login ───
+    // ── Admin: login (tetap GAS) ──────────────────────────────────
     function loginAdmin(){
       var pin = document.getElementById('gbPinInput').value;
       if (!pin){ showToast('PIN kosong!'); return; }
-
       gasPost({ action:'login', pin:pin }, function(res){
         if (res.ok){
           adminPin = pin;
-          isAdmin = true;
+          isAdmin  = true;
           document.getElementById('gbPinInput').value = '';
-          document.getElementById('gbLoginBar').style.display = 'none';
-          document.getElementById('gbAdminBar').style.display = 'flex';
+          document.getElementById('gbLoginBar').style.display  = 'none';
+          document.getElementById('gbAdminBar').style.display  = 'flex';
           showToast('Halo Nisa! 🌸');
-          // Reload daftar supaya tombol admin muncul
           loadAdmin();
         } else {
           showToast(res.msg || 'PIN salah!');
@@ -794,19 +843,18 @@
       });
     }
 
-    // ─── Admin: logout ───
+    // ── Admin: logout ─────────────────────────────────────────────
     function logoutAdmin(){
       adminPin = ''; isAdmin = false;
       document.getElementById('gbLoginBar').style.display = 'flex';
       document.getElementById('gbAdminBar').style.display = 'none';
-      loadPublik(); // kembali ke tampilan publik biasa
+      loadPublik();
     }
 
-    // ─── Admin: load semua pesan (termasuk yang belum dijawab) ───
+    // ── Admin: load semua pesan (tetap GAS) ──────────────────────
     function loadAdmin(){
       var el = document.getElementById('gbPublikList');
       el.innerHTML = '<div class="gb-loading">Memuat semua pesan... 🌸</div>';
-
       gasPost({ action:'getAll', pin:adminPin }, function(res){
         el.innerHTML = '';
         if (!res.ok){ showToast(res.msg || 'Gagal'); return; }
@@ -815,18 +863,15 @@
           return;
         }
         res.data.forEach(function(item){
-          var div = document.createElement('div');
+          var div   = document.createElement('div');
           div.className = 'gb-card';
-          div.id = 'pubcard-' + item.row;
-
+          div.id    = 'pubcard-' + item.row;
           var badge = item.tampil
             ? '<span class="gb-badge gb-badge-show">Tampil</span>'
             : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>';
-
           var jawabanHtml = item.jawaban
             ? '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>' + escHtml(item.jawaban) + '</div>'
             : '';
-
           div.innerHTML =
             '<div class="gb-card-q">🙋 ' + escHtml(item.pesan) + badge + '</div>' +
             jawabanHtml +
@@ -838,12 +883,12 @@
                 '<button class="gb-reply-hide" onclick="sembunyikan(' + item.row + ')">🙈 Sembunyikan</button>' +
               '</div>' +
             '</div>';
-
           el.appendChild(div);
         });
       });
     }
 
+    // ── Admin: simpan jawaban (tetap GAS) ────────────────────────
     function simpanJawaban(row){
       var jawaban = document.getElementById('reply-' + row).value.trim();
       if (!jawaban){ showToast('Jawaban kosong!'); return; }
@@ -853,6 +898,7 @@
       });
     }
 
+    // ── Admin: sembunyikan (tetap GAS) ───────────────────────────
     function sembunyikan(row){
       gasPost({ action:'sembunyikan', pin:adminPin, row:row }, function(res){
         if (res.ok){ showToast('Disembunyikan 🙈'); loadAdmin(); }
@@ -860,10 +906,6 @@
       });
     }
 
-    function escHtml(str){
-      if (!str) return '';
-      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
   </script>
 </body>
 </html>
