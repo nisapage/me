@@ -3,185 +3,237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dino Kucing🌸</title>
+<title>Dino Kucing 🌸</title>
 <style>
   :root{--pink-1:#fff0f5;--pink-2:#ffd6e8;--pink-3:#ff9ebb;--pink-4:#ff6fa5;--pink-dark:#d63e79;--text:#5c2a3d;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Segoe UI',sans-serif;background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);padding:16px;}
+  body{font-family:'Segoe UI',sans-serif;background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);padding:16px;user-select:none;}
   h1{font-size:20px;color:var(--pink-dark);margin-bottom:4px;text-align:center;}
   .sub{font-size:12px;color:#a1526f;margin-bottom:16px;text-align:center;}
-  #gameWrap{position:relative;background:rgba(255,255,255,0.85);border-radius:20px;box-shadow:0 8px 28px rgba(214,62,121,0.2);padding:16px;width:100%;max-width:480px;}
-  canvas{display:block;width:100%;border-radius:12px;background:#fff8fb;border:2px solid var(--pink-2);}
+  #gameWrap{background:rgba(255,255,255,0.85);border-radius:20px;box-shadow:0 8px 28px rgba(214,62,121,0.2);padding:16px;width:100%;max-width:480px;}
+  canvas{display:block;width:100%;border-radius:12px;background:#fff8fb;border:2px solid var(--pink-2);touch-action:none;}
   #score{text-align:center;margin-top:10px;font-size:14px;font-weight:700;color:var(--pink-dark);}
   #msg{text-align:center;margin-top:8px;font-size:13px;color:#b45a7e;min-height:20px;}
   .btn-row{display:flex;justify-content:center;gap:10px;margin-top:12px;}
-  .btn{padding:10px 24px;border:none;border-radius:999px;background:var(--pink-4);color:#fff;font-weight:700;font-size:13px;cursor:pointer;transition:transform .15s,background .15s;}
-  .btn:active{transform:scale(0.95);background:var(--pink-dark);}
-  .back-btn{padding:10px 24px;border:none;border-radius:999px;background:var(--pink-2);color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;transition:transform .15s;}
-  .back-btn:active{transform:scale(0.95);}
+  .btn{padding:10px 24px;border:none;border-radius:999px;background:var(--pink-4);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
+  .btn:active{transform:scale(0.95);}
+  .back-btn{padding:10px 24px;border:none;border-radius:999px;background:var(--pink-2);color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;}
   .tip{font-size:11px;color:#c17b95;text-align:center;margin-top:8px;}
+  /* Tombol loncat khusus mobile */
+  #jumpBtn{display:none;width:100%;margin-top:12px;padding:14px;border:none;border-radius:14px;background:var(--pink-4);color:#fff;font-weight:700;font-size:15px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  #jumpBtn:active{background:var(--pink-dark);}
+  @media(pointer:coarse){#jumpBtn{display:block;}}
 </style>
 </head>
 <body>
 <h1>🌸 Dino Kucing 🌸</h1>
-<p class="sub">Lompati kaktus! Tekan spasi / tap layar buat loncat~</p>
+<p class="sub">Lompati rintangan! Tekan spasi / tombol loncat~</p>
 <div id="gameWrap">
   <canvas id="c" height="160"></canvas>
   <div id="score">🌸 Skor: 0</div>
-  <div id="msg">Tap / tekan Spasi untuk mulai!</div>
+  <div id="msg">Tekan Spasi atau tombol Loncat untuk mulai!</div>
+  <button id="jumpBtn" onclick="jump()">🐾 Loncat!</button>
   <div class="btn-row">
     <button class="btn" onclick="restartGame()">🔄 Main Lagi</button>
     <button class="back-btn" onclick="location.href='games.html'">← Kembali</button>
   </div>
-  <p class="tip">💡 Di HP: tap layar untuk loncat</p>
+  <p class="tip">💡 HP: pakai tombol Loncat di atas · PC: tekan Spasi</p>
 </div>
 
 <script>
 const canvas = document.getElementById('c');
-const ctx    = canvas.getContext('2d');
+const ctx = canvas.getContext('2d');
 const W = 480, H = 160;
 canvas.width = W; canvas.height = H;
 
-const GROUND = H - 28;
-const GRAVITY = 0.6;
-const JUMP_FORCE = -12;
+const GROUND_Y = H - 30;   // garis tanah
+const DINO_H = 36, DINO_W = 28;
+const GRAVITY = 0.65;
+const JUMP_V = -13;
 
 let dino, obstacles, score, speed, frame, gameRunning, gameOver, animId;
 
-function initGame(){
-  dino = {x:50, y:GROUND-36, w:28, h:36, vy:0, onGround:true, frame:0, frameTimer:0};
+/* ── INIT ── */
+function initGame() {
+  dino = { x: 55, y: GROUND_Y - DINO_H, vy: 0, onGround: true };
   obstacles = [];
-  score = 0; speed = 4; frame = 0; gameRunning = false; gameOver = false;
-  clearCanvas();
-  drawDino();
-  drawGround();
+  score = 0; speed = 4; frame = 0;
+  gameRunning = false; gameOver = false;
+  cancelAnimationFrame(animId);
+  render();
   document.getElementById('score').textContent = '🌸 Skor: 0';
-  document.getElementById('msg').textContent = 'Tap / tekan Spasi untuk mulai!';
+  document.getElementById('msg').textContent = 'Tekan Spasi atau tombol Loncat untuk mulai!';
 }
 
-function clearCanvas(){
-  ctx.clearRect(0,0,W,H);
-  // sky dots (bintang kecil)
-  ctx.fillStyle = '#ffeef5';
-  ctx.fillRect(0,0,W,H);
-  ctx.fillStyle = '#ffb6d6';
-  [[60,20],[150,35],[280,15],[380,28],[440,40],[100,10]].forEach(([x,y])=>{
-    ctx.beginPath(); ctx.arc(x,y,2,0,Math.PI*2); ctx.fill();
-  });
+/* ── JUMP ── */
+function jump() {
+  if (gameOver) { restartGame(); return; }
+  if (!gameRunning) { startGame(); return; }
+  if (dino.onGround) {
+    dino.vy = JUMP_V;
+    dino.onGround = false;
+  }
 }
 
-function drawGround(){
-  ctx.fillStyle = '#ffb6d6';
-  ctx.fillRect(0, GROUND+36, W, 4);
-  // dekorasi tanah
-  ctx.fillStyle = '#ff9ebb';
-  for(let i=0;i<W;i+=30) ctx.fillRect(i, GROUND+38, 14, 2);
+function startGame() {
+  gameRunning = true;
+  document.getElementById('msg').textContent = '';
+  dino.vy = JUMP_V;
+  dino.onGround = false;
+  loop();
 }
 
-function drawDino(){
-  const x = dino.x, y = dino.y;
-  // badan
-  ctx.fillStyle = '#ff6fa5';
-  ctx.beginPath();
-  ctx.roundRect(x, y+8, 28, 28, 6);
-  ctx.fill();
-  // kepala
-  ctx.fillStyle = '#ff9ebb';
-  ctx.beginPath();
-  ctx.roundRect(x+4, y, 22, 18, 8);
-  ctx.fill();
-  // telinga
-  ctx.fillStyle = '#ff6fa5';
-  ctx.beginPath(); ctx.roundRect(x+4, y-6, 6, 10, 3); ctx.fill();
-  ctx.beginPath(); ctx.roundRect(x+16, y-6, 6, 10, 3); ctx.fill();
-  // mata
-  ctx.fillStyle = '#fff';
-  ctx.beginPath(); ctx.arc(x+10, y+7, 4, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(x+20, y+7, 4, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = '#d63e79';
-  ctx.beginPath(); ctx.arc(x+11, y+7, 2, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(x+21, y+7, 2, 0, Math.PI*2); ctx.fill();
-  // hidung
-  ctx.fillStyle = '#d63e79';
-  ctx.beginPath(); ctx.arc(x+15, y+12, 2, 0, Math.PI*2); ctx.fill();
-  // kaki (animasi)
-  const legOff = (dino.onGround && gameRunning) ? (Math.floor(frame/8)%2)*6 : 0;
-  ctx.fillStyle = '#ff6fa5';
-  ctx.fillRect(x+4, y+34, 8, 8+legOff);
-  ctx.fillRect(x+16, y+34, 8, 8+(6-legOff));
-  // ekor
-  ctx.fillStyle = '#ff9ebb';
-  ctx.beginPath(); ctx.roundRect(x-8, y+14, 12, 8, 4); ctx.fill();
-}
-
-function drawCactus(obs){
-  // kaktus diganti bunga/jamur pink
-  ctx.fillStyle = '#d63e79';
-  ctx.beginPath(); ctx.roundRect(obs.x+obs.w/2-5, obs.y+10, 10, obs.h-10, 4); ctx.fill();
-  // kepala jamur
-  ctx.fillStyle = '#ff6fa5';
-  ctx.beginPath(); ctx.arc(obs.x+obs.w/2, obs.y+12, 14, Math.PI, 0); ctx.fill();
-  ctx.fillStyle = '#fff';
-  [[0,-2],[8,4],[-8,4]].forEach(([dx,dy])=>{
-    ctx.beginPath(); ctx.arc(obs.x+obs.w/2+dx, obs.y+12+dy, 3, Math.PI, 0); ctx.fill();
-  });
-}
-
-function spawnObstacle(){
-  const h = 30 + Math.random()*20;
-  obstacles.push({x:W, y:GROUND+36-h, w:28, h:h});
-}
-
-function jump(){
-  if(!gameRunning && !gameOver){ gameRunning=true; document.getElementById('msg').textContent=''; loop(); return; }
-  if(gameOver){ restartGame(); return; }
-  if(dino.onGround){ dino.vy = JUMP_FORCE; dino.onGround = false; }
-}
-
-function loop(){
-  if(!gameRunning) return;
+/* ── GAME LOOP ── */
+function loop() {
   frame++;
-  // spawn
-  if(frame % Math.max(60, 110 - Math.floor(score/5)) === 0) spawnObstacle();
-  // move dino
+
+  // spawn obstacle — interval acak
+  if (!obstacles.length || obstacles[obstacles.length - 1].x < W - (160 + Math.random() * 120)) {
+    if (frame > 60) spawnObstacle();
+  }
+
+  // fisika dino
   dino.vy += GRAVITY;
-  dino.y  += dino.vy;
-  if(dino.y >= GROUND - 36){ dino.y = GROUND-36; dino.vy = 0; dino.onGround = true; }
-  // move obstacles
-  obstacles.forEach(o=>{ o.x -= speed; });
-  obstacles = obstacles.filter(o=>o.x > -50);
-  // collision
-  for(let o of obstacles){
-    if(dino.x+4 < o.x+o.w-4 && dino.x+dino.w-4 > o.x+4 && dino.y+8 < o.y+o.h && dino.y+dino.h > o.y+4){
+  dino.y += dino.vy;
+  if (dino.y >= GROUND_Y - DINO_H) {
+    dino.y = GROUND_Y - DINO_H;
+    dino.vy = 0;
+    dino.onGround = true;
+  }
+
+  // gerak obstacle
+  obstacles.forEach(o => o.x -= speed);
+  obstacles = obstacles.filter(o => o.x + o.w > 0);
+
+  // collision — hitbox dikecilkan 4px tiap sisi
+  const dx = 4, dy = 4;
+  const dLeft = dino.x + dx, dRight = dino.x + DINO_W - dx;
+  const dTop  = dino.y + dy, dBot   = dino.y + DINO_H - dy;
+  for (const o of obstacles) {
+    if (dRight > o.x + 2 && dLeft < o.x + o.w - 2 && dBot > o.y + 2 && dTop < o.y + o.h) {
       endGame(); return;
     }
   }
-  // score
-  if(frame%6===0){ score++; if(score%10===0) speed = Math.min(10, speed+0.3); }
 
-  clearCanvas();
-  drawGround();
-  obstacles.forEach(drawCactus);
-  drawDino();
+  // skor & percepat
+  if (frame % 6 === 0) {
+    score++;
+    document.getElementById('score').textContent = '🌸 Skor: ' + score;
+    if (score % 15 === 0) speed = Math.min(11, speed + 0.4);
+  }
 
-  document.getElementById('score').textContent = '🌸 Skor: ' + score;
+  render();
   animId = requestAnimationFrame(loop);
 }
 
-function endGame(){
-  gameRunning = false; gameOver = true;
-  cancelAnimationFrame(animId);
-  document.getElementById('msg').textContent = '💔 Game over! Skor: ' + score + ' — Tap/Spasi untuk main lagi~';
+/* ── SPAWN ── */
+function spawnObstacle() {
+  const h = 28 + Math.random() * 22;
+  obstacles.push({ x: W + 10, y: GROUND_Y - h, w: 26, h });
 }
 
-function restartGame(){
+/* ── RENDER ── */
+function render() {
+  // bg
+  ctx.fillStyle = '#ffeef5';
+  ctx.fillRect(0, 0, W, H);
+  // bintang
+  ctx.fillStyle = '#ffb6d6';
+  [[60,18],[150,32],[280,14],[380,26],[440,38],[100,9],[320,40]].forEach(([x,y]) => {
+    ctx.beginPath(); ctx.arc(x, y, 1.8, 0, Math.PI*2); ctx.fill();
+  });
+  // tanah
+  ctx.fillStyle = '#ffb6d6';
+  ctx.fillRect(0, GROUND_Y, W, 4);
+  ctx.fillStyle = '#ff9ebb';
+  for (let i = 0; i < W; i += 28) ctx.fillRect(i, GROUND_Y + 4, 14, 2);
+
+  // obstacles (jamur pink)
+  obstacles.forEach(drawMushroom);
+
+  // dino
+  drawCat();
+}
+
+function drawMushroom(o) {
+  const cx = o.x + o.w / 2;
+  // batang
+  ctx.fillStyle = '#c43569';
+  ctx.beginPath(); ctx.roundRect(cx - 5, o.y + 12, 10, o.h - 12, 3); ctx.fill();
+  // topi
+  ctx.fillStyle = '#ff6fa5';
+  ctx.beginPath(); ctx.arc(cx, o.y + 13, 15, Math.PI, 0); ctx.fill();
+  // bintik putih
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  [[0,0],[7,5],[-7,5]].forEach(([dx, dy]) => {
+    ctx.beginPath(); ctx.arc(cx + dx, o.y + 10 + dy, 3, Math.PI, 0); ctx.fill();
+  });
+}
+
+function drawCat() {
+  const x = dino.x, y = dino.y;
+  // ekor
+  ctx.fillStyle = '#ff9ebb';
+  ctx.beginPath(); ctx.roundRect(x - 10, y + 16, 13, 7, 4); ctx.fill();
+  // badan
+  ctx.fillStyle = '#ff6fa5';
+  ctx.beginPath(); ctx.roundRect(x, y + 10, DINO_W, 26, 6); ctx.fill();
+  // kepala
+  ctx.fillStyle = '#ff9ebb';
+  ctx.beginPath(); ctx.roundRect(x + 3, y, 22, 18, 8); ctx.fill();
+  // telinga
+  ctx.fillStyle = '#ff6fa5';
+  ctx.beginPath(); ctx.roundRect(x + 4, y - 7, 6, 10, 3); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(x + 17, y - 7, 6, 10, 3); ctx.fill();
+  ctx.fillStyle = '#ffc0d8';
+  ctx.beginPath(); ctx.roundRect(x + 5, y - 5, 4, 7, 2); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(x + 18, y - 5, 4, 7, 2); ctx.fill();
+  // mata
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(x + 10, y + 8, 4, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x + 20, y + 8, 4, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#5c2a3d';
+  ctx.beginPath(); ctx.arc(x + 11, y + 8, 2, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x + 21, y + 8, 2, 0, Math.PI*2); ctx.fill();
+  // hidung
+  ctx.fillStyle = '#d63e79';
+  ctx.beginPath(); ctx.arc(x + 14, y + 13, 2, 0, Math.PI*2); ctx.fill();
+  // kumis
+  ctx.strokeStyle = '#d63e79'; ctx.lineWidth = 1;
+  [[x+7, y+13, x+2, y+11],[x+7, y+14, x+2, y+15],
+   [x+21, y+13, x+26, y+11],[x+21, y+14, x+26, y+15]].forEach(([x1,y1,x2,y2]) => {
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  });
+  // kaki (animasi lari)
+  const legOff = (dino.onGround && gameRunning) ? (Math.floor(frame / 7) % 2) * 5 : 0;
+  ctx.fillStyle = '#ff6fa5';
+  ctx.beginPath(); ctx.roundRect(x + 4,  y + 34, 8, 8 + legOff, 3);     ctx.fill();
+  ctx.beginPath(); ctx.roundRect(x + 16, y + 34, 8, 8 + (5 - legOff), 3); ctx.fill();
+}
+
+/* ── END / RESTART ── */
+function endGame() {
+  gameRunning = false; gameOver = true;
   cancelAnimationFrame(animId);
+  // gambar X di mata
+  render();
+  const x = dino.x, y = dino.y;
+  ctx.strokeStyle = '#d63e79'; ctx.lineWidth = 2;
+  [[x+7,y+5,x+13,y+11],[x+13,y+5,x+7,y+11],
+   [x+17,y+5,x+23,y+11],[x+23,y+5,x+17,y+11]].forEach(([x1,y1,x2,y2]) => {
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  });
+  document.getElementById('msg').textContent = '💔 Aduh! Skor: ' + score + ' — Tap Loncat / Spasi untuk main lagi~';
+}
+
+function restartGame() {
   initGame();
 }
 
-document.addEventListener('keydown', e=>{ if(e.code==='Space'||e.code==='ArrowUp'){ e.preventDefault(); jump(); } });
-canvas.addEventListener('click', jump);
-document.addEventListener('touchstart', e=>{ e.preventDefault(); jump(); }, {passive:false});
+/* ── INPUT ── keyboard saja untuk PC; tombol #jumpBtn untuk HP ── */
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump(); }
+});
 
 initGame();
 </script>
