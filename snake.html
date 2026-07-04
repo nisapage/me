@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snake Nisa 🌸</title>
+<style>
+  :root{--pink-1:#fff0f5;--pink-2:#ffd6e8;--pink-3:#ff9ebb;--pink-4:#ff6fa5;--pink-dark:#d63e79;--text:#5c2a3d;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);padding:16px;}
+  h1{font-size:20px;color:var(--pink-dark);margin-bottom:4px;text-align:center;}
+  .sub{font-size:12px;color:#a1526f;margin-bottom:16px;text-align:center;}
+  #gameWrap{background:rgba(255,255,255,0.85);border-radius:20px;box-shadow:0 8px 28px rgba(214,62,121,0.2);padding:16px;width:100%;max-width:360px;}
+  canvas{display:block;margin:0 auto;border-radius:12px;border:2px solid var(--pink-2);}
+  #score{text-align:center;margin-top:10px;font-size:14px;font-weight:700;color:var(--pink-dark);}
+  #msg{text-align:center;margin-top:6px;font-size:12.5px;color:#b45a7e;min-height:18px;}
+  .btn-row{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+  .btn{padding:10px 20px;border:none;border-radius:999px;background:var(--pink-4);color:#fff;font-weight:700;font-size:13px;cursor:pointer;transition:transform .15s;}
+  .btn:active{transform:scale(0.95);}
+  .back-btn{padding:10px 20px;border:none;border-radius:999px;background:var(--pink-2);color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;}
+  /* D-pad */
+  .dpad{display:grid;grid-template-areas:'. u .' 'l . r' '. d .';grid-template-columns:44px 44px 44px;grid-template-rows:44px 44px 44px;gap:4px;margin:14px auto 0;width:fit-content;}
+  .dpad button{width:44px;height:44px;border:none;border-radius:10px;background:var(--pink-2);color:var(--pink-dark);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+  .dpad button:active{background:var(--pink-3);}
+  .du{grid-area:u;}.dd{grid-area:d;}.dl{grid-area:l;}.dr{grid-area:r;}
+</style>
+</head>
+<body>
+<h1>🐍 Ular Nokia 🌸</h1>
+<p class="sub">Makan bunga sebanyak-banyaknya dan jangan sampai nabrak!</p>
+<div id="gameWrap">
+  <canvas id="c"></canvas>
+  <div id="score">🌸 Skor: 0</div>
+  <div id="msg">Tap arah / tekan panah untuk mulai~</div>
+  <div class="btn-row">
+    <button class="btn" onclick="restartGame()">🔄 Main Lagi</button>
+    <button class="back-btn" onclick="location.href='games.html'">← Kembali</button>
+  </div>
+  <div class="dpad">
+    <button class="du" onpointerdown="setDir(0,-1)">▲</button>
+    <button class="dl" onpointerdown="setDir(-1,0)">◀</button>
+    <button class="dr" onpointerdown="setDir(1,0)">▶</button>
+    <button class="dd" onpointerdown="setDir(0,1)">▼</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+const CELL = 16, COLS = 20, ROWS = 20;
+canvas.width = CELL*COLS; canvas.height = CELL*ROWS;
+
+const FOODS = ['🌸','🌷','🎀','💗','⭐','🍓'];
+
+let snake, dir, nextDir, food, score, gameRunning, gameOver, timer;
+
+function rnd(n){ return Math.floor(Math.random()*n); }
+
+function initGame(){
+  snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+  dir = {x:1,y:0}; nextDir = {x:1,y:0};
+  score = 0; gameRunning = false; gameOver = false;
+  placeFood();
+  draw();
+  document.getElementById('score').textContent = '🌸 Skor: 0';
+  document.getElementById('msg').textContent = 'Tap arah / tekan panah untuk mulai~';
+}
+
+function placeFood(){
+  let pos;
+  do { pos = {x:rnd(COLS), y:rnd(ROWS)}; }
+  while(snake.some(s=>s.x===pos.x && s.y===pos.y));
+  food = {...pos, emoji: FOODS[rnd(FOODS.length)]};
+}
+
+function setDir(dx,dy){
+  if(!gameRunning && !gameOver){ startGame(); }
+  if(gameOver){ restartGame(); return; }
+  if(dx !== -dir.x || dy !== -dir.y) nextDir = {x:dx,y:dy};
+}
+
+function startGame(){
+  gameRunning = true;
+  document.getElementById('msg').textContent = '';
+  clearInterval(timer);
+  timer = setInterval(tick, 130);
+}
+
+function tick(){
+  dir = {...nextDir};
+  const head = {x: snake[0].x+dir.x, y: snake[0].y+dir.y};
+  // wall collision
+  if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS){ endGame(); return; }
+  // self collision
+  if(snake.some(s=>s.x===head.x&&s.y===head.y)){ endGame(); return; }
+  snake.unshift(head);
+  if(head.x===food.x && head.y===food.y){
+    score++;
+    placeFood();
+    document.getElementById('score').textContent = '🌸 Skor: ' + score;
+    if(score % 5 === 0) clearInterval(timer), timer = setInterval(tick, Math.max(60, 130 - score*4));
+  } else {
+    snake.pop();
+  }
+  draw();
+}
+
+function draw(){
+  // background grid
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+    ctx.fillStyle = (r+c)%2===0 ? '#fff8fb' : '#fff0f5';
+    ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
+  }
+  // food
+  ctx.font = (CELL-2)+'px serif';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(food.emoji, food.x*CELL+CELL/2, food.y*CELL+CELL/2);
+
+  // snake
+  snake.forEach((s,i)=>{
+    const x=s.x*CELL, y=s.y*CELL;
+    ctx.fillStyle = i===0 ? '#d63e79' : (i%2===0 ? '#ff6fa5' : '#ff9ebb');
+    ctx.beginPath();
+    ctx.roundRect(x+1, y+1, CELL-2, CELL-2, i===0?6:4);
+    ctx.fill();
+    if(i===0){
+      // mata
+      ctx.fillStyle='#fff';
+      ctx.beginPath(); ctx.arc(x+5,y+5,2.5,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+11,y+5,2.5,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#5c2a3d';
+      ctx.beginPath(); ctx.arc(x+5,y+5,1.2,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+11,y+5,1.2,0,Math.PI*2); ctx.fill();
+    }
+  });
+}
+
+function endGame(){
+  clearInterval(timer);
+  gameRunning = false; gameOver = true;
+  document.getElementById('msg').textContent = '💔 Game over! Skor: ' + score + ' — Tap arah untuk main lagi~';
+}
+
+function restartGame(){
+  clearInterval(timer);
+  initGame();
+}
+
+document.addEventListener('keydown', e=>{
+  const map = {'ArrowUp':[0,-1],'ArrowDown':[0,1],'ArrowLeft':[-1,0],'ArrowRight':[1,0]};
+  if(map[e.key]){ e.preventDefault(); setDir(...map[e.key]); }
+});
+
+initGame();
+</script>
+</body>
+</html>
