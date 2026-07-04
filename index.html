@@ -730,7 +730,7 @@ function tampilTombolMore() {
   // Publik: kalau belum ada jawaban, tampilkan status menunggu
   var jawabanHtml = '';
   if (item.jawaban) {
-    jawabanHtml = '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>';
+    jawabanHtml = '<div class="gb-card-a"><div class="gb-card-a-label">Jawab</div>'+escHtml(item.jawaban)+'</div>';
   } else if (!isAdmin) {
     jawabanHtml = '<div class="gb-card-a" style="color:#b45a7e;font-style:italic;font-size:12.5px;">⏳ Belum dijawab~</div>';
   }
