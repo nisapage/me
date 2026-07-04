@@ -247,6 +247,27 @@
     .gb-empty{text-align:center;font-size:13px;color:#c17b95;padding:20px 0;font-style:italic;}
     .gb-loading{text-align:center;font-size:13px;color:#b45a7e;padding:16px 0;}
 
+    /* Skeleton loading */
+    .gb-skeleton{
+      background:var(--pink-1);border-radius:16px;margin-bottom:12px;
+      padding:14px;border-left:4px solid var(--pink-2);
+    }
+    .skel-line{
+      height:12px;border-radius:999px;background:var(--pink-2);margin-bottom:8px;
+      animation:skelPulse 1.2s ease-in-out infinite;
+    }
+    .skel-line.w80{width:80%;}
+    .skel-line.w60{width:60%;}
+    .skel-line.w90{width:90%;}
+    .skel-block{
+      height:52px;border-radius:12px;background:var(--pink-2);margin-top:10px;
+      animation:skelPulse 1.2s ease-in-out infinite;animation-delay:.15s;
+    }
+    @keyframes skelPulse{
+      0%,100%{opacity:1;}
+      50%{opacity:0.45;}
+    }
+
     /* Pesan baru yang baru dikirim (tampil lokal dulu) */
     .gb-card-new{
       background:var(--pink-1);border-radius:16px;margin-bottom:12px;
@@ -690,15 +711,25 @@
       div.id = 'gbDraftCard';
       div.innerHTML =
         '<div class="gb-card-new-q">🙋 ' + escHtml(pesan) + '</div>' +
-        '<div class="gb-card-new-status">⏳ Pesanmu terkirim! Tunggu balasanku ya~ 🌸</div>';
+        '<div class="gb-card-new-status">⏳ Pesanmu terkirim! Tunggu jawaban dari Nisa ya~ 🌸</div>';
       // Sisipkan sebelum daftar publik
       el.insertBefore(div, el.firstChild);
+    }
+
+    // ─── Skeleton placeholder ───
+    function skelHtml(){
+      return '<div class="gb-skeleton">' +
+               '<div class="skel-line w80"></div>' +
+               '<div class="skel-line w60"></div>' +
+               '<div class="skel-block"></div>' +
+             '</div>';
     }
 
     // ─── Load pesan publik (hanya 3 terbaru untuk cepat) ───
     function loadPublik(){
       var el = document.getElementById('gbPublikList');
-      el.innerHTML = '<div class="gb-loading">Memuat pesan... 🌸</div>';
+      // Tampilkan 3 skeleton card dulu biar keliatan langsung ada isi
+      el.innerHTML = skelHtml() + skelHtml() + skelHtml();
 
       gasPost({ action:'getPublik', limit:3 }, function(res){
         el.innerHTML = '';
