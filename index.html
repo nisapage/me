@@ -51,6 +51,11 @@
     .profile-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;}
     .profile-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;border:2px solid #fff;box-shadow:0 4px 10px rgba(255,111,165,0.3);cursor:pointer;transition:transform .2s ease;}
     .profile-photos img:active{transform:scale(0.95);}
+    #lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+    #lightbox.show{opacity:1;pointer-events:all;}
+    #lightbox img{max-width:92vw;max-height:88vh;border-radius:18px;transform:scale(0.85);transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+    #lightbox.show img{transform:scale(1);}
+    #lightbox-close{position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:22px;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
     .info-row{display:flex;flex-direction:column;gap:2px;padding:12px 14px;background:var(--pink-1);border-radius:14px;margin-bottom:10px;border-left:4px solid var(--pink-3);}
     .info-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#b45a7e;font-weight:700;}
     .info-value{font-size:14.5px;line-height:1.5;}
@@ -318,6 +323,10 @@
     </div>
   </div>
 
+<div id="lightbox" onclick="tutupLightbox()">
+    <button id="lightbox-close" onclick="tutupLightbox()">✕</button>
+    <img id="lightbox-img" src="" alt="Foto">
+  </div>
   <audio id="bgAudio" loop preload="none" src="aa.mp3"></audio>
 
   <script>
@@ -348,6 +357,18 @@
       clearTimeout(window._toastTimer);
       window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
     }
+    function bukaLightbox(src){
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    function tutupLightbox(){
+      document.getElementById('lightbox').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') tutupLightbox();
+    });
 
     window.addEventListener('scroll', function(){
       var btn = document.getElementById('toTop');
@@ -356,7 +377,7 @@
     });
 
     document.querySelectorAll('.profile-photos img').forEach(function(img){
-      img.addEventListener('click', function(){ window.open(img.src, '_blank'); });
+      img.addEventListener('click', function(){ bukaLightbox(img.src); });
     });
 
     // =============================================
