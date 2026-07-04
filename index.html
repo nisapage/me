@@ -262,10 +262,10 @@
       gap:8px;
     }
     ul.list li::before{ content:"🌸"; flex-shrink:0; }
+    .yikes li::before{ content:"🚫"; }
 
     .lk-block{ margin-bottom:16px; }
     .lk-title{ font-weight:700; font-size:15px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
-    .yikes li::before{ content:"🚫"; }
 
     .acc-item{
       display:flex;
@@ -693,10 +693,7 @@
 
   <div id="audioHint" class="audio-hint" onclick="manualPlay()">🎵 Tap di sini untuk nyalain musik</div>
 
-  <!-- Audio langsung dari Google Drive, preload=none agar tidak memperlambat load awal -->
-  <audio id="bgAudio" loop preload="none"
-    src="aa.mp3">
-  </audio>
+  <audio id="bgAudio" loop preload="none" src="aa.mp3"></audio>
 
   <script>
     function showPage(name) {
@@ -821,7 +818,7 @@
       }
     }
 
-    // ===== Floating petals background ===== (dikurangi jadi 8)
+    // ===== Floating petals background =====
     (function initPetals(){
       var emojis = ['🌸','🌷','🎀','💮'];
       var container = document.getElementById('petals');
