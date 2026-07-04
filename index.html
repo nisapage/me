@@ -346,7 +346,7 @@
         </div>
         <div class="menu-grid">
           <button class="menu-btn" onclick="showPage('vibecoding')"><span class="ic">💻</span> Vibe Coding By Me</button>
-          <button class="menu-btn" onclick="showPage('guestbook')"><span class="ic">💌</span> Tanya Nisa</button>
+          <button class="menu-btn" onclick="showPage('guestbook')"><span class="ic">💌</span> QnA</button>
         </div>
       </div>
 
@@ -442,12 +442,12 @@
         <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
       </div>
 
-      <!-- GUESTBOOK / TANYA NISA -->
+      <!-- GUESTBOOK / QNA -->
       <div id="page-guestbook" class="page">
-        <div class="section-title">💌 Tanya Nisa</div>
+        <div class="section-title">💌 QnA</div>
         <div class="gb-intro">
-          Mau nanya sesuatu ke Nisa? Kirim aja anonim di sini!<br>
-          Nanti Nisa akan jawab kalau sempet ya 🌸
+          Mau nanya sesuatu? Kirim aja anonim di sini<br>
+          Nanti jawaban akan dikirim di bawah pertanyaannya 🌸
         </div>
 
         <!-- Form kirim pesan -->
@@ -458,7 +458,7 @@
 
         <!-- Tombol admin -->
         <div class="gb-admin-toggle">
-          <button class="gb-admin-btn" onclick="toggleAdmin()">🔐 Mode Nisa</button>
+          <button class="gb-admin-btn" onclick="toggleAdmin()">🔐 Mode Login</button>
         </div>
 
         <!-- Panel admin -->
@@ -477,7 +477,7 @@
         </div>
 
         <!-- Pesan publik yang sudah dijawab -->
-        <div class="gb-divider">💬 Jawaban Nisa</div>
+        <div class="gb-divider">💬 Jawaban Ada di Sini</div>
         <div id="gbPublikList"><div class="gb-loading">Memuat pesan... 🌸</div></div>
 
         <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
@@ -697,7 +697,7 @@
           div.className = 'gb-card';
           div.innerHTML =
             '<div class="gb-card-q">🙋 ' + escHtml(item.pesan) + '</div>' +
-            '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>' + escHtml(item.jawaban) + '</div>' +
+            '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Ada di Sini</div>' + escHtml(item.jawaban) + '</div>' +
             '<div class="gb-card-date">📅 ' + item.waktu + '</div>';
           el.appendChild(div);
         });
@@ -756,7 +756,7 @@
             : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>';
           div.innerHTML =
             '<div class="gb-admin-q">🙋 ' + escHtml(item.pesan) + badge + '</div>' +
-            '<textarea class="gb-reply-area" id="reply-' + item.row + '" placeholder="Tulis jawaban Nisa...">' + escHtml(item.jawaban) + '</textarea>' +
+            '<textarea class="gb-reply-area" id="reply-' + item.row + '" placeholder="Tulis Jawaban Ada di Sini...">' + escHtml(item.jawaban) + '</textarea>' +
             '<div class="gb-reply-row">' +
               '<button class="gb-reply-save" onclick="simpanJawaban(' + item.row + ')">💾 Simpan & Tampilkan</button>' +
               '<button class="gb-reply-hide" onclick="sembunyikan(' + item.row + ')">🙈 Sembunyikan</button>' +
