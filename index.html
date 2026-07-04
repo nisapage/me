@@ -727,21 +727,24 @@
 
     // ─── Load pesan publik (hanya 3 terbaru untuk cepat) ───
     function loadPublik(){
-      var el = document.getElementById('gbPublikList');
-      // Tampilkan 3 skeleton card dulu biar keliatan langsung ada isi
-      el.innerHTML = skelHtml() + skelHtml() + skelHtml();
+  var el = document.getElementById('gbPublikList');
+  el.innerHTML = skelHtml() + skelHtml() + skelHtml();
 
-      gasPost({ action:'getPublik', limit:3 }, function(res){
-        el.innerHTML = '';
-        if (!res.ok || !res.data || res.data.length === 0){
-          el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
-          return;
-        }
-        res.data.forEach(function(item){
-          el.appendChild(buatKartuPublik(item));
-        });
+  // Pakai GET bukan POST
+  fetch(GAS_URL)
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      el.innerHTML = '';
+      if (!res.ok || !res.data || res.data.length === 0){
+        el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
+        return;
+      }
+      res.data.forEach(function(item){
+        el.appendChild(buatKartuPublik(item));
       });
-    }
+    })
+    .catch(function(){ el.innerHTML = '<div class="gb-empty">Gagal memuat pesan 😢</div>'; });
+}
 
     // Buat elemen kartu publik (bisa dengan tombol admin kalau mode admin aktif)
     function buatKartuPublik(item){
