@@ -124,6 +124,8 @@
     .gb-reply-row{display:flex;gap:8px;}
     .gb-reply-save{flex:1;padding:10px;border:none;border-radius:10px;background:var(--pink-4);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
     .gb-reply-hide{padding:10px 14px;border:none;border-radius:10px;background:var(--pink-2);color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;}
+    .gb-reply-delete{padding:10px 14px;border:none;border-radius:10px;background:#ffe0e6;color:#c0392b;font-weight:700;font-size:13px;cursor:pointer;}
+.gb-reply-delete:active{background:#f8d7da;}
     .gb-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:999px;font-weight:700;margin-left:6px;}
     .gb-badge-show{background:#d4edda;color:#155724;}.gb-badge-hide{background:#f8d7da;color:#721c24;}
     /* Admin login */
@@ -692,10 +694,13 @@ function tampilTombolMore() {
     adminHtml =
       '<div class="gb-admin-inline show" id="ainline-'+item.id+'">' +
         '<textarea class="gb-reply-area" id="reply-'+item.id+'" placeholder="Tulis atau edit jawaban...">'+escHtml(item.jawaban)+'</textarea>' +
-        '<div class="gb-reply-row">' +
-          '<button class="gb-reply-save" onclick="simpanJawaban(\''+item.id+'\')">💾 Simpan &amp; Tampilkan</button>' +
-          '<button class="gb-reply-hide" onclick="sembunyikan(\''+item.id+'\')">🙈 Sembunyikan</button>' +
-        '</div></div>';
+        ''<div class="gb-reply-row">' +
+  '<button class="gb-reply-save" onclick="simpanJawaban(\''+item.id+'\')">💾 Simpan &amp; Tampilkan</button>' +
+  '<button class="gb-reply-hide" onclick="sembunyikan(\''+item.id+'\')">🙈 Sembunyikan</button>' +
+'</div>' +
+'<div style="margin-top:8px;">' +
+  '<button class="gb-reply-delete" onclick="hapusPesan(\''+item.id+'\')" style="width:100%;">🗑️ Hapus Permanen</button>' +
+'</div></div>';
   }
 
   div.innerHTML =
@@ -742,6 +747,22 @@ function tampilTombolMore() {
         console.error(err);
       }
     }
+
+    async function hapusPesan(docId) {
+  if (!confirm('Yakin mau hapus pesan ini permanen? Tidak bisa dibatalkan!')) return;
+  if (!window._fb) return;
+  try {
+    var _f = window._fb;
+    await _f.deleteDoc(_f.doc(window._db, 'messages', docId));
+    showToast('Pesan dihapus permanen 🗑️');
+    // Hapus kartu dari DOM langsung tanpa reload
+    var card = document.getElementById('card-' + docId);
+    if (card) card.remove();
+  } catch(err) {
+    showToast('Gagal menghapus 😢');
+    console.error(err);
+  }
+}
   </script>
 
   <!-- Firebase — load sebagai module, resolve promise saat siap -->
