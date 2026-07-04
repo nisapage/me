@@ -97,6 +97,14 @@
     .vc-card-body{padding:12px 14px;}
     .vc-card-title{font-weight:700;font-size:15px;color:var(--pink-dark);margin-bottom:4px;}
     .vc-card-desc{font-size:13px;line-height:1.5;color:var(--text);}
+    .vc-card-img {
+  /* tambahkan ini */
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+.vc-card-img:active {
+  transform: scale(0.97);
+}
     .vc-tbc{text-align:center;font-size:13px;color:#b45a7e;font-style:italic;margin-top:6px;margin-bottom:4px;}
     /* ======== GUESTBOOK ======== */
     .gb-intro{text-align:center;font-size:13px;color:var(--text);background:var(--pink-1);border-radius:14px;padding:12px 14px;margin-bottom:18px;line-height:1.6;}
@@ -376,9 +384,9 @@
       else btn.classList.remove('show');
     });
 
-    document.querySelectorAll('.profile-photos img').forEach(function(img){
-      img.addEventListener('click', function(){ bukaLightbox(img.src); });
-    });
+    document.querySelectorAll('.profile-photos img, .vc-card-img').forEach(function(img){
+  img.addEventListener('click', function(){ bukaLightbox(img.src); });
+});
 
     // =============================================
     // MUSIC
