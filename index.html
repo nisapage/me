@@ -8,198 +8,84 @@
   <base target="_top">
   <style>
     :root{
-      --pink-1:#fff0f5;
-      --pink-2:#ffd6e8;
-      --pink-3:#ff9ebb;
-      --pink-4:#ff6fa5;
-      --pink-dark:#d63e79;
-      --text:#5c2a3d;
+      --pink-1:#fff0f5;--pink-2:#ffd6e8;--pink-3:#ff9ebb;
+      --pink-4:#ff6fa5;--pink-dark:#d63e79;--text:#5c2a3d;
       --card-bg:rgba(255,255,255,0.85);
     }
     body.dark{
-      --pink-1:#3a2230;
-      --pink-2:#2b1a26;
-      --pink-3:#7a3f5c;
-      --pink-4:#ff6fa5;
-      --pink-dark:#ff9ebb;
-      --text:#f6dce8;
+      --pink-1:#3a2230;--pink-2:#2b1a26;--pink-3:#7a3f5c;
+      --pink-4:#ff6fa5;--pink-dark:#ff9ebb;--text:#f6dce8;
       --card-bg:rgba(35,20,30,0.85);
       background:linear-gradient(160deg,#241119,#33172a 60%,#3a2230);
     }
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{
-      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-      background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));
-      min-height:100vh;
-      color:var(--text);
-      display:flex;
-      justify-content:center;
-      padding:24px 14px;
-      overflow-x:hidden;
-    }
-    .app{ width:100%; max-width:420px; position:relative; z-index:2; }
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));min-height:100vh;color:var(--text);display:flex;justify-content:center;padding:24px 14px;overflow-x:hidden;}
+    .app{width:100%;max-width:420px;position:relative;z-index:2;}
     #petals{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1;}
     .petal{position:absolute;top:-40px;font-size:18px;opacity:0.75;animation:petalFall linear infinite;}
-    @keyframes petalFall{
-      0%{transform:translateY(-40px) translateX(0) rotate(0deg);}
-      100%{transform:translateY(110vh) translateX(20px) rotate(360deg);}
-    }
+    @keyframes petalFall{0%{transform:translateY(-40px) translateX(0) rotate(0deg);}100%{transform:translateY(110vh) translateX(20px) rotate(360deg);}}
     .fab-row{position:fixed;top:14px;right:14px;display:flex;gap:8px;z-index:20;}
-    .fab-btn{
-      width:38px;height:38px;border-radius:50%;border:none;
-      background:var(--card-bg);box-shadow:0 4px 12px rgba(214,62,121,0.25);
-      font-size:16px;display:flex;align-items:center;justify-content:center;
-      cursor:pointer;transition:transform .15s ease;
-    }
+    .fab-btn{width:38px;height:38px;border-radius:50%;border:none;background:var(--card-bg);box-shadow:0 4px 12px rgba(214,62,121,0.25);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s ease;}
     .fab-btn:active{transform:scale(0.9);}
-    #splash{
-      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));
-      z-index:999;animation:splashOut .9s ease forwards;animation-delay:0.3s;
-    }
+    #splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));z-index:999;animation:splashOut .9s ease forwards;animation-delay:0.3s;}
     #splash .splash-emoji{font-size:52px;animation:splashPop .7s cubic-bezier(.34,1.56,.64,1) forwards;}
-    @keyframes splashPop{
-      0%{transform:scale(0.15);opacity:0;}
-      60%{transform:scale(1.15);opacity:1;}
-      100%{transform:scale(1);opacity:1;}
-    }
-    @keyframes splashOut{
-      0%{opacity:1;visibility:visible;}
-      99%{opacity:0;visibility:visible;}
-      100%{opacity:0;visibility:hidden;pointer-events:none;}
-    }
-    .card{
-      background:var(--card-bg);position:relative;z-index:2;border-radius:22px;
-      padding:28px 22px;box-shadow:0 10px 30px rgba(214,62,121,0.25);
-      transform:scale(0.15);opacity:0;
-      animation:cardGrow .8s cubic-bezier(.34,1.56,.64,1) forwards;
-      animation-delay:0.35s;transform-origin:center center;
-    }
-    @keyframes cardGrow{
-      0%{opacity:0;transform:scale(0.15);}
-      70%{opacity:1;transform:scale(1.03);}
-      100%{opacity:1;transform:scale(1);}
-    }
+    @keyframes splashPop{0%{transform:scale(0.15);opacity:0;}60%{transform:scale(1.15);opacity:1;}100%{transform:scale(1);opacity:1;}}
+    @keyframes splashOut{0%{opacity:1;visibility:visible;}99%{opacity:0;visibility:visible;}100%{opacity:0;visibility:hidden;pointer-events:none;}}
+    .card{background:var(--card-bg);position:relative;z-index:2;border-radius:22px;padding:28px 22px;box-shadow:0 10px 30px rgba(214,62,121,0.25);transform:scale(0.15);opacity:0;animation:cardGrow .8s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:0.35s;transform-origin:center center;}
+    @keyframes cardGrow{0%{opacity:0;transform:scale(0.15);}70%{opacity:1;transform:scale(1.03);}100%{opacity:1;transform:scale(1);}}
     .emoji-float{text-align:center;font-size:38px;margin-bottom:6px;animation:float 3s ease-in-out infinite;}
     @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
     h1{text-align:center;font-size:22px;color:var(--pink-dark);margin-bottom:6px;line-height:1.4;}
     .subtitle{text-align:center;font-size:13px;color:#a1526f;margin-bottom:24px;}
-    .greeting{
-      text-align:center;font-size:12.5px;color:var(--pink-dark);background:var(--pink-1);
-      border-radius:999px;padding:6px 14px;margin:0 auto 18px;width:fit-content;font-weight:600;
-    }
+    .greeting{text-align:center;font-size:12.5px;color:var(--pink-dark);background:var(--pink-1);border-radius:999px;padding:6px 14px;margin:0 auto 18px;width:fit-content;font-weight:600;}
     .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px;}
-    .menu-grid-center{display:flex;justify-content:center;margin-top:12px;margin-bottom:6px;}
-    .menu-grid-center .menu-btn{width:calc(50% - 6px);}
-    .menu-btn{
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:8px;width:100%;aspect-ratio:1/0.85;padding:14px 10px;border:none;
-      border-radius:18px;background:linear-gradient(135deg,#ffffff,var(--pink-1));
-      color:var(--pink-dark);font-size:14px;font-weight:600;cursor:pointer;
-      box-shadow:0 4px 12px rgba(255,111,165,0.25);
-      transition:transform .15s ease,box-shadow .15s ease;text-align:center;
-    }
+    .menu-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;aspect-ratio:1/0.85;padding:14px 10px;border:none;border-radius:18px;background:linear-gradient(135deg,#ffffff,var(--pink-1));color:var(--pink-dark);font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(255,111,165,0.25);transition:transform .15s ease,box-shadow .15s ease;text-align:center;}
     .menu-btn:active{transform:scale(0.96);box-shadow:0 2px 6px rgba(255,111,165,0.3);}
     .menu-btn .ic{font-size:26px;}
     .back-wrap{display:flex;justify-content:center;margin-top:22px;}
-    .back-btn{
-      display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border:none;
-      border-radius:999px;background:var(--pink-4);color:#fff;font-weight:600;
-      font-size:14px;cursor:pointer;transition:transform .15s ease,background .15s ease;
-    }
+    .back-btn{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border:none;border-radius:999px;background:var(--pink-4);color:#fff;font-weight:600;font-size:14px;cursor:pointer;transition:transform .15s ease,background .15s ease;}
     .back-btn:active{transform:scale(0.95);background:var(--pink-dark);}
-    .page{display:none;}
-    .page.active{display:block;animation:slideIn .35s ease;}
+    .page{display:none;}.page.active{display:block;animation:slideIn .35s ease;}
     @keyframes slideIn{from{opacity:0;transform:translateX(14px);}to{opacity:1;transform:translateX(0);}}
     .section-title{font-size:19px;color:var(--pink-dark);margin-bottom:16px;text-align:center;}
     .profile-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;}
-    .profile-photos img{
-      width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;
-      border:2px solid #fff;box-shadow:0 4px 10px rgba(255,111,165,0.3);
-      cursor:pointer;transition:transform .2s ease;
-    }
+    .profile-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;border:2px solid #fff;box-shadow:0 4px 10px rgba(255,111,165,0.3);cursor:pointer;transition:transform .2s ease;}
     .profile-photos img:active{transform:scale(0.95);}
-    .info-row{
-      display:flex;flex-direction:column;gap:2px;padding:12px 14px;
-      background:var(--pink-1);border-radius:14px;margin-bottom:10px;
-      border-left:4px solid var(--pink-3);
-    }
+    .info-row{display:flex;flex-direction:column;gap:2px;padding:12px 14px;background:var(--pink-1);border-radius:14px;margin-bottom:10px;border-left:4px solid var(--pink-3);}
     .info-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#b45a7e;font-weight:700;}
     .info-value{font-size:14.5px;line-height:1.5;}
     ul.list{list-style:none;}
-    ul.list li{
-      background:var(--pink-1);padding:11px 14px;border-radius:12px;
-      margin-bottom:8px;font-size:14.5px;display:flex;align-items:flex-start;gap:8px;
-    }
+    ul.list li{background:var(--pink-1);padding:11px 14px;border-radius:12px;margin-bottom:8px;font-size:14.5px;display:flex;align-items:flex-start;gap:8px;}
     .list-icon{flex-shrink:0;}
     .lk-block{margin-bottom:16px;}
     .lk-title{font-weight:700;font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-    .acc-item{
-      display:flex;align-items:center;gap:12px;background:var(--pink-1);
-      padding:12px 14px;border-radius:14px;margin-bottom:10px;
-      text-decoration:none;color:inherit;transition:transform .15s ease;
-    }
+    .acc-item{display:flex;align-items:center;gap:12px;background:var(--pink-1);padding:12px 14px;border-radius:14px;margin-bottom:10px;text-decoration:none;color:inherit;transition:transform .15s ease;}
     .acc-item:active{transform:scale(0.97);}
     .acc-ic{font-size:20px;width:26px;text-align:center;}
     .acc-text{font-size:14px;flex:1;}
     .acc-platform{font-size:11px;color:#b45a7e;font-weight:700;text-transform:uppercase;}
     footer{text-align:center;font-size:11px;color:#c17b95;margin-top:18px;}
     .footer-date{text-align:center;font-size:11px;color:#b45a7e;margin-top:4px;font-weight:600;}
-    #toTop{
-      position:fixed;right:18px;bottom:70px;background:var(--pink-4);color:#fff;
-      border:none;width:40px;height:40px;border-radius:50%;font-size:16px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.2);display:none;align-items:center;
-      justify-content:center;cursor:pointer;z-index:15;
-    }
+    #toTop{position:fixed;right:18px;bottom:70px;background:var(--pink-4);color:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:16px;box-shadow:0 4px 12px rgba(0,0,0,0.2);display:none;align-items:center;justify-content:center;cursor:pointer;z-index:15;}
     #toTop.show{display:flex;}
-    /* ===== Now Playing ===== */
-    #nowPlaying{
-      position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-      background:var(--pink-dark);color:#fff;font-size:12px;font-weight:600;
-      padding:8px 16px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,0.2);
-      z-index:10;display:flex;align-items:center;gap:8px;white-space:nowrap;
-      transition:opacity .4s ease;cursor:pointer;
-    }
+    #nowPlaying{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--pink-dark);color:#fff;font-size:12px;font-weight:600;padding:8px 16px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,0.2);z-index:10;display:flex;align-items:center;gap:8px;white-space:nowrap;transition:opacity .4s ease;cursor:pointer;}
     #nowPlaying.hide{opacity:0;pointer-events:none;}
     .np-icon{animation:spin 2s linear infinite;display:inline-block;}
     @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
     .np-icon.paused{animation:none;}
-    .toast{
-      position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-40px);
-      background:var(--pink-dark);color:#fff;font-size:12.5px;font-weight:600;
-      padding:9px 18px;border-radius:999px;z-index:50;opacity:0;
-      transition:all .3s ease;white-space:nowrap;
-    }
+    .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-40px);background:var(--pink-dark);color:#fff;font-size:12.5px;font-weight:600;padding:9px 18px;border-radius:999px;z-index:50;opacity:0;transition:all .3s ease;white-space:nowrap;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-    /* ===== Share modal ===== */
-    #shareOverlay{
-      position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;
-      align-items:flex-end;justify-content:center;z-index:60;
-    }
+    #shareOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:flex-end;justify-content:center;z-index:60;}
     #shareOverlay.show{display:flex;}
-    .share-sheet{
-      width:100%;max-width:420px;background:var(--card-bg);
-      border-radius:22px 22px 0 0;padding:20px 20px 26px;animation:sheetUp .3s ease;
-    }
+    .share-sheet{width:100%;max-width:420px;background:var(--card-bg);border-radius:22px 22px 0 0;padding:20px 20px 26px;animation:sheetUp .3s ease;}
     @keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
     .share-sheet h3{text-align:center;font-size:15px;color:var(--pink-dark);margin-bottom:16px;}
     .share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
-    .share-opt{
-      display:flex;flex-direction:column;align-items:center;gap:6px;
-      background:none;border:none;cursor:pointer;color:var(--text);font-size:11px;text-decoration:none;
-    }
-    .share-opt .ic-wrap{
-      width:46px;height:46px;border-radius:50%;display:flex;
-      align-items:center;justify-content:center;font-size:20px;color:#fff;
-    }
+    .share-opt{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:var(--text);font-size:11px;text-decoration:none;}
+    .share-opt .ic-wrap{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;}
     .share-opt:active .ic-wrap{transform:scale(0.92);}
-    .sc-wa{background:#25D366;}.sc-fb{background:#1877F2;}.sc-tw{background:#000;}
-    .sc-tg{background:#26A5E4;}.sc-em{background:#EA4335;}.sc-cp{background:var(--pink-4);}
-    .share-close{
-      display:block;width:100%;padding:12px;border:none;border-radius:14px;
-      background:var(--pink-1);color:var(--pink-dark);font-weight:700;font-size:14px;cursor:pointer;
-    }
-    /* ===== Vibe Coding ===== */
+    .sc-wa{background:#25D366;}.sc-fb{background:#1877F2;}.sc-tw{background:#000;}.sc-tg{background:#26A5E4;}.sc-em{background:#EA4335;}.sc-cp{background:var(--pink-4);}
+    .share-close{display:block;width:100%;padding:12px;border:none;border-radius:14px;background:var(--pink-1);color:var(--pink-dark);font-weight:700;font-size:14px;cursor:pointer;}
     .vc-intro{text-align:center;font-size:13.5px;color:var(--text);margin-bottom:20px;line-height:1.6;}
     .vc-card{background:var(--pink-1);border-radius:16px;margin-bottom:14px;overflow:hidden;border-left:4px solid var(--pink-3);}
     .vc-card-img{width:100%;height:auto;display:block;border-bottom:2px solid var(--pink-2);}
@@ -207,122 +93,44 @@
     .vc-card-title{font-weight:700;font-size:15px;color:var(--pink-dark);margin-bottom:4px;}
     .vc-card-desc{font-size:13px;line-height:1.5;color:var(--text);}
     .vc-tbc{text-align:center;font-size:13px;color:#b45a7e;font-style:italic;margin-top:6px;margin-bottom:4px;}
-    /* ===== Guestbook ===== */
-    .gb-intro{
-      text-align:center;font-size:13px;color:var(--text);
-      background:var(--pink-1);border-radius:14px;padding:12px 14px;
-      margin-bottom:18px;line-height:1.6;
-    }
+    .gb-intro{text-align:center;font-size:13px;color:var(--text);background:var(--pink-1);border-radius:14px;padding:12px 14px;margin-bottom:18px;line-height:1.6;}
     .gb-form{margin-bottom:16px;}
-    .gb-textarea{
-      width:100%;min-height:100px;border:2px solid var(--pink-2);border-radius:14px;
-      padding:12px 14px;font-size:14px;font-family:inherit;color:var(--text);
-      background:var(--pink-1);resize:none;outline:none;transition:border .2s;
-    }
+    .gb-textarea{width:100%;min-height:100px;border:2px solid var(--pink-2);border-radius:14px;padding:12px 14px;font-size:14px;font-family:inherit;color:var(--text);background:var(--pink-1);resize:none;outline:none;transition:border .2s;}
     .gb-textarea:focus{border-color:var(--pink-4);}
-    .gb-send{
-      display:block;width:100%;margin-top:10px;padding:13px;border:none;
-      border-radius:14px;background:var(--pink-4);color:#fff;font-size:14px;
-      font-weight:700;cursor:pointer;transition:background .15s,transform .15s;
-    }
+    .gb-send{display:block;width:100%;margin-top:10px;padding:13px;border:none;border-radius:14px;background:var(--pink-4);color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s,transform .15s;}
     .gb-send:active{background:var(--pink-dark);transform:scale(0.98);}
     .gb-send:disabled{opacity:0.6;cursor:not-allowed;}
-    .gb-divider{
-      text-align:center;font-size:12px;color:#b45a7e;font-weight:700;
-      margin-bottom:14px;letter-spacing:.5px;text-transform:uppercase;
-    }
-    .gb-card{
-      background:var(--pink-1);border-radius:16px;margin-bottom:12px;
-      padding:14px;border-left:4px solid var(--pink-3);
-    }
+    .gb-divider{text-align:center;font-size:12px;color:#b45a7e;font-weight:700;margin-bottom:14px;letter-spacing:.5px;text-transform:uppercase;}
+    .gb-card{background:var(--pink-1);border-radius:16px;margin-bottom:12px;padding:14px;border-left:4px solid var(--pink-3);}
     .gb-card-q{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:10px;}
-    .gb-card-a{
-      background:var(--card-bg);border-radius:12px;padding:10px 12px;
-      font-size:13.5px;color:var(--pink-dark);line-height:1.5;
-      border-left:3px solid var(--pink-4);
-    }
+    .gb-card-a{background:var(--card-bg);border-radius:12px;padding:10px 12px;font-size:13.5px;color:var(--pink-dark);line-height:1.5;border-left:3px solid var(--pink-4);}
     .gb-card-a-label{font-size:10px;font-weight:700;color:#b45a7e;text-transform:uppercase;margin-bottom:4px;}
     .gb-card-date{font-size:10.5px;color:#c17b95;margin-top:8px;text-align:right;}
     .gb-empty{text-align:center;font-size:13px;color:#c17b95;padding:20px 0;font-style:italic;}
     .gb-loading{text-align:center;font-size:13px;color:#b45a7e;padding:16px 0;}
-    /* Skeleton loading */
-    .gb-skeleton{
-      background:var(--pink-1);border-radius:16px;margin-bottom:12px;
-      padding:14px;border-left:4px solid var(--pink-2);
-    }
-    .skel-line{
-      height:12px;border-radius:999px;background:var(--pink-2);margin-bottom:8px;
-      animation:skelPulse 1.2s ease-in-out infinite;
-    }
-    .skel-line.w80{width:80%;}
-    .skel-line.w60{width:60%;}
-    .skel-line.w90{width:90%;}
-    .skel-block{
-      height:52px;border-radius:12px;background:var(--pink-2);margin-top:10px;
-      animation:skelPulse 1.2s ease-in-out infinite;animation-delay:.15s;
-    }
-    @keyframes skelPulse{
-      0%,100%{opacity:1;}
-      50%{opacity:0.45;}
-    }
-    /* Pesan baru yang baru dikirim (tampil lokal dulu) */
-    .gb-card-new{
-      background:var(--pink-1);border-radius:16px;margin-bottom:12px;
-      padding:14px;border-left:4px solid var(--pink-4);
-      animation:slideIn .3s ease;
-    }
+    .gb-skeleton{background:var(--pink-1);border-radius:16px;margin-bottom:12px;padding:14px;border-left:4px solid var(--pink-2);}
+    .skel-line{height:12px;border-radius:999px;background:var(--pink-2);margin-bottom:8px;animation:skelPulse 1.2s ease-in-out infinite;}
+    .skel-line.w80{width:80%;}.skel-line.w60{width:60%;}.skel-line.w90{width:90%;}
+    .skel-block{height:52px;border-radius:12px;background:var(--pink-2);margin-top:10px;animation:skelPulse 1.2s ease-in-out infinite;animation-delay:.15s;}
+    @keyframes skelPulse{0%,100%{opacity:1;}50%{opacity:0.45;}}
+    .gb-card-new{background:var(--pink-1);border-radius:16px;margin-bottom:12px;padding:14px;border-left:4px solid var(--pink-4);animation:slideIn .3s ease;}
     .gb-card-new-q{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:8px;}
     .gb-card-new-status{font-size:11.5px;color:#b45a7e;font-style:italic;}
-    /* ===== Admin mode ===== */
-    .gb-admin-inline{
-      display:none;margin-top:10px;border-top:1px dashed var(--pink-2);padding-top:10px;
-    }
+    .gb-admin-inline{display:none;margin-top:10px;border-top:1px dashed var(--pink-2);padding-top:10px;}
     .gb-admin-inline.show{display:block;}
-    .gb-reply-area{
-      width:100%;min-height:70px;border:2px solid var(--pink-2);border-radius:10px;
-      padding:10px;font-size:13px;font-family:inherit;color:var(--text);
-      background:var(--card-bg);resize:none;outline:none;margin-bottom:8px;
-    }
+    .gb-reply-area{width:100%;min-height:70px;border:2px solid var(--pink-2);border-radius:10px;padding:10px;font-size:13px;font-family:inherit;color:var(--text);background:var(--card-bg);resize:none;outline:none;margin-bottom:8px;}
     .gb-reply-area:focus{border-color:var(--pink-4);}
     .gb-reply-row{display:flex;gap:8px;}
-    .gb-reply-save{
-      flex:1;padding:10px;border:none;border-radius:10px;background:var(--pink-4);
-      color:#fff;font-weight:700;font-size:13px;cursor:pointer;
-    }
-    .gb-reply-hide{
-      padding:10px 14px;border:none;border-radius:10px;background:var(--pink-2);
-      color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;
-    }
-    .gb-badge{
-      display:inline-block;font-size:10px;padding:2px 8px;border-radius:999px;
-      font-weight:700;margin-left:6px;
-    }
-    .gb-badge-show{background:#d4edda;color:#155724;}
-    .gb-badge-hide{background:#f8d7da;color:#721c24;}
-    .gb-login-bar{
-      display:flex;align-items:center;gap:8px;
-      background:var(--pink-1);border-radius:14px;padding:10px 14px;
-      margin-bottom:16px;
-    }
-    .gb-login-bar input{
-      flex:1;padding:8px 12px;border:2px solid var(--pink-2);border-radius:10px;
-      font-size:13px;font-family:inherit;color:var(--text);background:var(--card-bg);
-      outline:none;
-    }
+    .gb-reply-save{flex:1;padding:10px;border:none;border-radius:10px;background:var(--pink-4);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
+    .gb-reply-hide{padding:10px 14px;border:none;border-radius:10px;background:var(--pink-2);color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;}
+    .gb-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:999px;font-weight:700;margin-left:6px;}
+    .gb-badge-show{background:#d4edda;color:#155724;}.gb-badge-hide{background:#f8d7da;color:#721c24;}
+    .gb-login-bar{display:flex;align-items:center;gap:8px;background:var(--pink-1);border-radius:14px;padding:10px 14px;margin-bottom:16px;}
+    .gb-login-bar input{flex:1;padding:8px 12px;border:2px solid var(--pink-2);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);background:var(--card-bg);outline:none;}
     .gb-login-bar input:focus{border-color:var(--pink-4);}
-    .gb-login-bar button{
-      padding:8px 14px;border:none;border-radius:10px;background:var(--pink-dark);
-      color:#fff;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;
-    }
-    .gb-admin-bar{
-      display:flex;justify-content:space-between;align-items:center;
-      background:var(--pink-2);border-radius:14px;padding:10px 14px;
-      margin-bottom:16px;font-size:13px;color:var(--pink-dark);font-weight:700;
-    }
-    .gb-logout-btn{
-      padding:6px 12px;border:none;border-radius:999px;background:var(--pink-1);
-      color:var(--pink-dark);font-weight:700;font-size:12px;cursor:pointer;
-    }
+    .gb-login-bar button{padding:8px 14px;border:none;border-radius:10px;background:var(--pink-dark);color:#fff;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;}
+    .gb-admin-bar{display:flex;justify-content:space-between;align-items:center;background:var(--pink-2);border-radius:14px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--pink-dark);font-weight:700;}
+    .gb-logout-btn{padding:6px 12px;border:none;border-radius:999px;background:var(--pink-1);color:var(--pink-dark);font-weight:700;font-size:12px;cursor:pointer;}
     #gbLoginSection{margin-bottom:4px;}
   </style>
 </head>
@@ -346,7 +154,7 @@
         <div class="menu-grid">
           <button class="menu-btn" onclick="showPage('profil')"><span class="ic">🧕</span> Profil</button>
           <button class="menu-btn" onclick="showPage('hobi')"><span class="ic">🎨</span> Hobi</button>
-          <button class="menu-btn" onclick="showPage('likes')"><span class="ic">💗</span> Likes & Yikes</button>
+          <button class="menu-btn" onclick="showPage('likes')"><span class="ic">💗</span> Likes &amp; Yikes</button>
           <button class="menu-btn" onclick="showPage('akun')"><span class="ic">📱</span> Akunku</button>
         </div>
         <div class="menu-grid">
@@ -388,7 +196,7 @@
 
       <!-- LIKES & YIKES -->
       <div id="page-likes" class="page">
-        <div class="section-title">💗 Likes & Yikes</div>
+        <div class="section-title">💗 Likes &amp; Yikes</div>
         <div class="lk-block">
           <div class="lk-title">💕 Likes</div>
           <ul class="list">
@@ -454,12 +262,10 @@
           Mau nanya sesuatu? Kirim aja anonim di sini<br>
           Nanti jawaban akan dikirim di bawah pertanyaannya 🌸
         </div>
-        <!-- Form kirim pesan -->
         <div class="gb-form">
           <textarea class="gb-textarea" id="gbPesan" placeholder="Tulis pertanyaan atau pesanmu di sini..."></textarea>
           <button class="gb-send" id="gbSendBtn" onclick="kirimPesan()">Kirim Anonim 💌</button>
         </div>
-        <!-- Login Nisa -->
         <div id="gbLoginSection">
           <div class="gb-login-bar" id="gbLoginBar">
             <input type="password" id="gbPinInput" placeholder="Masukkan sandi..." onkeydown="if(event.key==='Enter') loginAdmin()">
@@ -470,7 +276,6 @@
             <button class="gb-logout-btn" onclick="logoutAdmin()">Keluar</button>
           </div>
         </div>
-        <!-- Pesan publik -->
         <div class="gb-divider">💬 Jawaban Ada di Sini</div>
         <div id="gbPublikList"><div class="gb-loading">Memuat pesan... 🌸</div></div>
         <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
@@ -485,13 +290,10 @@
 
   <button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️</button>
   <div class="toast" id="toast"></div>
-
-  <!-- Now Playing -->
   <div id="nowPlaying" class="hide" onclick="toggleMusic()">
     <span class="np-icon paused" id="npIcon">🎵</span>
     <span id="npText">NCT Dream - Heavenly</span>
   </div>
-
   <div id="shareOverlay" onclick="if(event.target===this) closeShareSheet()">
     <div class="share-sheet">
       <h3>Bagikan Halaman Ini</h3>
@@ -509,9 +311,318 @@
 
   <audio id="bgAudio" loop preload="none" src="aa.mp3"></audio>
 
-  <!-- ======================================================= -->
-  <!-- FIREBASE SDK (type=module, expose ke window)            -->
-  <!-- ======================================================= -->
+  <!-- ============================================================
+       PENTING: Script biasa dulu (buat promise), baru Firebase
+       ============================================================ -->
+  <script>
+    // ✅ Buat promise SEBELUM Firebase module load
+    // Ini mencegah race condition — tidak peduli siapa yang duluan selesai
+    window._fbReadyPromise = new Promise(function(resolve) {
+      window._fbReadyResolve = resolve;
+    });
+
+    var GAS_URL = 'https://script.google.com/macros/s/AKfycbwAUZkNvaMnuf77gdg6G98ncuaPT3ULd0j0iAYy6zgWZCQIWfntnuO9RKg0FZZ-0-fp/exec';
+    var adminPin = '';
+    var isAdmin  = false;
+
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+      document.getElementById('page-' + name).classList.add('active');
+      window.scrollTo(0, 0);
+      if (name === 'guestbook') loadPublik();
+    }
+
+    (function(){
+      var hari  = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+      var bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+      var now   = new Date();
+      document.getElementById('footerDate').textContent =
+        "📅 " + hari[now.getDay()] + ", " + now.getDate() + " " + bulan[now.getMonth()] + " " + now.getFullYear();
+      var h = now.getHours();
+      var greet = h>=4&&h<11?"Selamat pagi":h>=11&&h<15?"Selamat siang":h>=15&&h<18?"Selamat sore":"Selamat malam";
+      document.getElementById('greeting').textContent = "✨ " + greet + ", semoga harimu menyenangkan~~";
+    })();
+
+    function showToast(msg){
+      var t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2000);
+    }
+
+    window.addEventListener('scroll', function(){
+      var btn = document.getElementById('toTop');
+      if (window.scrollY > 200) btn.classList.add('show');
+      else btn.classList.remove('show');
+    });
+
+    document.querySelectorAll('.profile-photos img').forEach(function(img){
+      img.addEventListener('click', function(){ window.open(img.src, '_blank'); });
+    });
+
+    var audio = document.getElementById('bgAudio');
+    var audioStarted = false;
+    var musicBtn = document.getElementById('musicBtn');
+    var npEl     = document.getElementById('nowPlaying');
+    var npIcon   = document.getElementById('npIcon');
+
+    function manualPlay(){
+      if (audioStarted) return;
+      audio.play().then(function(){
+        audioStarted = true;
+        npEl.classList.remove('hide');
+        npIcon.classList.remove('paused');
+        musicBtn.textContent = '🎵';
+      }).catch(function(){});
+    }
+    function toggleMusic(){
+      if (!audioStarted){ manualPlay(); return; }
+      if (audio.paused){ audio.play(); musicBtn.textContent='🎵'; npIcon.classList.remove('paused'); }
+      else { audio.pause(); musicBtn.textContent='🔇'; npIcon.classList.add('paused'); }
+    }
+    window.addEventListener('load', manualPlay);
+    document.addEventListener('click', manualPlay, {once:true});
+    document.addEventListener('touchstart', manualPlay, {once:true});
+
+    function toggleTheme(){
+      document.body.classList.toggle('dark');
+      var isDark = document.body.classList.contains('dark');
+      document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+      showToast(isDark ? 'Mode gelap aktif 🌙' : 'Mode terang aktif ☀️');
+    }
+
+    var PUBLIC_URL = 'https://nisapage.github.io/me/';
+    function sharePage(){
+      var url = PUBLIC_URL, text = 'Ini webpagenya Nisa!';
+      if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+        navigator.share({title:'Halamannya Nisa',text:text,url:url}).catch(function(){});
+        return;
+      }
+      document.getElementById('shareWA').href = 'https://wa.me/?text='+encodeURIComponent(text+' '+url);
+      document.getElementById('shareFB').href = 'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url);
+      document.getElementById('shareTW').href = 'https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url);
+      document.getElementById('shareTG').href = 'https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(text);
+      document.getElementById('shareEM').href = 'mailto:?subject='+encodeURIComponent('Halamannya Nisa')+'&body='+encodeURIComponent(text+' '+url);
+      document.getElementById('shareOverlay').classList.add('show');
+    }
+    function closeShareSheet(){ document.getElementById('shareOverlay').classList.remove('show'); }
+    function copyShareLink(){
+      if (navigator.clipboard) navigator.clipboard.writeText(PUBLIC_URL).then(function(){ showToast('Link disalin! 📋'); closeShareSheet(); });
+    }
+
+    (function(){
+      var emojis = ['🌸','🌷','🎀','💮'];
+      var container = document.getElementById('petals');
+      for (var i=0;i<8;i++){
+        var p = document.createElement('div');
+        p.className = 'petal';
+        p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        p.style.left = Math.random()*100+'vw';
+        p.style.fontSize = (14+Math.random()*14)+'px';
+        var d = 9+Math.random()*10;
+        p.style.animationDuration = d+'s';
+        p.style.animationDelay = (Math.random()*d)+'s';
+        container.appendChild(p);
+      }
+    })();
+
+    setTimeout(function(){ var s=document.getElementById('splash'); if(s) s.style.display='none'; },1300);
+
+    document.querySelectorAll('.acc-item').forEach(function(item){
+      item.addEventListener('contextmenu', function(e){
+        e.preventDefault();
+        navigator.clipboard && navigator.clipboard.writeText(item.href).then(function(){ showToast('Link disalin! 📋'); });
+      });
+    });
+
+    // ============================================================
+    // GUESTBOOK FUNCTIONS
+    // ============================================================
+
+    function gasPost(payload, cb){
+      fetch(GAS_URL, {method:'POST', body:JSON.stringify(payload)})
+        .then(function(r){ return r.json(); })
+        .then(cb)
+        .catch(function(){ showToast('Koneksi gagal, coba lagi 😢'); });
+    }
+
+    function skelHtml(){
+      return '<div class="gb-skeleton"><div class="skel-line w80"></div><div class="skel-line w60"></div><div class="skel-block"></div></div>';
+    }
+
+    function escHtml(str){
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function tampilPesanBaru(pesan){
+      var old = document.getElementById('gbDraftCard');
+      if (old) old.remove();
+      var el  = document.getElementById('gbPublikList');
+      var div = document.createElement('div');
+      div.className = 'gb-card-new';
+      div.id = 'gbDraftCard';
+      div.innerHTML = '<div class="gb-card-new-q">🙋 '+escHtml(pesan)+'</div><div class="gb-card-new-status">⏳ Pesanmu terkirim! Tunggu jawaban dari Nisa ya~ 🌸</div>';
+      el.insertBefore(div, el.firstChild);
+    }
+
+    // Kirim pesan → Firestore
+    function kirimPesan(){
+      var pesan = document.getElementById('gbPesan').value.trim();
+      if (!pesan){ showToast('Pesannya kosong nih! 🌸'); return; }
+      if (!window._fb){ showToast('Koneksi sedang disiapkan, coba lagi 🌸'); return; }
+
+      var btn = document.getElementById('gbSendBtn');
+      btn.disabled = true; btn.textContent = 'Mengirim... 🌸';
+      tampilPesanBaru(pesan);
+
+      var _f = window._fb;
+      _f.addDoc(_f.collection(window._db,'messages'),{
+        pesan: pesan, waktu: _f.serverTimestamp(), tampil: false, jawaban: ''
+      }).then(function(){
+        btn.disabled = false; btn.textContent = 'Kirim Anonim 💌';
+        document.getElementById('gbPesan').value = '';
+        showToast('Pesanmu terkirim! 🌸');
+      }).catch(function(err){
+        btn.disabled = false; btn.textContent = 'Kirim Anonim 💌';
+        var draft = document.getElementById('gbDraftCard');
+        if (draft) draft.remove();
+        showToast('Koneksi gagal, coba lagi 😢');
+        console.error('Firestore kirim error:', err);
+      });
+    }
+
+    // ✅ FIX UTAMA: loadPublik pakai async/await + _fbReadyPromise
+    // Tidak ada lagi race condition — selalu tunggu Firebase siap dulu
+    async function loadPublik(){
+      var el = document.getElementById('gbPublikList');
+      el.innerHTML = skelHtml() + skelHtml() + skelHtml();
+
+      await window._fbReadyPromise; // tunggu Firebase, aman kapanpun dipanggil
+
+      var _f = window._fb;
+      try {
+        var q = _f.query(
+          _f.collection(window._db, 'messages'),
+          _f.where('tampil', '==', true),
+          _f.orderBy('waktu', 'desc'),
+          _f.limit(20)
+        );
+        var snap = await _f.getDocs(q);
+        el.innerHTML = '';
+        if (snap.empty){
+          el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
+          return;
+        }
+        snap.forEach(function(doc){
+          var item = doc.data(); item.id = doc.id;
+          if (item.waktu && item.waktu.toDate){
+            item.waktu = item.waktu.toDate().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+          }
+          el.appendChild(buatKartuPublik(item));
+        });
+      } catch(err) {
+        // Kalau error karena belum ada composite index, kasih pesan yang jelas
+        el.innerHTML = '<div class="gb-empty">Gagal memuat pesan 😢<br><small style="color:#b45a7e">'+escHtml(err.message)+'</small></div>';
+        console.error('Firestore loadPublik error:', err);
+      }
+    }
+
+    function buatKartuPublik(item){
+      var div = document.createElement('div');
+      div.className = 'gb-card';
+      div.id = 'pubcard-' + (item.row || item.id);
+      var adminSection = '';
+      if (isAdmin){
+        var rowRef = item.row || item.id;
+        adminSection =
+          '<div class="gb-admin-inline show" id="ainline-'+rowRef+'">' +
+            '<textarea class="gb-reply-area" id="reply-'+rowRef+'" placeholder="Tulis atau edit jawaban...">'+escHtml(item.jawaban)+'</textarea>' +
+            '<div class="gb-reply-row">' +
+              '<button class="gb-reply-save" onclick="simpanJawaban(\''+rowRef+'\')">💾 Simpan &amp; Tampilkan</button>' +
+              '<button class="gb-reply-hide" onclick="sembunyikan(\''+rowRef+'\')">🙈 Sembunyikan</button>' +
+            '</div></div>';
+      }
+      div.innerHTML =
+        '<div class="gb-card-q">🙋 '+escHtml(item.pesan)+'</div>' +
+        '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>' +
+        '<div class="gb-card-date">📅 '+(item.waktu||'')+'</div>' + adminSection;
+      return div;
+    }
+
+    function loginAdmin(){
+      var pin = document.getElementById('gbPinInput').value;
+      if (!pin){ showToast('PIN kosong!'); return; }
+      gasPost({action:'login', pin:pin}, function(res){
+        if (res.ok){
+          adminPin = pin; isAdmin = true;
+          document.getElementById('gbPinInput').value = '';
+          document.getElementById('gbLoginBar').style.display = 'none';
+          document.getElementById('gbAdminBar').style.display = 'flex';
+          showToast('Halo Nisa! 🌸');
+          loadAdmin();
+        } else { showToast(res.msg || 'PIN salah!'); }
+      });
+    }
+
+    function logoutAdmin(){
+      adminPin = ''; isAdmin = false;
+      document.getElementById('gbLoginBar').style.display = 'flex';
+      document.getElementById('gbAdminBar').style.display = 'none';
+      loadPublik();
+    }
+
+    function loadAdmin(){
+      var el = document.getElementById('gbPublikList');
+      el.innerHTML = '<div class="gb-loading">Memuat semua pesan... 🌸</div>';
+      gasPost({action:'getAll', pin:adminPin}, function(res){
+        el.innerHTML = '';
+        if (!res.ok){ showToast(res.msg||'Gagal'); return; }
+        if (!res.data || res.data.length===0){ el.innerHTML='<div class="gb-empty">Belum ada pesan masuk 🌸</div>'; return; }
+        res.data.forEach(function(item){
+          var div = document.createElement('div');
+          div.className = 'gb-card'; div.id = 'pubcard-'+item.row;
+          var badge = item.tampil
+            ? '<span class="gb-badge gb-badge-show">Tampil</span>'
+            : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>';
+          var jawabanHtml = item.jawaban
+            ? '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>'
+            : '';
+          div.innerHTML =
+            '<div class="gb-card-q">🙋 '+escHtml(item.pesan)+badge+'</div>' +
+            jawabanHtml +
+            '<div class="gb-card-date">📅 '+item.waktu+'</div>' +
+            '<div class="gb-admin-inline show" id="ainline-'+item.row+'">' +
+              '<textarea class="gb-reply-area" id="reply-'+item.row+'" placeholder="Tulis atau edit jawaban...">'+escHtml(item.jawaban)+'</textarea>' +
+              '<div class="gb-reply-row">' +
+                '<button class="gb-reply-save" onclick="simpanJawaban('+item.row+')">💾 Simpan &amp; Tampilkan</button>' +
+                '<button class="gb-reply-hide" onclick="sembunyikan('+item.row+')">🙈 Sembunyikan</button>' +
+              '</div></div>';
+          el.appendChild(div);
+        });
+      });
+    }
+
+    function simpanJawaban(row){
+      var jawaban = document.getElementById('reply-'+row).value.trim();
+      if (!jawaban){ showToast('Jawaban kosong!'); return; }
+      gasPost({action:'jawab', pin:adminPin, row:row, jawaban:jawaban}, function(res){
+        showToast(res.msg||(res.ok?'Tersimpan! 💌':'Gagal'));
+        if (res.ok){ loadAdmin(); }
+      });
+    }
+
+    function sembunyikan(row){
+      gasPost({action:'sembunyikan', pin:adminPin, row:row}, function(res){
+        if (res.ok){ showToast('Disembunyikan 🙈'); loadAdmin(); }
+        else showToast(res.msg||'Gagal');
+      });
+    }
+  </script>
+
+  <!-- ============================================================
+       FIREBASE — load setelah script utama, resolve promise saat siap
+       ============================================================ -->
   <script type="module">
     import { initializeApp }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -532,380 +643,12 @@
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
 
-    // Expose ke script global (non-module)
     window._db = db;
     window._fb = { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp };
 
-    // Setelah Firebase siap, baru jalankan init utama
-    window.dispatchEvent(new Event('firebaseReady'));
+    // ✅ Firebase sudah siap — resolve promise supaya loadPublik() bisa jalan
+    window._fbReadyResolve();
   </script>
 
-  <!-- ======================================================= -->
-  <!-- SCRIPT UTAMA                                            -->
-  <!-- ======================================================= -->
-  <script>
-    // GAS URL — tetap dipakai HANYA untuk fungsi admin
-    var GAS_URL = 'https://script.google.com/macros/s/AKfycbwAUZkNvaMnuf77gdg6G98ncuaPT3ULd0j0iAYy6zgWZCQIWfntnuO9RKg0FZZ-0-fp/exec';
-    var adminPin = '';
-    var isAdmin  = false;
-
-    // ===== Page navigation =====
-    function showPage(name) {
-      document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-      document.getElementById('page-' + name).classList.add('active');
-      window.scrollTo(0, 0);
-      if (name === 'guestbook') loadPublik();
-    }
-
-    // ===== Footer date & greeting =====
-    (function(){
-      var hari   = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-      var bulan  = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-      var now    = new Date();
-      document.getElementById('footerDate').textContent =
-        "📅 " + hari[now.getDay()] + ", " + now.getDate() + " " + bulan[now.getMonth()] + " " + now.getFullYear();
-      var h = now.getHours();
-      var greet = h>=4&&h<11?"Selamat pagi":h>=11&&h<15?"Selamat siang":h>=15&&h<18?"Selamat sore":"Selamat malam";
-      document.getElementById('greeting').textContent = "✨ " + greet + ", semoga harimu menyenangkan~~";
-    })();
-
-    // ===== Toast =====
-    function showToast(msg){
-      var t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2000);
-    }
-
-    // ===== Scroll to top =====
-    window.addEventListener('scroll', function(){
-      var btn = document.getElementById('toTop');
-      if (window.scrollY > 200) btn.classList.add('show');
-      else btn.classList.remove('show');
-    });
-
-    // ===== Photo tap =====
-    document.querySelectorAll('.profile-photos img').forEach(function(img){
-      img.addEventListener('click', function(){ window.open(img.src, '_blank'); });
-    });
-
-    // ===== Audio & Now Playing =====
-    var audio        = document.getElementById('bgAudio');
-    var audioStarted = false;
-    var musicBtn     = document.getElementById('musicBtn');
-    var npEl         = document.getElementById('nowPlaying');
-    var npIcon       = document.getElementById('npIcon');
-
-    function manualPlay(){
-      if (audioStarted) return;
-      audio.play().then(function(){
-        audioStarted = true;
-        npEl.classList.remove('hide');
-        npIcon.classList.remove('paused');
-        musicBtn.textContent = '🎵';
-      }).catch(function(){});
-    }
-    function toggleMusic(){
-      if (!audioStarted){ manualPlay(); return; }
-      if (audio.paused){
-        audio.play();
-        musicBtn.textContent = '🎵';
-        npIcon.classList.remove('paused');
-      } else {
-        audio.pause();
-        musicBtn.textContent = '🔇';
-        npIcon.classList.add('paused');
-      }
-    }
-    window.addEventListener('load', manualPlay);
-    document.addEventListener('click', manualPlay, { once:true });
-    document.addEventListener('touchstart', manualPlay, { once:true });
-
-    // ===== Theme =====
-    function toggleTheme(){
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
-      showToast(isDark ? 'Mode gelap aktif 🌙' : 'Mode terang aktif ☀️');
-    }
-
-    // ===== Share =====
-    var PUBLIC_URL = 'https://nisapage.github.io/me/';
-    function sharePage(){
-      var url = PUBLIC_URL, text = 'Ini webpagenya Nisa!';
-      if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
-        navigator.share({ title:'Halamannya Nisa', text:text, url:url }).catch(function(){});
-        return;
-      }
-      document.getElementById('shareWA').href = 'https://wa.me/?text=' + encodeURIComponent(text+' '+url);
-      document.getElementById('shareFB').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
-      document.getElementById('shareTW').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url);
-      document.getElementById('shareTG').href = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
-      document.getElementById('shareEM').href = 'mailto:?subject=' + encodeURIComponent('Halamannya Nisa') + '&body=' + encodeURIComponent(text+' '+url);
-      document.getElementById('shareOverlay').classList.add('show');
-    }
-    function closeShareSheet(){ document.getElementById('shareOverlay').classList.remove('show'); }
-    function copyShareLink(){
-      if (navigator.clipboard) navigator.clipboard.writeText(PUBLIC_URL).then(function(){ showToast('Link disalin! 📋'); closeShareSheet(); });
-    }
-
-    // ===== Petals =====
-    (function(){
-      var emojis    = ['🌸','🌷','🎀','💮'];
-      var container = document.getElementById('petals');
-      for (var i = 0; i < 8; i++){
-        var p = document.createElement('div');
-        p.className   = 'petal';
-        p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-        p.style.left  = Math.random()*100 + 'vw';
-        p.style.fontSize = (14+Math.random()*14) + 'px';
-        var d = 9+Math.random()*10;
-        p.style.animationDuration = d + 's';
-        p.style.animationDelay   = (Math.random()*d) + 's';
-        container.appendChild(p);
-      }
-    })();
-
-    setTimeout(function(){ var s=document.getElementById('splash'); if(s) s.style.display='none'; }, 1300);
-
-    // ===== Copy link on acc long-press =====
-    document.querySelectorAll('.acc-item').forEach(function(item){
-      item.addEventListener('contextmenu', function(e){
-        e.preventDefault();
-        navigator.clipboard && navigator.clipboard.writeText(item.href).then(function(){ showToast('Link disalin! 📋'); });
-      });
-    });
-
-    // ============================================================
-    // GUESTBOOK — baca & kirim pakai Firebase, admin tetap GAS
-    // ============================================================
-
-    // ── Helper GAS post (hanya untuk admin) ──────────────────────
-    function gasPost(payload, cb){
-      fetch(GAS_URL, { method:'POST', body: JSON.stringify(payload) })
-        .then(function(r){ return r.json(); })
-        .then(cb)
-        .catch(function(){ showToast('Koneksi gagal, coba lagi 😢'); });
-    }
-
-    // ── Skeleton placeholder ─────────────────────────────────────
-    function skelHtml(){
-      return '<div class="gb-skeleton">' +
-               '<div class="skel-line w80"></div>' +
-               '<div class="skel-line w60"></div>' +
-               '<div class="skel-block"></div>' +
-             '</div>';
-    }
-
-    // ── escHtml ───────────────────────────────────────────────────
-    function escHtml(str){
-      if (!str) return '';
-      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-
-    // ── Tampilkan kartu optimistic (sebelum dijawab) ──────────────
-    function tampilPesanBaru(pesan){
-      var old = document.getElementById('gbDraftCard');
-      if (old) old.remove();
-      var el  = document.getElementById('gbPublikList');
-      var div = document.createElement('div');
-      div.className = 'gb-card-new';
-      div.id        = 'gbDraftCard';
-      div.innerHTML =
-        '<div class="gb-card-new-q">🙋 ' + escHtml(pesan) + '</div>' +
-        '<div class="gb-card-new-status">⏳ Pesanmu terkirim! Tunggu jawaban dari Nisa ya~ 🌸</div>';
-      el.insertBefore(div, el.firstChild);
-    }
-
-    // ── Kirim pesan → Firestore ───────────────────────────────────
-    function kirimPesan(){
-      var pesan = document.getElementById('gbPesan').value.trim();
-      if (!pesan){ showToast('Pesannya kosong nih! 🌸'); return; }
-
-      // Tunggu Firebase siap
-      if (!window._fb){
-        showToast('Koneksi sedang disiapkan, coba lagi 🌸');
-        return;
-      }
-
-      var btn = document.getElementById('gbSendBtn');
-      btn.disabled    = true;
-      btn.textContent = 'Mengirim... 🌸';
-      tampilPesanBaru(pesan);
-
-      var _f = window._fb;
-      _f.addDoc(_f.collection(window._db, 'messages'), {
-        pesan  : pesan,
-        waktu  : _f.serverTimestamp(),
-        tampil : false,
-        jawaban: ''
-      }).then(function(){
-        btn.disabled    = false;
-        btn.textContent = 'Kirim Anonim 💌';
-        document.getElementById('gbPesan').value = '';
-        showToast('Pesanmu terkirim! 🌸');
-      }).catch(function(err){
-        btn.disabled    = false;
-        btn.textContent = 'Kirim Anonim 💌';
-        var draft = document.getElementById('gbDraftCard');
-        if (draft) draft.remove();
-        showToast('Koneksi gagal, coba lagi 😢');
-        console.error('Firestore kirim error:', err);
-      });
-    }
-
-    // ── Load pesan publik ← Firestore ────────────────────────────
-    function loadPublik(){
-      var el = document.getElementById('gbPublikList');
-      el.innerHTML = skelHtml() + skelHtml() + skelHtml();
-
-      // Tunggu Firebase siap
-      if (!window._fb){
-        window.addEventListener('firebaseReady', function(){ loadPublik(); }, { once:true });
-        return;
-      }
-
-      var _f = window._fb;
-      var q  = _f.query(
-        _f.collection(window._db, 'messages'),
-        _f.where('tampil', '==', true),
-        _f.orderBy('waktu', 'desc'),
-        _f.limit(20)
-      );
-
-      _f.getDocs(q).then(function(snap){
-        el.innerHTML = '';
-        if (snap.empty){
-          el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
-          return;
-        }
-        snap.forEach(function(doc){
-          var item = doc.data();
-          item.id  = doc.id;
-          // Format Timestamp Firestore → string tanggal Indonesia
-          if (item.waktu && item.waktu.toDate){
-            var d = item.waktu.toDate();
-            item.waktu = d.toLocaleDateString('id-ID',{ day:'numeric', month:'long', year:'numeric' });
-          }
-          el.appendChild(buatKartuPublik(item));
-        });
-      }).catch(function(err){
-        el.innerHTML = '<div class="gb-empty">Gagal memuat pesan 😢</div>';
-        console.error('Firestore loadPublik error:', err);
-      });
-    }
-
-    // ── Buat kartu publik ─────────────────────────────────────────
-    function buatKartuPublik(item){
-      var div = document.createElement('div');
-      div.className = 'gb-card';
-      // Firestore pakai doc.id (string), bukan row number
-      div.id = 'pubcard-' + (item.row || item.id);
-
-      var adminSection = '';
-      if (isAdmin){
-        var rowRef = item.row || item.id;
-        adminSection =
-          '<div class="gb-admin-inline show" id="ainline-' + rowRef + '">' +
-            '<textarea class="gb-reply-area" id="reply-' + rowRef + '" placeholder="Tulis atau edit jawaban...">' + escHtml(item.jawaban) + '</textarea>' +
-            '<div class="gb-reply-row">' +
-              '<button class="gb-reply-save" onclick="simpanJawaban(' + rowRef + ')">💾 Simpan & Tampilkan</button>' +
-              '<button class="gb-reply-hide" onclick="sembunyikan(' + rowRef + ')">🙈 Sembunyikan</button>' +
-            '</div>' +
-          '</div>';
-      }
-
-      div.innerHTML =
-        '<div class="gb-card-q">🙋 ' + escHtml(item.pesan) + '</div>' +
-        '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>' + escHtml(item.jawaban) + '</div>' +
-        '<div class="gb-card-date">📅 ' + (item.waktu || '') + '</div>' +
-        adminSection;
-      return div;
-    }
-
-    // ── Admin: login (tetap GAS) ──────────────────────────────────
-    function loginAdmin(){
-      var pin = document.getElementById('gbPinInput').value;
-      if (!pin){ showToast('PIN kosong!'); return; }
-      gasPost({ action:'login', pin:pin }, function(res){
-        if (res.ok){
-          adminPin = pin;
-          isAdmin  = true;
-          document.getElementById('gbPinInput').value = '';
-          document.getElementById('gbLoginBar').style.display  = 'none';
-          document.getElementById('gbAdminBar').style.display  = 'flex';
-          showToast('Halo Nisa! 🌸');
-          loadAdmin();
-        } else {
-          showToast(res.msg || 'PIN salah!');
-        }
-      });
-    }
-
-    // ── Admin: logout ─────────────────────────────────────────────
-    function logoutAdmin(){
-      adminPin = ''; isAdmin = false;
-      document.getElementById('gbLoginBar').style.display = 'flex';
-      document.getElementById('gbAdminBar').style.display = 'none';
-      loadPublik();
-    }
-
-    // ── Admin: load semua pesan (tetap GAS) ──────────────────────
-    function loadAdmin(){
-      var el = document.getElementById('gbPublikList');
-      el.innerHTML = '<div class="gb-loading">Memuat semua pesan... 🌸</div>';
-      gasPost({ action:'getAll', pin:adminPin }, function(res){
-        el.innerHTML = '';
-        if (!res.ok){ showToast(res.msg || 'Gagal'); return; }
-        if (!res.data || res.data.length === 0){
-          el.innerHTML = '<div class="gb-empty">Belum ada pesan masuk 🌸</div>';
-          return;
-        }
-        res.data.forEach(function(item){
-          var div   = document.createElement('div');
-          div.className = 'gb-card';
-          div.id    = 'pubcard-' + item.row;
-          var badge = item.tampil
-            ? '<span class="gb-badge gb-badge-show">Tampil</span>'
-            : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>';
-          var jawabanHtml = item.jawaban
-            ? '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>' + escHtml(item.jawaban) + '</div>'
-            : '';
-          div.innerHTML =
-            '<div class="gb-card-q">🙋 ' + escHtml(item.pesan) + badge + '</div>' +
-            jawabanHtml +
-            '<div class="gb-card-date">📅 ' + item.waktu + '</div>' +
-            '<div class="gb-admin-inline show" id="ainline-' + item.row + '">' +
-              '<textarea class="gb-reply-area" id="reply-' + item.row + '" placeholder="Tulis atau edit jawaban...">' + escHtml(item.jawaban) + '</textarea>' +
-              '<div class="gb-reply-row">' +
-                '<button class="gb-reply-save" onclick="simpanJawaban(' + item.row + ')">💾 Simpan & Tampilkan</button>' +
-                '<button class="gb-reply-hide" onclick="sembunyikan(' + item.row + ')">🙈 Sembunyikan</button>' +
-              '</div>' +
-            '</div>';
-          el.appendChild(div);
-        });
-      });
-    }
-
-    // ── Admin: simpan jawaban (tetap GAS) ────────────────────────
-    function simpanJawaban(row){
-      var jawaban = document.getElementById('reply-' + row).value.trim();
-      if (!jawaban){ showToast('Jawaban kosong!'); return; }
-      gasPost({ action:'jawab', pin:adminPin, row:row, jawaban:jawaban }, function(res){
-        showToast(res.msg || (res.ok ? 'Tersimpan! 💌' : 'Gagal'));
-        if (res.ok){ loadAdmin(); }
-      });
-    }
-
-    // ── Admin: sembunyikan (tetap GAS) ───────────────────────────
-    function sembunyikan(row){
-      gasPost({ action:'sembunyikan', pin:adminPin, row:row }, function(res){
-        if (res.ok){ showToast('Disembunyikan 🙈'); loadAdmin(); }
-        else showToast(res.msg || 'Gagal');
-      });
-    }
-
-  </script>
 </body>
 </html>
