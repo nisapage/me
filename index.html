@@ -93,6 +93,7 @@
     .vc-card-title{font-weight:700;font-size:15px;color:var(--pink-dark);margin-bottom:4px;}
     .vc-card-desc{font-size:13px;line-height:1.5;color:var(--text);}
     .vc-tbc{text-align:center;font-size:13px;color:#b45a7e;font-style:italic;margin-top:6px;margin-bottom:4px;}
+    /* ======== GUESTBOOK ======== */
     .gb-intro{text-align:center;font-size:13px;color:var(--text);background:var(--pink-1);border-radius:14px;padding:12px 14px;margin-bottom:18px;line-height:1.6;}
     .gb-form{margin-bottom:16px;}
     .gb-textarea{width:100%;min-height:100px;border:2px solid var(--pink-2);border-radius:14px;padding:12px 14px;font-size:14px;font-family:inherit;color:var(--text);background:var(--pink-1);resize:none;outline:none;transition:border .2s;}
@@ -107,7 +108,6 @@
     .gb-card-a-label{font-size:10px;font-weight:700;color:#b45a7e;text-transform:uppercase;margin-bottom:4px;}
     .gb-card-date{font-size:10.5px;color:#c17b95;margin-top:8px;text-align:right;}
     .gb-empty{text-align:center;font-size:13px;color:#c17b95;padding:20px 0;font-style:italic;}
-    .gb-loading{text-align:center;font-size:13px;color:#b45a7e;padding:16px 0;}
     .gb-skeleton{background:var(--pink-1);border-radius:16px;margin-bottom:12px;padding:14px;border-left:4px solid var(--pink-2);}
     .skel-line{height:12px;border-radius:999px;background:var(--pink-2);margin-bottom:8px;animation:skelPulse 1.2s ease-in-out infinite;}
     .skel-line.w80{width:80%;}.skel-line.w60{width:60%;}.skel-line.w90{width:90%;}
@@ -116,6 +116,7 @@
     .gb-card-new{background:var(--pink-1);border-radius:16px;margin-bottom:12px;padding:14px;border-left:4px solid var(--pink-4);animation:slideIn .3s ease;}
     .gb-card-new-q{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:8px;}
     .gb-card-new-status{font-size:11.5px;color:#b45a7e;font-style:italic;}
+    /* Admin inline */
     .gb-admin-inline{display:none;margin-top:10px;border-top:1px dashed var(--pink-2);padding-top:10px;}
     .gb-admin-inline.show{display:block;}
     .gb-reply-area{width:100%;min-height:70px;border:2px solid var(--pink-2);border-radius:10px;padding:10px;font-size:13px;font-family:inherit;color:var(--text);background:var(--card-bg);resize:none;outline:none;margin-bottom:8px;}
@@ -125,6 +126,7 @@
     .gb-reply-hide{padding:10px 14px;border:none;border-radius:10px;background:var(--pink-2);color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;}
     .gb-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:999px;font-weight:700;margin-left:6px;}
     .gb-badge-show{background:#d4edda;color:#155724;}.gb-badge-hide{background:#f8d7da;color:#721c24;}
+    /* Admin login */
     .gb-login-bar{display:flex;align-items:center;gap:8px;background:var(--pink-1);border-radius:14px;padding:10px 14px;margin-bottom:16px;}
     .gb-login-bar input{flex:1;padding:8px 12px;border:2px solid var(--pink-2);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);background:var(--card-bg);outline:none;}
     .gb-login-bar input:focus{border-color:var(--pink-4);}
@@ -132,6 +134,7 @@
     .gb-admin-bar{display:flex;justify-content:space-between;align-items:center;background:var(--pink-2);border-radius:14px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--pink-dark);font-weight:700;}
     .gb-logout-btn{padding:6px 12px;border:none;border-radius:999px;background:var(--pink-1);color:var(--pink-dark);font-weight:700;font-size:12px;cursor:pointer;}
     #gbLoginSection{margin-bottom:4px;}
+    .gb-loading{text-align:center;font-size:13px;color:#b45a7e;padding:16px 0;}
   </style>
 </head>
 <body>
@@ -311,25 +314,15 @@
 
   <audio id="bgAudio" loop preload="none" src="aa.mp3"></audio>
 
-  <!-- ============================================================
-       PENTING: Script biasa dulu (buat promise), baru Firebase
-       ============================================================ -->
   <script>
-    // ✅ Buat promise SEBELUM Firebase module load
-    // Ini mencegah race condition — tidak peduli siapa yang duluan selesai
-    window._fbReadyPromise = new Promise(function(resolve) {
-      window._fbReadyResolve = resolve;
-    });
-
-    var GAS_URL = 'https://script.google.com/macros/s/AKfycbwAUZkNvaMnuf77gdg6G98ncuaPT3ULd0j0iAYy6zgWZCQIWfntnuO9RKg0FZZ-0-fp/exec';
-    var adminPin = '';
-    var isAdmin  = false;
-
+    // =============================================
+    // UTILITY
+    // =============================================
     function showPage(name) {
       document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
       document.getElementById('page-' + name).classList.add('active');
       window.scrollTo(0, 0);
-      if (name === 'guestbook') loadPublik();
+      if (name === 'guestbook') loadPesan();
     }
 
     (function(){
@@ -347,7 +340,7 @@
       var t = document.getElementById('toast');
       t.textContent = msg; t.classList.add('show');
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2000);
+      window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
     }
 
     window.addEventListener('scroll', function(){
@@ -360,6 +353,9 @@
       img.addEventListener('click', function(){ window.open(img.src, '_blank'); });
     });
 
+    // =============================================
+    // MUSIC
+    // =============================================
     var audio = document.getElementById('bgAudio');
     var audioStarted = false;
     var musicBtn = document.getElementById('musicBtn');
@@ -391,6 +387,9 @@
       showToast(isDark ? 'Mode gelap aktif 🌙' : 'Mode terang aktif ☀️');
     }
 
+    // =============================================
+    // SHARE
+    // =============================================
     var PUBLIC_URL = 'https://nisapage.github.io/me/';
     function sharePage(){
       var url = PUBLIC_URL, text = 'Ini webpagenya Nisa!';
@@ -410,6 +409,9 @@
       if (navigator.clipboard) navigator.clipboard.writeText(PUBLIC_URL).then(function(){ showToast('Link disalin! 📋'); closeShareSheet(); });
     }
 
+    // =============================================
+    // PETALS
+    // =============================================
     (function(){
       var emojis = ['🌸','🌷','🎀','💮'];
       var container = document.getElementById('petals');
@@ -435,30 +437,98 @@
       });
     });
 
-    // ============================================================
-    // GUESTBOOK FUNCTIONS
-    // ============================================================
+    // =============================================
+    // ADMIN STATE
+    // =============================================
+    // PIN di-hash dengan SHA-256 sederhana — PIN asli tidak pernah dikirim ke server
+    // Ganti ADMIN_PIN_HASH dengan hash dari PIN-mu
+    // Cara dapat hash: buka browser console, jalankan:
+    // crypto.subtle.digest('SHA-256', new TextEncoder().encode('PIN_MU')).then(b => console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
+    var ADMIN_PIN_HASH = 'b5085feaaec23ac0ed500e1446a19449d9aa7ccd7980b04df7a8175265513a8f'; // GANTI dengan hash PIN-mu!
+    var isAdmin = false;
 
-    function gasPost(payload, cb){
-      fetch(GAS_URL, {method:'POST', body:JSON.stringify(payload)})
-        .then(function(r){ return r.json(); })
-        .then(cb)
-        .catch(function(){ showToast('Koneksi gagal, coba lagi 😢'); });
+    async function hashPin(pin) {
+      var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin));
+      return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2,'0')).join('');
+    }
+
+    async function loginAdmin() {
+      var pin = document.getElementById('gbPinInput').value;
+      if (!pin) { showToast('PIN kosong!'); return; }
+      var h = await hashPin(pin);
+      if (h === ADMIN_PIN_HASH) {
+        isAdmin = true;
+        document.getElementById('gbPinInput').value = '';
+        document.getElementById('gbLoginBar').style.display = 'none';
+        document.getElementById('gbAdminBar').style.display = 'flex';
+        showToast('Halo Nisa! 🌸');
+        loadPesan();
+      } else {
+        showToast('PIN salah! 🔒');
+      }
+    }
+
+    function logoutAdmin() {
+      isAdmin = false;
+      document.getElementById('gbLoginBar').style.display = 'flex';
+      document.getElementById('gbAdminBar').style.display = 'none';
+      loadPesan();
+    }
+
+    // =============================================
+    // FIRESTORE HELPER — semua operasi QnA
+    // =============================================
+    function escHtml(str){
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     function skelHtml(){
       return '<div class="gb-skeleton"><div class="skel-line w80"></div><div class="skel-line w60"></div><div class="skel-block"></div></div>';
     }
 
-    function escHtml(str){
-      if (!str) return '';
-      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    function fmtTanggal(ts) {
+      if (!ts) return '';
+      var d = ts.toDate ? ts.toDate() : new Date(ts);
+      return d.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
     }
 
-    function tampilPesanBaru(pesan){
+    // Kirim pesan → Firestore
+    async function kirimPesan() {
+      var pesan = document.getElementById('gbPesan').value.trim();
+      if (!pesan) { showToast('Pesannya kosong nih! 🌸'); return; }
+      if (!window._fb) { showToast('Koneksi sedang disiapkan, coba lagi 🌸'); return; }
+
+      var btn = document.getElementById('gbSendBtn');
+      btn.disabled = true; btn.textContent = 'Mengirim... 🌸';
+
+      // Tampilkan draft langsung biar ga berasa lemot
+      tampilDraft(pesan);
+
+      try {
+        var _f = window._fb;
+        await _f.addDoc(_f.collection(window._db, 'messages'), {
+          pesan: pesan,
+          waktu: _f.serverTimestamp(),
+          tampil: false,
+          jawaban: ''
+        });
+        btn.disabled = false; btn.textContent = 'Kirim Anonim 💌';
+        document.getElementById('gbPesan').value = '';
+        showToast('Pesanmu terkirim! 🌸');
+      } catch(err) {
+        btn.disabled = false; btn.textContent = 'Kirim Anonim 💌';
+        var draft = document.getElementById('gbDraftCard');
+        if (draft) draft.remove();
+        showToast('Koneksi gagal, coba lagi 😢');
+        console.error(err);
+      }
+    }
+
+    function tampilDraft(pesan) {
       var old = document.getElementById('gbDraftCard');
       if (old) old.remove();
-      var el  = document.getElementById('gbPublikList');
+      var el = document.getElementById('gbPublikList');
       var div = document.createElement('div');
       div.className = 'gb-card-new';
       div.id = 'gbDraftCard';
@@ -466,168 +536,136 @@
       el.insertBefore(div, el.firstChild);
     }
 
-    // Kirim pesan → Firestore
-    function kirimPesan(){
-      var pesan = document.getElementById('gbPesan').value.trim();
-      if (!pesan){ showToast('Pesannya kosong nih! 🌸'); return; }
-      if (!window._fb){ showToast('Koneksi sedang disiapkan, coba lagi 🌸'); return; }
-
-      var btn = document.getElementById('gbSendBtn');
-      btn.disabled = true; btn.textContent = 'Mengirim... 🌸';
-      tampilPesanBaru(pesan);
-
-      var _f = window._fb;
-      _f.addDoc(_f.collection(window._db,'messages'),{
-        pesan: pesan, waktu: _f.serverTimestamp(), tampil: false, jawaban: ''
-      }).then(function(){
-        btn.disabled = false; btn.textContent = 'Kirim Anonim 💌';
-        document.getElementById('gbPesan').value = '';
-        showToast('Pesanmu terkirim! 🌸');
-      }).catch(function(err){
-        btn.disabled = false; btn.textContent = 'Kirim Anonim 💌';
-        var draft = document.getElementById('gbDraftCard');
-        if (draft) draft.remove();
-        showToast('Koneksi gagal, coba lagi 😢');
-        console.error('Firestore kirim error:', err);
-      });
-    }
-
-    // ✅ FIX UTAMA: loadPublik pakai async/await + _fbReadyPromise
-    // Tidak ada lagi race condition — selalu tunggu Firebase siap dulu
-    async function loadPublik(){
+    // Load pesan — publik hanya yang tampil=true, admin lihat semua
+    async function loadPesan() {
       var el = document.getElementById('gbPublikList');
       el.innerHTML = skelHtml() + skelHtml() + skelHtml();
 
-      await window._fbReadyPromise; // tunggu Firebase, aman kapanpun dipanggil
-
+      await window._fbReadyPromise;
       var _f = window._fb;
+
       try {
-        var q = _f.query(
-          _f.collection(window._db, 'messages'),
-          _f.where('tampil', '==', true),
-          _f.orderBy('waktu', 'desc'),
-          _f.limit(20)
-        );
+        var q;
+        if (isAdmin) {
+          // Admin: lihat semua pesan, urut terbaru
+          q = _f.query(
+            _f.collection(window._db, 'messages'),
+            _f.orderBy('waktu', 'desc'),
+            _f.limit(50)
+          );
+        } else {
+          // Publik: hanya yang tampil = true
+          q = _f.query(
+            _f.collection(window._db, 'messages'),
+            _f.where('tampil', '==', true),
+            _f.orderBy('waktu', 'desc'),
+            _f.limit(20)
+          );
+        }
+
         var snap = await _f.getDocs(q);
         el.innerHTML = '';
-        if (snap.empty){
+
+        if (snap.empty) {
           el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
           return;
         }
-        snap.forEach(function(doc){
-          var item = doc.data(); item.id = doc.id;
-          if (item.waktu && item.waktu.toDate){
-            item.waktu = item.waktu.toDate().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-          }
-          el.appendChild(buatKartuPublik(item));
+
+        snap.forEach(function(doc) {
+          var item = doc.data();
+          item.id = doc.id;
+          item.waktuFmt = fmtTanggal(item.waktu);
+          el.appendChild(buatKartu(item));
         });
       } catch(err) {
-        // Kalau error karena belum ada composite index, kasih pesan yang jelas
         el.innerHTML = '<div class="gb-empty">Gagal memuat pesan 😢<br><small style="color:#b45a7e">'+escHtml(err.message)+'</small></div>';
-        console.error('Firestore loadPublik error:', err);
+        console.error('Firestore loadPesan error:', err);
       }
     }
 
-    function buatKartuPublik(item){
+    function buatKartu(item) {
       var div = document.createElement('div');
       div.className = 'gb-card';
-      div.id = 'pubcard-' + (item.row || item.id);
-      var adminSection = '';
-      if (isAdmin){
-        var rowRef = item.row || item.id;
-        adminSection =
-          '<div class="gb-admin-inline show" id="ainline-'+rowRef+'">' +
-            '<textarea class="gb-reply-area" id="reply-'+rowRef+'" placeholder="Tulis atau edit jawaban...">'+escHtml(item.jawaban)+'</textarea>' +
+      div.id = 'card-' + item.id;
+
+      var badge = isAdmin
+        ? (item.tampil
+          ? '<span class="gb-badge gb-badge-show">Tampil</span>'
+          : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>')
+        : '';
+
+      var jawabanHtml = item.jawaban
+        ? '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>'
+        : '';
+
+      var adminHtml = '';
+      if (isAdmin) {
+        adminHtml =
+          '<div class="gb-admin-inline show" id="ainline-'+item.id+'">' +
+            '<textarea class="gb-reply-area" id="reply-'+item.id+'" placeholder="Tulis atau edit jawaban...">'+escHtml(item.jawaban)+'</textarea>' +
             '<div class="gb-reply-row">' +
-              '<button class="gb-reply-save" onclick="simpanJawaban(\''+rowRef+'\')">💾 Simpan &amp; Tampilkan</button>' +
-              '<button class="gb-reply-hide" onclick="sembunyikan(\''+rowRef+'\')">🙈 Sembunyikan</button>' +
+              '<button class="gb-reply-save" onclick="simpanJawaban(\''+item.id+'\')">💾 Simpan &amp; Tampilkan</button>' +
+              '<button class="gb-reply-hide" onclick="sembunyikan(\''+item.id+'\')">🙈 Sembunyikan</button>' +
             '</div></div>';
       }
+
       div.innerHTML =
-        '<div class="gb-card-q">🙋 '+escHtml(item.pesan)+'</div>' +
-        '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>' +
-        '<div class="gb-card-date">📅 '+(item.waktu||'')+'</div>' + adminSection;
+        '<div class="gb-card-q">🙋 '+escHtml(item.pesan)+badge+'</div>' +
+        jawabanHtml +
+        '<div class="gb-card-date">📅 '+(item.waktuFmt||'')+'</div>' +
+        adminHtml;
+
       return div;
     }
 
-    function loginAdmin(){
-      var pin = document.getElementById('gbPinInput').value;
-      if (!pin){ showToast('PIN kosong!'); return; }
-      gasPost({action:'login', pin:pin}, function(res){
-        if (res.ok){
-          adminPin = pin; isAdmin = true;
-          document.getElementById('gbPinInput').value = '';
-          document.getElementById('gbLoginBar').style.display = 'none';
-          document.getElementById('gbAdminBar').style.display = 'flex';
-          showToast('Halo Nisa! 🌸');
-          loadAdmin();
-        } else { showToast(res.msg || 'PIN salah!'); }
-      });
-    }
+    // Admin: simpan jawaban + set tampil=true
+    async function simpanJawaban(docId) {
+      var jawaban = document.getElementById('reply-'+docId).value.trim();
+      if (!jawaban) { showToast('Jawaban kosong!'); return; }
+      if (!window._fb) return;
 
-    function logoutAdmin(){
-      adminPin = ''; isAdmin = false;
-      document.getElementById('gbLoginBar').style.display = 'flex';
-      document.getElementById('gbAdminBar').style.display = 'none';
-      loadPublik();
-    }
-
-    function loadAdmin(){
-      var el = document.getElementById('gbPublikList');
-      el.innerHTML = '<div class="gb-loading">Memuat semua pesan... 🌸</div>';
-      gasPost({action:'getAll', pin:adminPin}, function(res){
-        el.innerHTML = '';
-        if (!res.ok){ showToast(res.msg||'Gagal'); return; }
-        if (!res.data || res.data.length===0){ el.innerHTML='<div class="gb-empty">Belum ada pesan masuk 🌸</div>'; return; }
-        res.data.forEach(function(item){
-          var div = document.createElement('div');
-          div.className = 'gb-card'; div.id = 'pubcard-'+item.row;
-          var badge = item.tampil
-            ? '<span class="gb-badge gb-badge-show">Tampil</span>'
-            : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>';
-          var jawabanHtml = item.jawaban
-            ? '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>'
-            : '';
-          div.innerHTML =
-            '<div class="gb-card-q">🙋 '+escHtml(item.pesan)+badge+'</div>' +
-            jawabanHtml +
-            '<div class="gb-card-date">📅 '+item.waktu+'</div>' +
-            '<div class="gb-admin-inline show" id="ainline-'+item.row+'">' +
-              '<textarea class="gb-reply-area" id="reply-'+item.row+'" placeholder="Tulis atau edit jawaban...">'+escHtml(item.jawaban)+'</textarea>' +
-              '<div class="gb-reply-row">' +
-                '<button class="gb-reply-save" onclick="simpanJawaban('+item.row+')">💾 Simpan &amp; Tampilkan</button>' +
-                '<button class="gb-reply-hide" onclick="sembunyikan('+item.row+')">🙈 Sembunyikan</button>' +
-              '</div></div>';
-          el.appendChild(div);
+      try {
+        var _f = window._fb;
+        await _f.updateDoc(_f.doc(window._db, 'messages', docId), {
+          jawaban: jawaban,
+          tampil: true
         });
-      });
+        showToast('Jawaban tersimpan! 💌');
+        loadPesan();
+      } catch(err) {
+        showToast('Gagal menyimpan 😢');
+        console.error(err);
+      }
     }
 
-    function simpanJawaban(row){
-      var jawaban = document.getElementById('reply-'+row).value.trim();
-      if (!jawaban){ showToast('Jawaban kosong!'); return; }
-      gasPost({action:'jawab', pin:adminPin, row:row, jawaban:jawaban}, function(res){
-        showToast(res.msg||(res.ok?'Tersimpan! 💌':'Gagal'));
-        if (res.ok){ loadAdmin(); }
-      });
-    }
-
-    function sembunyikan(row){
-      gasPost({action:'sembunyikan', pin:adminPin, row:row}, function(res){
-        if (res.ok){ showToast('Disembunyikan 🙈'); loadAdmin(); }
-        else showToast(res.msg||'Gagal');
-      });
+    // Admin: sembunyikan pesan (tampil=false)
+    async function sembunyikan(docId) {
+      if (!window._fb) return;
+      try {
+        var _f = window._fb;
+        await _f.updateDoc(_f.doc(window._db, 'messages', docId), {
+          tampil: false
+        });
+        showToast('Disembunyikan 🙈');
+        loadPesan();
+      } catch(err) {
+        showToast('Gagal 😢');
+        console.error(err);
+      }
     }
   </script>
 
-  <!-- ============================================================
-       FIREBASE — load setelah script utama, resolve promise saat siap
-       ============================================================ -->
+  <!-- Firebase — load sebagai module, resolve promise saat siap -->
   <script type="module">
+    // ✅ Buat promise SEBELUM Firebase load
+    window._fbReadyPromise = new Promise(function(resolve) {
+      window._fbReadyResolve = resolve;
+    });
+
     import { initializeApp }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
-      getFirestore, collection, addDoc,
+      getFirestore, collection, addDoc, doc, updateDoc,
       query, where, orderBy, limit, getDocs, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -644,9 +682,9 @@
     const db  = getFirestore(app);
 
     window._db = db;
-    window._fb = { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp };
+    window._fb = { collection, addDoc, doc, updateDoc, query, where, orderBy, limit, getDocs, serverTimestamp };
 
-    // ✅ Firebase sudah siap — resolve promise supaya loadPublik() bisa jalan
+    // Firebase siap → resolve promise
     window._fbReadyResolve();
   </script>
 
