@@ -39,444 +39,288 @@
     }
     .app{ width:100%; max-width:420px; position:relative; z-index:2; }
 
-    /* ===== Floating petals background ===== */
-    #petals{
-      position:fixed;
-      inset:0;
-      overflow:hidden;
-      pointer-events:none;
-      z-index:1;
-    }
-    .petal{
-      position:absolute;
-      top:-40px;
-      font-size:18px;
-      opacity:0.75;
-      animation:petalFall linear infinite;
-    }
+    #petals{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1;}
+    .petal{position:absolute;top:-40px;font-size:18px;opacity:0.75;animation:petalFall linear infinite;}
     @keyframes petalFall{
-      0%{ transform:translateY(-40px) translateX(0) rotate(0deg); }
-      100%{ transform:translateY(110vh) translateX(20px) rotate(360deg); }
+      0%{transform:translateY(-40px) translateX(0) rotate(0deg);}
+      100%{transform:translateY(110vh) translateX(20px) rotate(360deg);}
     }
 
-    /* ===== Floating action buttons (top corner) ===== */
-    .fab-row{
-      position:fixed;
-      top:14px;
-      right:14px;
-      display:flex;
-      gap:8px;
-      z-index:20;
-    }
+    .fab-row{position:fixed;top:14px;right:14px;display:flex;gap:8px;z-index:20;}
     .fab-btn{
-      width:38px;
-      height:38px;
-      border-radius:50%;
-      border:none;
-      background:var(--card-bg);
-      box-shadow:0 4px 12px rgba(214,62,121,0.25);
-      font-size:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      transition:transform .15s ease;
+      width:38px;height:38px;border-radius:50%;border:none;
+      background:var(--card-bg);box-shadow:0 4px 12px rgba(214,62,121,0.25);
+      font-size:16px;display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:transform .15s ease;
     }
-    .fab-btn:active{ transform:scale(0.9); }
+    .fab-btn:active{transform:scale(0.9);}
 
-    /* ===== Splash / Intro ===== */
     #splash{
-      position:fixed;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
       background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 60%,var(--pink-3));
-      z-index:999;
-      animation:splashOut .9s ease forwards;
-      animation-delay:0.3s;
+      z-index:999;animation:splashOut .9s ease forwards;animation-delay:0.3s;
     }
-    #splash .splash-emoji{
-      font-size:52px;
-      animation:splashPop .7s cubic-bezier(.34,1.56,.64,1) forwards;
-    }
+    #splash .splash-emoji{font-size:52px;animation:splashPop .7s cubic-bezier(.34,1.56,.64,1) forwards;}
     @keyframes splashPop{
-      0%{ transform:scale(0.15); opacity:0; }
-      60%{ transform:scale(1.15); opacity:1; }
-      100%{ transform:scale(1); opacity:1; }
+      0%{transform:scale(0.15);opacity:0;}
+      60%{transform:scale(1.15);opacity:1;}
+      100%{transform:scale(1);opacity:1;}
     }
     @keyframes splashOut{
-      0%{ opacity:1; visibility:visible; }
-      99%{ opacity:0; visibility:visible; }
-      100%{ opacity:0; visibility:hidden; pointer-events:none; }
+      0%{opacity:1;visibility:visible;}
+      99%{opacity:0;visibility:visible;}
+      100%{opacity:0;visibility:hidden;pointer-events:none;}
     }
 
     .card{
-      background:var(--card-bg);
-      position:relative;
-      z-index:2;
-      border-radius:22px;
-      padding:28px 22px;
-      box-shadow:0 10px 30px rgba(214,62,121,0.25);
-      transform:scale(0.15);
-      opacity:0;
+      background:var(--card-bg);position:relative;z-index:2;border-radius:22px;
+      padding:28px 22px;box-shadow:0 10px 30px rgba(214,62,121,0.25);
+      transform:scale(0.15);opacity:0;
       animation:cardGrow .8s cubic-bezier(.34,1.56,.64,1) forwards;
-      animation-delay:0.35s;
-      transform-origin:center center;
+      animation-delay:0.35s;transform-origin:center center;
     }
     @keyframes cardGrow{
-      0%{ opacity:0; transform:scale(0.15); }
-      70%{ opacity:1; transform:scale(1.03); }
-      100%{ opacity:1; transform:scale(1); }
+      0%{opacity:0;transform:scale(0.15);}
+      70%{opacity:1;transform:scale(1.03);}
+      100%{opacity:1;transform:scale(1);}
     }
 
-    .emoji-float{
-      text-align:center;
-      font-size:38px;
-      margin-bottom:6px;
-      animation:float 3s ease-in-out infinite;
-    }
-    @keyframes float{
-      0%,100%{transform:translateY(0);}
-      50%{transform:translateY(-8px);}
-    }
+    .emoji-float{text-align:center;font-size:38px;margin-bottom:6px;animation:float 3s ease-in-out infinite;}
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 
-    h1{ text-align:center; font-size:22px; color:var(--pink-dark); margin-bottom:6px; line-height:1.4; }
-    .subtitle{ text-align:center; font-size:13px; color:#a1526f; margin-bottom:24px; }
+    h1{text-align:center;font-size:22px;color:var(--pink-dark);margin-bottom:6px;line-height:1.4;}
+    .subtitle{text-align:center;font-size:13px;color:#a1526f;margin-bottom:24px;}
     .greeting{
-      text-align:center;
-      font-size:12.5px;
-      color:var(--pink-dark);
-      background:var(--pink-1);
-      border-radius:999px;
-      padding:6px 14px;
-      margin:0 auto 18px;
-      width:fit-content;
-      font-weight:600;
+      text-align:center;font-size:12.5px;color:var(--pink-dark);background:var(--pink-1);
+      border-radius:999px;padding:6px 14px;margin:0 auto 18px;width:fit-content;font-weight:600;
     }
 
-    .menu-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-      margin-bottom:6px;
-    }
-    .menu-grid-center{
-      display:flex;
-      justify-content:center;
-      margin-top:12px;
-      margin-bottom:6px;
-    }
-    .menu-grid-center .menu-btn{
-      width:calc(50% - 6px);
-    }
+    .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px;}
+    .menu-grid-center{display:flex;justify-content:center;margin-top:12px;margin-bottom:6px;}
+    .menu-grid-center .menu-btn{width:calc(50% - 6px);}
     .menu-btn{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      width:100%;
-      aspect-ratio:1/0.85;
-      padding:14px 10px;
-      border:none;
-      border-radius:18px;
-      background:linear-gradient(135deg,#ffffff,var(--pink-1));
-      color:var(--pink-dark);
-      font-size:14px;
-      font-weight:600;
-      cursor:pointer;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:8px;width:100%;aspect-ratio:1/0.85;padding:14px 10px;border:none;
+      border-radius:18px;background:linear-gradient(135deg,#ffffff,var(--pink-1));
+      color:var(--pink-dark);font-size:14px;font-weight:600;cursor:pointer;
       box-shadow:0 4px 12px rgba(255,111,165,0.25);
-      transition:transform .15s ease, box-shadow .15s ease;
-      text-align:center;
+      transition:transform .15s ease,box-shadow .15s ease;text-align:center;
     }
-    .menu-btn:active{ transform:scale(0.96); box-shadow:0 2px 6px rgba(255,111,165,0.3); }
-    .menu-btn .ic{ font-size:26px; }
-    .back-wrap{ display:flex; justify-content:center; margin-top:22px; }
+    .menu-btn:active{transform:scale(0.96);box-shadow:0 2px 6px rgba(255,111,165,0.3);}
+    .menu-btn .ic{font-size:26px;}
+
+    .back-wrap{display:flex;justify-content:center;margin-top:22px;}
     .back-btn{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:11px 22px;
-      border:none;
-      border-radius:999px;
-      background:var(--pink-4);
-      color:#fff;
-      font-weight:600;
-      font-size:14px;
-      cursor:pointer;
-      transition:transform .15s ease, background .15s ease;
+      display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border:none;
+      border-radius:999px;background:var(--pink-4);color:#fff;font-weight:600;
+      font-size:14px;cursor:pointer;transition:transform .15s ease,background .15s ease;
     }
-    .back-btn:active{ transform:scale(0.95); background:var(--pink-dark); }
+    .back-btn:active{transform:scale(0.95);background:var(--pink-dark);}
 
-    .page{ display:none; }
-    .page.active{ display:block; animation:slideIn .35s ease; }
-    @keyframes slideIn{
-      from{ opacity:0; transform:translateX(14px); }
-      to{ opacity:1; transform:translateX(0); }
-    }
+    .page{display:none;}
+    .page.active{display:block;animation:slideIn .35s ease;}
+    @keyframes slideIn{from{opacity:0;transform:translateX(14px);}to{opacity:1;transform:translateX(0);}}
 
-    .section-title{ font-size:19px; color:var(--pink-dark); margin-bottom:16px; text-align:center; }
+    .section-title{font-size:19px;color:var(--pink-dark);margin-bottom:16px;text-align:center;}
 
-    .profile-photos{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
-      margin-bottom:18px;
-    }
+    .profile-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;}
     .profile-photos img{
-      width:100%;
-      aspect-ratio:1/1;
-      object-fit:cover;
-      border-radius:14px;
-      border:2px solid #fff;
-      box-shadow:0 4px 10px rgba(255,111,165,0.3);
-      cursor:pointer;
-      transition:transform .2s ease;
-      loading:lazy;
+      width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;
+      border:2px solid #fff;box-shadow:0 4px 10px rgba(255,111,165,0.3);
+      cursor:pointer;transition:transform .2s ease;
     }
-    .profile-photos img:active{ transform:scale(0.95); }
+    .profile-photos img:active{transform:scale(0.95);}
 
     .info-row{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      padding:12px 14px;
-      background:var(--pink-1);
-      border-radius:14px;
-      margin-bottom:10px;
+      display:flex;flex-direction:column;gap:2px;padding:12px 14px;
+      background:var(--pink-1);border-radius:14px;margin-bottom:10px;
       border-left:4px solid var(--pink-3);
     }
-    .info-label{ font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:#b45a7e; font-weight:700; }
-    .info-value{ font-size:14.5px; line-height:1.5; }
+    .info-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#b45a7e;font-weight:700;}
+    .info-value{font-size:14.5px;line-height:1.5;}
 
-    ul.list{ list-style:none; }
+    ul.list{list-style:none;}
     ul.list li{
-      background:var(--pink-1);
-      padding:11px 14px;
-      border-radius:12px;
-      margin-bottom:8px;
-      font-size:14.5px;
-      display:flex;
-      align-items:flex-start;
-      gap:8px;
+      background:var(--pink-1);padding:11px 14px;border-radius:12px;
+      margin-bottom:8px;font-size:14.5px;display:flex;align-items:flex-start;gap:8px;
     }
-    ul.list li::before{ content:"🌸"; flex-shrink:0; }
-    .yikes li::before{ content:"🚫" !important; }
+    .list-icon{flex-shrink:0;}
 
-    .lk-block{ margin-bottom:16px; }
-    .lk-title{ font-weight:700; font-size:15px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+    .lk-block{margin-bottom:16px;}
+    .lk-title{font-weight:700;font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 
     .acc-item{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      background:var(--pink-1);
-      padding:12px 14px;
-      border-radius:14px;
-      margin-bottom:10px;
-      text-decoration:none;
-      color:inherit;
-      transition:transform .15s ease;
-      position:relative;
+      display:flex;align-items:center;gap:12px;background:var(--pink-1);
+      padding:12px 14px;border-radius:14px;margin-bottom:10px;
+      text-decoration:none;color:inherit;transition:transform .15s ease;
     }
-    .acc-item:active{ transform:scale(0.97); }
-    .acc-ic{ font-size:20px; width:26px; text-align:center; }
-    .acc-text{ font-size:14px; flex:1; }
-    .acc-platform{ font-size:11px; color:#b45a7e; font-weight:700; text-transform:uppercase; }
+    .acc-item:active{transform:scale(0.97);}
+    .acc-ic{font-size:20px;width:26px;text-align:center;}
+    .acc-text{font-size:14px;flex:1;}
+    .acc-platform{font-size:11px;color:#b45a7e;font-weight:700;text-transform:uppercase;}
 
-    footer{ text-align:center; font-size:11px; color:#c17b95; margin-top:18px; }
-    .footer-date{
-      text-align:center;
-      font-size:11px;
-      color:#b45a7e;
-      margin-top:4px;
-      font-weight:600;
-    }
+    footer{text-align:center;font-size:11px;color:#c17b95;margin-top:18px;}
+    .footer-date{text-align:center;font-size:11px;color:#b45a7e;margin-top:4px;font-weight:600;}
 
-    /* Scroll to top */
     #toTop{
-      position:fixed;
-      right:18px;
-      bottom:70px;
-      background:var(--pink-4);
-      color:#fff;
-      border:none;
-      width:40px;
-      height:40px;
-      border-radius:50%;
-      font-size:16px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.2);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      z-index:15;
+      position:fixed;right:18px;bottom:70px;background:var(--pink-4);color:#fff;
+      border:none;width:40px;height:40px;border-radius:50%;font-size:16px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);display:none;align-items:center;
+      justify-content:center;cursor:pointer;z-index:15;
     }
-    #toTop.show{ display:flex; }
+    #toTop.show{display:flex;}
 
-    .audio-hint{
-      position:fixed;
-      bottom:16px;
-      left:50%;
-      transform:translateX(-50%);
-      background:var(--pink-4);
-      color:#fff;
-      font-size:12px;
-      font-weight:600;
-      padding:8px 16px;
-      border-radius:999px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.2);
-      z-index:10;
-      transition:opacity .3s ease;
-      cursor:pointer;
-      white-space:nowrap;
+    /* ===== Now Playing ===== */
+    #nowPlaying{
+      position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+      background:var(--pink-dark);color:#fff;font-size:12px;font-weight:600;
+      padding:8px 16px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,0.2);
+      z-index:10;display:flex;align-items:center;gap:8px;white-space:nowrap;
+      transition:opacity .4s ease;cursor:pointer;
     }
-    .audio-hint.hide{ opacity:0; pointer-events:none; }
+    #nowPlaying.hide{opacity:0;pointer-events:none;}
+    .np-icon{animation:spin 2s linear infinite;display:inline-block;}
+    @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+    .np-icon.paused{animation:none;}
 
     .toast{
-      position:fixed;
-      top:20px;
-      left:50%;
-      transform:translateX(-50%) translateY(-40px);
-      background:var(--pink-dark);
-      color:#fff;
-      font-size:12.5px;
-      font-weight:600;
-      padding:9px 18px;
-      border-radius:999px;
-      z-index:50;
-      opacity:0;
-      transition:all .3s ease;
-      white-space:nowrap;
+      position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-40px);
+      background:var(--pink-dark);color:#fff;font-size:12.5px;font-weight:600;
+      padding:9px 18px;border-radius:999px;z-index:50;opacity:0;
+      transition:all .3s ease;white-space:nowrap;
     }
-    .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
     /* ===== Share modal ===== */
     #shareOverlay{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.45);
-      display:none;
-      align-items:flex-end;
-      justify-content:center;
-      z-index:60;
+      position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;
+      align-items:flex-end;justify-content:center;z-index:60;
     }
-    #shareOverlay.show{ display:flex; }
+    #shareOverlay.show{display:flex;}
     .share-sheet{
-      width:100%;
-      max-width:420px;
-      background:var(--card-bg);
-      border-radius:22px 22px 0 0;
-      padding:20px 20px 26px;
-      animation:sheetUp .3s ease;
+      width:100%;max-width:420px;background:var(--card-bg);
+      border-radius:22px 22px 0 0;padding:20px 20px 26px;animation:sheetUp .3s ease;
     }
-    @keyframes sheetUp{
-      from{ transform:translateY(100%); }
-      to{ transform:translateY(0); }
-    }
-    .share-sheet h3{
-      text-align:center;
-      font-size:15px;
-      color:var(--pink-dark);
-      margin-bottom:16px;
-    }
-    .share-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px;
-      margin-bottom:16px;
-    }
+    @keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+    .share-sheet h3{text-align:center;font-size:15px;color:var(--pink-dark);margin-bottom:16px;}
+    .share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
     .share-opt{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:6px;
-      background:none;
-      border:none;
-      cursor:pointer;
-      color:var(--text);
-      font-size:11px;
-      text-decoration:none;
+      display:flex;flex-direction:column;align-items:center;gap:6px;
+      background:none;border:none;cursor:pointer;color:var(--text);font-size:11px;text-decoration:none;
     }
     .share-opt .ic-wrap{
-      width:46px;
-      height:46px;
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:20px;
-      color:#fff;
+      width:46px;height:46px;border-radius:50%;display:flex;
+      align-items:center;justify-content:center;font-size:20px;color:#fff;
     }
-    .share-opt:active .ic-wrap{ transform:scale(0.92); }
-    .sc-wa{ background:#25D366; }
-    .sc-fb{ background:#1877F2; }
-    .sc-tw{ background:#000; }
-    .sc-tg{ background:#26A5E4; }
-    .sc-em{ background:#EA4335; }
-    .sc-cp{ background:var(--pink-4); }
+    .share-opt:active .ic-wrap{transform:scale(0.92);}
+    .sc-wa{background:#25D366;}.sc-fb{background:#1877F2;}.sc-tw{background:#000;}
+    .sc-tg{background:#26A5E4;}.sc-em{background:#EA4335;}.sc-cp{background:var(--pink-4);}
     .share-close{
-      display:block;
-      width:100%;
-      padding:12px;
-      border:none;
-      border-radius:14px;
-      background:var(--pink-1);
-      color:var(--pink-dark);
-      font-weight:700;
-      font-size:14px;
-      cursor:pointer;
+      display:block;width:100%;padding:12px;border:none;border-radius:14px;
+      background:var(--pink-1);color:var(--pink-dark);font-weight:700;font-size:14px;cursor:pointer;
     }
 
-    /* ===== Vibe Coding page ===== */
-    .vc-intro{
-      text-align:center;
-      font-size:13.5px;
-      color:var(--text);
-      margin-bottom:20px;
-      line-height:1.6;
+    /* ===== Vibe Coding ===== */
+    .vc-intro{text-align:center;font-size:13.5px;color:var(--text);margin-bottom:20px;line-height:1.6;}
+    .vc-card{background:var(--pink-1);border-radius:16px;margin-bottom:14px;overflow:hidden;border-left:4px solid var(--pink-3);}
+    .vc-card-img{width:100%;height:auto;display:block;border-bottom:2px solid var(--pink-2);}
+    .vc-card-body{padding:12px 14px;}
+    .vc-card-title{font-weight:700;font-size:15px;color:var(--pink-dark);margin-bottom:4px;}
+    .vc-card-desc{font-size:13px;line-height:1.5;color:var(--text);}
+    .vc-tbc{text-align:center;font-size:13px;color:#b45a7e;font-style:italic;margin-top:6px;margin-bottom:4px;}
+
+    /* ===== Guestbook ===== */
+    .gb-intro{
+      text-align:center;font-size:13px;color:var(--text);
+      background:var(--pink-1);border-radius:14px;padding:12px 14px;
+      margin-bottom:18px;line-height:1.6;
     }
-    .vc-card{
-      background:var(--pink-1);
-      border-radius:16px;
-      margin-bottom:14px;
-      overflow:hidden;
-      border-left:4px solid var(--pink-3);
+    .gb-form{margin-bottom:24px;}
+    .gb-textarea{
+      width:100%;min-height:100px;border:2px solid var(--pink-2);border-radius:14px;
+      padding:12px 14px;font-size:14px;font-family:inherit;color:var(--text);
+      background:var(--pink-1);resize:none;outline:none;transition:border .2s;
     }
-    .vc-card-img{
-      width:100%;
-      height:auto;
-      display:block;
-      border-bottom:2px solid var(--pink-2);
+    .gb-textarea:focus{border-color:var(--pink-4);}
+    .gb-send{
+      display:block;width:100%;margin-top:10px;padding:13px;border:none;
+      border-radius:14px;background:var(--pink-4);color:#fff;font-size:14px;
+      font-weight:700;cursor:pointer;transition:background .15s,transform .15s;
     }
-    .vc-card-body{ padding:12px 14px; }
-    .vc-card-title{
-      font-weight:700;
-      font-size:15px;
-      color:var(--pink-dark);
-      margin-bottom:4px;
+    .gb-send:active{background:var(--pink-dark);transform:scale(0.98);}
+    .gb-send:disabled{opacity:0.6;cursor:not-allowed;}
+
+    .gb-divider{
+      text-align:center;font-size:12px;color:#b45a7e;font-weight:700;
+      margin-bottom:14px;letter-spacing:.5px;text-transform:uppercase;
     }
-    .vc-card-desc{
-      font-size:13px;
-      line-height:1.5;
-      color:var(--text);
+    .gb-card{
+      background:var(--pink-1);border-radius:16px;margin-bottom:12px;
+      padding:14px;border-left:4px solid var(--pink-3);
     }
-    .vc-tbc{
-      text-align:center;
-      font-size:13px;
-      color:#b45a7e;
-      font-style:italic;
-      margin-top:6px;
-      margin-bottom:4px;
+    .gb-card-q{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:10px;}
+    .gb-card-a{
+      background:var(--card-bg);border-radius:12px;padding:10px 12px;
+      font-size:13.5px;color:var(--pink-dark);line-height:1.5;
+      border-left:3px solid var(--pink-4);
     }
+    .gb-card-a-label{font-size:10px;font-weight:700;color:#b45a7e;text-transform:uppercase;margin-bottom:4px;}
+    .gb-card-date{font-size:10.5px;color:#c17b95;margin-top:8px;text-align:right;}
+    .gb-empty{text-align:center;font-size:13px;color:#c17b95;padding:20px 0;font-style:italic;}
+    .gb-loading{text-align:center;font-size:13px;color:#b45a7e;padding:16px 0;}
+
+    /* Admin mode */
+    .gb-admin-toggle{
+      display:flex;justify-content:flex-end;margin-bottom:14px;
+    }
+    .gb-admin-btn{
+      font-size:11px;padding:6px 12px;border:none;border-radius:999px;
+      background:var(--pink-2);color:var(--pink-dark);font-weight:700;cursor:pointer;
+    }
+    .gb-admin-panel{
+      background:var(--pink-1);border-radius:14px;padding:14px;margin-bottom:18px;
+      border:2px dashed var(--pink-3);display:none;
+    }
+    .gb-admin-panel.show{display:block;}
+    .gb-pin-input{
+      width:100%;padding:10px 14px;border:2px solid var(--pink-2);border-radius:12px;
+      font-size:14px;font-family:inherit;color:var(--text);background:var(--card-bg);
+      outline:none;margin-bottom:10px;
+    }
+    .gb-pin-btn{
+      width:100%;padding:11px;border:none;border-radius:12px;background:var(--pink-dark);
+      color:#fff;font-weight:700;font-size:14px;cursor:pointer;
+    }
+    .gb-admin-card{
+      background:var(--card-bg);border-radius:14px;padding:14px;margin-bottom:12px;
+      border-left:4px solid var(--pink-4);
+    }
+    .gb-admin-q{font-size:14px;color:var(--text);margin-bottom:10px;line-height:1.5;}
+    .gb-reply-area{
+      width:100%;min-height:70px;border:2px solid var(--pink-2);border-radius:10px;
+      padding:10px;font-size:13px;font-family:inherit;color:var(--text);
+      background:var(--pink-1);resize:none;outline:none;margin-bottom:8px;
+    }
+    .gb-reply-area:focus{border-color:var(--pink-4);}
+    .gb-reply-row{display:flex;gap:8px;}
+    .gb-reply-save{
+      flex:1;padding:10px;border:none;border-radius:10px;background:var(--pink-4);
+      color:#fff;font-weight:700;font-size:13px;cursor:pointer;
+    }
+    .gb-reply-hide{
+      padding:10px 14px;border:none;border-radius:10px;background:var(--pink-2);
+      color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;
+    }
+    .gb-badge{
+      display:inline-block;font-size:10px;padding:2px 8px;border-radius:999px;
+      font-weight:700;margin-left:6px;
+    }
+    .gb-badge-show{background:#d4edda;color:#155724;}
+    .gb-badge-hide{background:#f8d7da;color:#721c24;}
   </style>
 </head>
 <body>
-  <div id="splash">
-    <div class="splash-emoji">🌷🎀</div>
-  </div>
-
+  <div id="splash"><div class="splash-emoji">🌷🎀</div></div>
   <div id="petals"></div>
 
   <div class="fab-row">
@@ -495,23 +339,14 @@
         <p class="subtitle">Silakan pencet salah satu tombol di bawah ini ya~</p>
         <div class="greeting" id="greeting"></div>
         <div class="menu-grid">
-          <button class="menu-btn" onclick="showPage('profil')">
-            <span class="ic">🧕</span> Profil
-          </button>
-          <button class="menu-btn" onclick="showPage('hobi')">
-            <span class="ic">🎨</span> Hobi
-          </button>
-          <button class="menu-btn" onclick="showPage('likes')">
-            <span class="ic">💗</span> Likes & Yikes
-          </button>
-          <button class="menu-btn" onclick="showPage('akun')">
-            <span class="ic">📱</span> Akunku
-          </button>
+          <button class="menu-btn" onclick="showPage('profil')"><span class="ic">🧕</span> Profil</button>
+          <button class="menu-btn" onclick="showPage('hobi')"><span class="ic">🎨</span> Hobi</button>
+          <button class="menu-btn" onclick="showPage('likes')"><span class="ic">💗</span> Likes & Yikes</button>
+          <button class="menu-btn" onclick="showPage('akun')"><span class="ic">📱</span> Akunku</button>
         </div>
-        <div class="menu-grid-center">
-          <button class="menu-btn" onclick="showPage('vibecoding')">
-            <span class="ic">💻</span> Vibe Coding By Me
-          </button>
+        <div class="menu-grid">
+          <button class="menu-btn" onclick="showPage('vibecoding')"><span class="ic">💻</span> Vibe Coding By Me</button>
+          <button class="menu-btn" onclick="showPage('guestbook')"><span class="ic">💌</span> Tanya Nisa</button>
         </div>
       </div>
 
@@ -523,43 +358,27 @@
           <img src="https://lh3.googleusercontent.com/d/1QqqaYvB38N-Co6jHaZ3RWnX2hm4-oknO" alt="Foto Nisa 2" loading="lazy">
           <img src="https://lh3.googleusercontent.com/d/1fU5b1BI29OR8akS9tnDyP794WTJzbQNg" alt="Foto Nisa 3" loading="lazy">
         </div>
-        <div class="info-row">
-          <span class="info-label">Nama</span>
-          <span class="info-value">Mauludiya Annisa Nurhakiki</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">Tahun Kelahiran</span>
-          <span class="info-value">2001</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">Pendidikan</span>
-          <span class="info-value">SMAN 1 Kedungwaru, Tulungagung<br>Teknik Elektro, Universitas Brawijaya</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">Domisili Saat Ini</span>
-          <span class="info-value">Ngawi, Jawa Timur</span>
-        </div>
-        <div class="back-wrap">
-          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
-        </div>
+        <div class="info-row"><span class="info-label">Nama</span><span class="info-value">Mauludiya Annisa Nurhakiki</span></div>
+        <div class="info-row"><span class="info-label">Tahun Kelahiran</span><span class="info-value">2001</span></div>
+        <div class="info-row"><span class="info-label">Pendidikan</span><span class="info-value">SMAN 1 Kedungwaru, Tulungagung<br>Teknik Elektro, Universitas Brawijaya</span></div>
+        <div class="info-row"><span class="info-label">Domisili Saat Ini</span><span class="info-value">Ngawi, Jawa Timur</span></div>
+        <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
       </div>
 
       <!-- HOBI -->
       <div id="page-hobi" class="page">
         <div class="section-title">🎨 Hobi</div>
         <ul class="list">
-          <li>Bernyanyi</li>
-          <li>Menonton dracin, drakor, dan anime</li>
-          <li>Belajar bahasa Korea dan Cina (tapi jangan tanya progressnya gimana wkwk)</li>
-          <li>Dengerin musik</li>
-          <li>Stargazing</li>
-          <li>Vibe coding dengan AI</li>
-          <li>Tutoring mata pelajaran anak sekolah (udah lama nggak jadi tutor sih)</li>
-          <li>Ngebantu nyelesaiin tugas ilmiah (tesis, skripsi, laporan PKL) temen maupun orang-orang random</li>
+          <li><span class="list-icon">🌸</span> Bernyanyi</li>
+          <li><span class="list-icon">🌸</span> Menonton dracin, drakor, dan anime</li>
+          <li><span class="list-icon">🌸</span> Belajar bahasa Korea dan Cina (tapi jangan tanya progressnya gimana wkwk)</li>
+          <li><span class="list-icon">🌸</span> Dengerin musik</li>
+          <li><span class="list-icon">🌸</span> Stargazing</li>
+          <li><span class="list-icon">🌸</span> Vibe coding dengan AI</li>
+          <li><span class="list-icon">🌸</span> Tutoring mata pelajaran anak sekolah (udah lama nggak jadi tutor sih)</li>
+          <li><span class="list-icon">🌸</span> Ngebantu nyelesaiin tugas ilmiah (tesis, skripsi, laporan PKL) temen maupun orang-orang random</li>
         </ul>
-        <div class="back-wrap">
-          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
-        </div>
+        <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
       </div>
 
       <!-- LIKES & YIKES -->
@@ -568,90 +387,100 @@
         <div class="lk-block">
           <div class="lk-title">💕 Likes</div>
           <ul class="list">
-            <li>Semua yang berkaitan dengan stroberi dan warna merah jambu</li>
-            <li>Air putih</li>
-            <li>Sop iga</li>
-            <li>Sate kambing</li>
+            <li><span class="list-icon">🌸</span> Semua yang berkaitan dengan stroberi dan warna merah jambu</li>
+            <li><span class="list-icon">🌸</span> Air putih</li>
+            <li><span class="list-icon">🌸</span> Sop iga</li>
+            <li><span class="list-icon">🌸</span> Sate kambing</li>
           </ul>
         </div>
         <div class="lk-block">
           <div class="lk-title">😖 Yikes</div>
-          <ul class="list yikes">
-            <li>Durian</li>
-            <li>Durian</li>
-            <li>Durian</li>
+          <ul class="list">
+            <li><span class="list-icon">🚫</span> Durian</li>
+            <li><span class="list-icon">🚫</span> Durian</li>
+            <li><span class="list-icon">🚫</span> Durian</li>
           </ul>
         </div>
-        <div class="back-wrap">
-          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
-        </div>
+        <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
       </div>
 
       <!-- AKUNKU -->
       <div id="page-akun" class="page">
         <div class="section-title">📱 Akunku</div>
         <a class="acc-item" href="https://www.instagram.com/maulnnisa/?hl=en" target="_blank" rel="noopener">
-          <div class="acc-ic">📸</div>
-          <div class="acc-text">
-            <div class="acc-platform">Instagram</div>
-            @maulnnisa
-          </div>
+          <div class="acc-ic">📸</div><div class="acc-text"><div class="acc-platform">Instagram</div>@maulnnisa</div>
         </a>
         <a class="acc-item" href="https://www.instagram.com/cilantrobook/?hl=en" target="_blank" rel="noopener">
-          <div class="acc-ic">📸</div>
-          <div class="acc-text">
-            <div class="acc-platform">Instagram</div>
-            @cilantrobook
-          </div>
+          <div class="acc-ic">📸</div><div class="acc-text"><div class="acc-platform">Instagram</div>@cilantrobook</div>
         </a>
         <a class="acc-item" href="https://www.facebook.com/nisaya.nisayaa/" target="_blank" rel="noopener">
-          <div class="acc-ic">👥</div>
-          <div class="acc-text">
-            <div class="acc-platform">Facebook</div>
-            Nisaya Nisayaa
-          </div>
+          <div class="acc-ic">👥</div><div class="acc-text"><div class="acc-platform">Facebook</div>Nisaya Nisayaa</div>
         </a>
         <a class="acc-item" href="https://www.duolingo.com/profile/maulnnisa?via=share_profile_qr" target="_blank" rel="noopener">
-          <div class="acc-ic">🦉</div>
-          <div class="acc-text">
-            <div class="acc-platform">Duolingo</div>
-            @MAULNNISA
-          </div>
+          <div class="acc-ic">🦉</div><div class="acc-text"><div class="acc-platform">Duolingo</div>@MAULNNISA</div>
         </a>
-        <div class="back-wrap">
-          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
-        </div>
+        <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
       </div>
 
-      <!-- VIBE CODING BY ME -->
+      <!-- VIBE CODING -->
       <div id="page-vibecoding" class="page">
         <div class="section-title">💻 Vibe Coding By Me</div>
         <p class="vc-intro">Di bawah ini adalah hasil vibe coding ku ^^</p>
         <div class="vc-card">
           <img class="vc-card-img" src="https://lh3.googleusercontent.com/d/1v3fCOcAMD8AydLXtQ4Go2e_FUx7h8fdO" alt="SODA" loading="lazy">
-          <div class="vc-card-body">
-            <div class="vc-card-title">1. SODA</div>
-            <div class="vc-card-desc">Webpage ini diajukan menjadi inovasi unit kerjaku yeay ^^</div>
-          </div>
+          <div class="vc-card-body"><div class="vc-card-title">1. SODA</div><div class="vc-card-desc">Webpage ini diajukan menjadi inovasi unit kerjaku yeay ^^</div></div>
         </div>
         <div class="vc-card">
           <img class="vc-card-img" src="https://lh3.googleusercontent.com/d/1IVkeKf_JtdsILbYXcI-qh1QLSpEc1tQl" alt="Lapak Bulanan" loading="lazy">
-          <div class="vc-card-body">
-            <div class="vc-card-title">2. Lapak Bulanan</div>
-            <div class="vc-card-desc">Webpage ini buat mempermudah jobdescku</div>
-          </div>
+          <div class="vc-card-body"><div class="vc-card-title">2. Lapak Bulanan</div><div class="vc-card-desc">Webpage ini buat mempermudah jobdescku</div></div>
         </div>
         <div class="vc-card">
           <img class="vc-card-img" src="https://lh3.googleusercontent.com/d/1tqoQTeJCn3Fr75b5h1n2blI6GRhp500X" alt="SIPEKAD" loading="lazy">
-          <div class="vc-card-body">
-            <div class="vc-card-title">3. SIPEKAD</div>
-            <div class="vc-card-desc">Ini webpage dibuat karena temenku yang latsar ga nuntasin tugas dia dan berakhir dgn aku yang ngerjain app ini semuanya 😅</div>
-          </div>
+          <div class="vc-card-body"><div class="vc-card-title">3. SIPEKAD</div><div class="vc-card-desc">Ini webpage dibuat karena temenku yang latsar ga nuntasin tugas dia dan berakhir dgn aku yang ngerjain app ini semuanya 😅</div></div>
         </div>
         <p class="vc-tbc">~ to be continued ~</p>
-        <div class="back-wrap">
-          <button class="back-btn" onclick="showPage('home')">Back to 🏠</button>
+        <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
+      </div>
+
+      <!-- GUESTBOOK / TANYA NISA -->
+      <div id="page-guestbook" class="page">
+        <div class="section-title">💌 Tanya Nisa</div>
+        <div class="gb-intro">
+          Mau nanya sesuatu ke Nisa? Kirim aja anonim di sini!<br>
+          Nanti Nisa akan jawab kalau sempet ya 🌸
         </div>
+
+        <!-- Form kirim pesan -->
+        <div class="gb-form">
+          <textarea class="gb-textarea" id="gbPesan" placeholder="Tulis pertanyaan atau pesanmu di sini..."></textarea>
+          <button class="gb-send" id="gbSendBtn" onclick="kirimPesan()">Kirim Anonim 💌</button>
+        </div>
+
+        <!-- Tombol admin -->
+        <div class="gb-admin-toggle">
+          <button class="gb-admin-btn" onclick="toggleAdmin()">🔐 Mode Nisa</button>
+        </div>
+
+        <!-- Panel admin -->
+        <div class="gb-admin-panel" id="gbAdminPanel">
+          <div id="gbLoginForm">
+            <input class="gb-pin-input" type="password" id="gbPinInput" placeholder="Masukkan PIN..." onkeydown="if(event.key==='Enter') loginAdmin()">
+            <button class="gb-pin-btn" onclick="loginAdmin()">Masuk 🔑</button>
+          </div>
+          <div id="gbAdminContent" style="display:none">
+            <div style="text-align:center;font-size:13px;color:var(--pink-dark);font-weight:700;margin-bottom:12px;">
+              ✅ Halo Nisa! Ini semua pesannya~
+            </div>
+            <div id="gbAdminList"></div>
+            <button class="gb-pin-btn" style="margin-top:8px;background:var(--pink-2);color:var(--pink-dark);" onclick="logoutAdmin()">Keluar</button>
+          </div>
+        </div>
+
+        <!-- Pesan publik yang sudah dijawab -->
+        <div class="gb-divider">💬 Jawaban Nisa</div>
+        <div id="gbPublikList"><div class="gb-loading">Memuat pesan... 🌸</div></div>
+
+        <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
       </div>
 
       <footer>
@@ -664,113 +493,101 @@
   <button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️</button>
   <div class="toast" id="toast"></div>
 
+  <!-- Now Playing -->
+  <div id="nowPlaying" class="hide" onclick="toggleMusic()">
+    <span class="np-icon paused" id="npIcon">🎵</span>
+    <span id="npText">NCT Dream - Heavenly</span>
+  </div>
+
   <div id="shareOverlay" onclick="if(event.target===this) closeShareSheet()">
     <div class="share-sheet">
       <h3>Bagikan Halamannya Nisa</h3>
       <div class="share-grid">
-        <a class="share-opt" id="shareWA" target="_blank" rel="noopener">
-          <span class="ic-wrap sc-wa">💬</span> WhatsApp
-        </a>
-        <a class="share-opt" id="shareFB" target="_blank" rel="noopener">
-          <span class="ic-wrap sc-fb">f</span> Facebook
-        </a>
-        <a class="share-opt" id="shareTW" target="_blank" rel="noopener">
-          <span class="ic-wrap sc-tw">𝕏</span> Twitter
-        </a>
-        <a class="share-opt" id="shareTG" target="_blank" rel="noopener">
-          <span class="ic-wrap sc-tg">✈️</span> Telegram
-        </a>
-        <a class="share-opt" id="shareEM" target="_blank" rel="noopener">
-          <span class="ic-wrap sc-em">✉️</span> Email
-        </a>
-        <button class="share-opt" onclick="copyShareLink()">
-          <span class="ic-wrap sc-cp">🔗</span> Copy Link
-        </button>
+        <a class="share-opt" id="shareWA" target="_blank" rel="noopener"><span class="ic-wrap sc-wa">💬</span> WhatsApp</a>
+        <a class="share-opt" id="shareFB" target="_blank" rel="noopener"><span class="ic-wrap sc-fb">f</span> Facebook</a>
+        <a class="share-opt" id="shareTW" target="_blank" rel="noopener"><span class="ic-wrap sc-tw">𝕏</span> Twitter</a>
+        <a class="share-opt" id="shareTG" target="_blank" rel="noopener"><span class="ic-wrap sc-tg">✈️</span> Telegram</a>
+        <a class="share-opt" id="shareEM" target="_blank" rel="noopener"><span class="ic-wrap sc-em">✉️</span> Email</a>
+        <button class="share-opt" onclick="copyShareLink()"><span class="ic-wrap sc-cp">🔗</span> Copy Link</button>
       </div>
       <button class="share-close" onclick="closeShareSheet()">Tutup</button>
     </div>
   </div>
 
-  <div id="audioHint" class="audio-hint" onclick="manualPlay()">🎵 Tap di sini untuk nyalain musik</div>
-
   <audio id="bgAudio" loop preload="none" src="aa.mp3"></audio>
 
   <script>
+    var GAS_URL = 'https://script.google.com/macros/s/AKfycbwAUZkNvaMnuf77gdg6G98ncuaPT3ULd0j0iAYy6zgWZCQIWfntnuO9RKg0FZZ-0-fp/exec';
+    var adminPin = '';
+    var isAdmin = false;
+
+    // ===== Page navigation =====
     function showPage(name) {
       document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
       document.getElementById('page-' + name).classList.add('active');
       window.scrollTo(0, 0);
+      if (name === 'guestbook') loadPublik();
     }
 
-    // ===== Live date (Indonesian) in footer =====
-    (function setFooterDate(){
-      var hariList = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-      var bulanList = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    // ===== Footer date & greeting =====
+    (function(){
+      var hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+      var bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
       var now = new Date();
-      var text = hariList[now.getDay()] + ", " + now.getDate() + " " + bulanList[now.getMonth()] + " " + now.getFullYear();
-      document.getElementById('footerDate').textContent = "📅 " + text;
-
+      document.getElementById('footerDate').textContent = "📅 " + hari[now.getDay()] + ", " + now.getDate() + " " + bulan[now.getMonth()] + " " + now.getFullYear();
       var h = now.getHours();
-      var greet = "Selamat malam";
-      if (h >= 4 && h < 11) greet = "Selamat pagi";
-      else if (h >= 11 && h < 15) greet = "Selamat siang";
-      else if (h >= 15 && h < 18) greet = "Selamat sore";
+      var greet = h>=4&&h<11?"Selamat pagi":h>=11&&h<15?"Selamat siang":h>=15&&h<18?"Selamat sore":"Selamat malam";
       document.getElementById('greeting').textContent = "✨ " + greet + ", makasih udah mampir di webku~~";
     })();
 
-    // ===== Toast helper =====
+    // ===== Toast =====
     function showToast(msg){
       var t = document.getElementById('toast');
       t.textContent = msg;
       t.classList.add('show');
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 1800);
+      window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2000);
     }
 
-    // ===== Copy link on long-press of account items =====
-    document.querySelectorAll('.acc-item').forEach(function(item){
-      item.addEventListener('contextmenu', function(e){
-        e.preventDefault();
-        navigator.clipboard && navigator.clipboard.writeText(item.href).then(function(){
-          showToast('Link disalin! 📋');
-        });
-      });
-    });
-
-    // ===== Scroll-to-top button visibility =====
+    // ===== Scroll to top =====
     window.addEventListener('scroll', function(){
       var btn = document.getElementById('toTop');
       if (window.scrollY > 200) btn.classList.add('show');
       else btn.classList.remove('show');
     });
 
-    // ===== Tap photo to view larger =====
+    // ===== Photo tap =====
     document.querySelectorAll('.profile-photos img').forEach(function(img){
       img.addEventListener('click', function(){ window.open(img.src, '_blank'); });
     });
 
-    // ===== Audio =====
+    // ===== Audio & Now Playing =====
     var audio = document.getElementById('bgAudio');
     var audioStarted = false;
     var musicBtn = document.getElementById('musicBtn');
+    var npEl = document.getElementById('nowPlaying');
+    var npIcon = document.getElementById('npIcon');
 
-    function manualPlay() {
+    function manualPlay(){
       if (audioStarted) return;
-      audio.play().then(function () {
+      audio.play().then(function(){
         audioStarted = true;
-        document.getElementById('audioHint').classList.add('hide');
+        npEl.classList.remove('hide');
+        npIcon.classList.remove('paused');
         musicBtn.textContent = '🎵';
-      }).catch(function () {});
+      }).catch(function(){});
     }
 
     function toggleMusic(){
-      if (!audioStarted) { manualPlay(); return; }
-      if (audio.paused) {
+      if (!audioStarted){ manualPlay(); return; }
+      if (audio.paused){
         audio.play();
         musicBtn.textContent = '🎵';
+        npIcon.classList.remove('paused');
       } else {
         audio.pause();
         musicBtn.textContent = '🔇';
+        npIcon.classList.add('paused');
       }
     }
 
@@ -778,7 +595,7 @@
     document.addEventListener('click', manualPlay, { once:true });
     document.addEventListener('touchstart', manualPlay, { once:true });
 
-    // ===== Dark / light theme toggle =====
+    // ===== Theme =====
     function toggleTheme(){
       document.body.classList.toggle('dark');
       var isDark = document.body.classList.contains('dark');
@@ -786,61 +603,189 @@
       showToast(isDark ? 'Mode gelap aktif 🌙' : 'Mode terang aktif ☀️');
     }
 
+    // ===== Share =====
     var PUBLIC_URL = 'https://nisapage.github.io/me/';
-
-    // ===== Share button =====
     function sharePage(){
-      var url = PUBLIC_URL;
-      var text = 'Ini webpagenya Nisa!';
-      if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        navigator.share({ title: 'Halamannya Nisa', text: text, url: url }).catch(function(){});
+      var url = PUBLIC_URL, text = 'Ini webpagenya Nisa!';
+      if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+        navigator.share({ title:'Halamannya Nisa', text:text, url:url }).catch(function(){});
         return;
       }
-      document.getElementById('shareWA').href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + url);
+      document.getElementById('shareWA').href = 'https://wa.me/?text=' + encodeURIComponent(text+' '+url);
       document.getElementById('shareFB').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
       document.getElementById('shareTW').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url);
       document.getElementById('shareTG').href = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
-      document.getElementById('shareEM').href = 'mailto:?subject=' + encodeURIComponent('Halamannya Nisa') + '&body=' + encodeURIComponent(text + ' ' + url);
+      document.getElementById('shareEM').href = 'mailto:?subject=' + encodeURIComponent('Halamannya Nisa') + '&body=' + encodeURIComponent(text+' '+url);
       document.getElementById('shareOverlay').classList.add('show');
     }
-
-    function closeShareSheet(){
-      document.getElementById('shareOverlay').classList.remove('show');
-    }
-
+    function closeShareSheet(){ document.getElementById('shareOverlay').classList.remove('show'); }
     function copyShareLink(){
-      var url = PUBLIC_URL;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(function(){
-          showToast('Link disalin! 📋');
-          closeShareSheet();
-        });
-      }
+      if (navigator.clipboard) navigator.clipboard.writeText(PUBLIC_URL).then(function(){ showToast('Link disalin! 📋'); closeShareSheet(); });
     }
 
-    // ===== Floating petals background =====
-    (function initPetals(){
+    // ===== Petals =====
+    (function(){
       var emojis = ['🌸','🌷','🎀','💮'];
       var container = document.getElementById('petals');
-      var count = 8;
-      for (var i = 0; i < count; i++) {
+      for (var i = 0; i < 8; i++){
         var p = document.createElement('div');
         p.className = 'petal';
-        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        p.style.left = Math.random() * 100 + 'vw';
-        p.style.fontSize = (14 + Math.random() * 14) + 'px';
-        var duration = 9 + Math.random() * 10;
-        p.style.animationDuration = duration + 's';
-        p.style.animationDelay = (Math.random() * duration) + 's';
+        p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        p.style.left = Math.random()*100 + 'vw';
+        p.style.fontSize = (14+Math.random()*14) + 'px';
+        var d = 9+Math.random()*10;
+        p.style.animationDuration = d + 's';
+        p.style.animationDelay = (Math.random()*d) + 's';
         container.appendChild(p);
       }
     })();
 
-    // Remove splash from flow after animation
-    setTimeout(function(){
-      var s = document.getElementById('splash');
-      if (s) s.style.display = 'none';
-    }, 1300);
+    setTimeout(function(){ var s=document.getElementById('splash'); if(s) s.style.display='none'; }, 1300);
+
+    // ===== Copy link on acc long-press =====
+    document.querySelectorAll('.acc-item').forEach(function(item){
+      item.addEventListener('contextmenu', function(e){
+        e.preventDefault();
+        navigator.clipboard && navigator.clipboard.writeText(item.href).then(function(){ showToast('Link disalin! 📋'); });
+      });
+    });
+
+    // ============================================
+    // GUESTBOOK
+    // ============================================
+    function gasPost(payload, cb){
+      fetch(GAS_URL, {
+        method:'POST',
+        body: JSON.stringify(payload)
+      })
+      .then(function(r){ return r.json(); })
+      .then(cb)
+      .catch(function(){ showToast('Koneksi gagal, coba lagi 😢'); });
+    }
+
+    // Kirim pesan anonim
+    function kirimPesan(){
+      var pesan = document.getElementById('gbPesan').value.trim();
+      if (!pesan){ showToast('Pesannya kosong nih! 🌸'); return; }
+      var btn = document.getElementById('gbSendBtn');
+      btn.disabled = true;
+      btn.textContent = 'Mengirim... 🌸';
+      gasPost({ action:'kirim', pesan:pesan }, function(res){
+        btn.disabled = false;
+        btn.textContent = 'Kirim Anonim 💌';
+        if (res.ok){
+          document.getElementById('gbPesan').value = '';
+          showToast(res.msg);
+        } else {
+          showToast(res.msg || 'Gagal kirim 😢');
+        }
+      });
+    }
+
+    // Load pesan publik
+    function loadPublik(){
+      var el = document.getElementById('gbPublikList');
+      el.innerHTML = '<div class="gb-loading">Memuat pesan... 🌸</div>';
+      gasPost({ action:'getPublik' }, function(res){
+        if (!res.ok || !res.data || res.data.length === 0){
+          el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
+          return;
+        }
+        el.innerHTML = '';
+        res.data.forEach(function(item){
+          var div = document.createElement('div');
+          div.className = 'gb-card';
+          div.innerHTML =
+            '<div class="gb-card-q">🙋 ' + escHtml(item.pesan) + '</div>' +
+            '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>' + escHtml(item.jawaban) + '</div>' +
+            '<div class="gb-card-date">📅 ' + item.waktu + '</div>';
+          el.appendChild(div);
+        });
+      });
+    }
+
+    // Toggle panel admin
+    function toggleAdmin(){
+      var panel = document.getElementById('gbAdminPanel');
+      panel.classList.toggle('show');
+    }
+
+    // Login admin
+    function loginAdmin(){
+      var pin = document.getElementById('gbPinInput').value;
+      if (!pin){ showToast('PIN kosong!'); return; }
+      gasPost({ action:'login', pin:pin }, function(res){
+        if (res.ok){
+          adminPin = pin;
+          isAdmin = true;
+          document.getElementById('gbLoginForm').style.display = 'none';
+          document.getElementById('gbAdminContent').style.display = 'block';
+          loadAdmin();
+        } else {
+          showToast(res.msg || 'PIN salah!');
+        }
+      });
+    }
+
+    // Logout admin
+    function logoutAdmin(){
+      adminPin = ''; isAdmin = false;
+      document.getElementById('gbLoginForm').style.display = 'block';
+      document.getElementById('gbAdminContent').style.display = 'none';
+      document.getElementById('gbPinInput').value = '';
+      document.getElementById('gbAdminPanel').classList.remove('show');
+    }
+
+    // Load semua pesan untuk admin
+    function loadAdmin(){
+      var el = document.getElementById('gbAdminList');
+      el.innerHTML = '<div class="gb-loading">Memuat... 🌸</div>';
+      gasPost({ action:'getAll', pin:adminPin }, function(res){
+        if (!res.ok){ showToast(res.msg || 'Gagal'); return; }
+        if (!res.data || res.data.length === 0){
+          el.innerHTML = '<div class="gb-empty">Belum ada pesan masuk 🌸</div>';
+          return;
+        }
+        el.innerHTML = '';
+        res.data.forEach(function(item){
+          var div = document.createElement('div');
+          div.className = 'gb-admin-card';
+          div.id = 'acard-' + item.row;
+          var badge = item.tampil
+            ? '<span class="gb-badge gb-badge-show">Tampil</span>'
+            : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>';
+          div.innerHTML =
+            '<div class="gb-admin-q">🙋 ' + escHtml(item.pesan) + badge + '</div>' +
+            '<textarea class="gb-reply-area" id="reply-' + item.row + '" placeholder="Tulis jawaban Nisa...">' + escHtml(item.jawaban) + '</textarea>' +
+            '<div class="gb-reply-row">' +
+              '<button class="gb-reply-save" onclick="simpanJawaban(' + item.row + ')">💾 Simpan & Tampilkan</button>' +
+              '<button class="gb-reply-hide" onclick="sembunyikan(' + item.row + ')">🙈 Sembunyikan</button>' +
+            '</div>';
+          el.appendChild(div);
+        });
+      });
+    }
+
+    function simpanJawaban(row){
+      var jawaban = document.getElementById('reply-' + row).value.trim();
+      if (!jawaban){ showToast('Jawaban kosong!'); return; }
+      gasPost({ action:'jawab', pin:adminPin, row:row, jawaban:jawaban }, function(res){
+        showToast(res.msg || (res.ok ? 'Tersimpan! 💌' : 'Gagal'));
+        if (res.ok){ loadAdmin(); loadPublik(); }
+      });
+    }
+
+    function sembunyikan(row){
+      gasPost({ action:'sembunyikan', pin:adminPin, row:row }, function(res){
+        if (res.ok){ showToast('Disembunyikan 🙈'); loadAdmin(); loadPublik(); }
+        else showToast(res.msg || 'Gagal');
+      });
+    }
+
+    function escHtml(str){
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
   </script>
 </body>
 </html>
