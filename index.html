@@ -537,86 +537,175 @@
     }
 
     // Load pesan — publik hanya yang tampil=true, admin lihat semua
-    async function loadPesan() {
-      var el = document.getElementById('gbPublikList');
-      el.innerHTML = skelHtml() + skelHtml() + skelHtml();
+    var _lastDoc = null;
+var _loadingMore = false;
+var PAGE_SIZE = 10;
 
-      await window._fbReadyPromise;
-      var _f = window._fb;
+async function loadPesan() {
+  _lastDoc = null; // reset pagination tiap kali buka QnA
+  var el = document.getElementById('gbPublikList');
+  el.innerHTML = skelHtml() + skelHtml() + skelHtml();
 
-      try {
-        var q;
-        if (isAdmin) {
-          // Admin: lihat semua pesan, urut terbaru
-          q = _f.query(
-            _f.collection(window._db, 'messages'),
-            _f.orderBy('waktu', 'desc'),
-            _f.limit(50)
-          );
-        } else {
-          // Publik: hanya yang tampil = true
-          q = _f.query(
-            _f.collection(window._db, 'messages'),
-            _f.where('tampil', '==', true),
-            _f.orderBy('waktu', 'desc'),
-            _f.limit(20)
-          );
-        }
+  // Hapus tombol load more lama kalau ada
+  var oldBtn = document.getElementById('gbLoadMore');
+  if (oldBtn) oldBtn.remove();
 
-        var snap = await _f.getDocs(q);
-        el.innerHTML = '';
+  await window._fbReadyPromise;
+  var _f = window._fb;
 
-        if (snap.empty) {
-          el.innerHTML = '<div class="gb-empty">Belum ada jawaban dari Nisa 🌸<br>Kirim pertanyaanmu dulu yuk!</div>';
-          return;
-        }
-
-        snap.forEach(function(doc) {
-          var item = doc.data();
-          item.id = doc.id;
-          item.waktuFmt = fmtTanggal(item.waktu);
-          el.appendChild(buatKartu(item));
-        });
-      } catch(err) {
-        el.innerHTML = '<div class="gb-empty">Gagal memuat pesan 😢<br><small style="color:#b45a7e">'+escHtml(err.message)+'</small></div>';
-        console.error('Firestore loadPesan error:', err);
-      }
+  try {
+    var q;
+    if (isAdmin) {
+      q = _f.query(
+        _f.collection(window._db, 'messages'),
+        _f.orderBy('waktu', 'desc'),
+        _f.limit(PAGE_SIZE)
+      );
+    } else {
+      // Publik: semua pesan (tampil atau tidak), urut terbaru
+      q = _f.query(
+        _f.collection(window._db, 'messages'),
+        _f.orderBy('waktu', 'desc'),
+        _f.limit(PAGE_SIZE)
+      );
     }
+
+    var snap = await _f.getDocs(q);
+    el.innerHTML = '';
+
+    if (snap.empty) {
+      el.innerHTML = '<div class="gb-empty">Belum ada pesan 🌸<br>Jadilah yang pertama kirim pertanyaan!</div>';
+      return;
+    }
+
+    snap.forEach(function(doc) {
+      var item = doc.data(); item.id = doc.id;
+      item.waktuFmt = fmtTanggal(item.waktu);
+      el.appendChild(buatKartu(item));
+    });
+
+    _lastDoc = snap.docs[snap.docs.length - 1];
+
+    // Kalau ada lebih dari PAGE_SIZE kemungkinan, tampilkan tombol
+    if (snap.docs.length === PAGE_SIZE) {
+      tampilTombolMore();
+    }
+  } catch(err) {
+    el.innerHTML = '<div class="gb-empty">Gagal memuat pesan 😢<br><small style="color:#b45a7e">'+escHtml(err.message)+'</small></div>';
+    console.error(err);
+  }
+}
+
+async function muatLebihBanyak() {
+  if (_loadingMore || !_lastDoc) return;
+  _loadingMore = true;
+
+  var btn = document.getElementById('gbLoadMore');
+  if (btn) { btn.textContent = 'Memuat... 🌸'; btn.disabled = true; }
+
+  await window._fbReadyPromise;
+  var _f = window._fb;
+  var el = document.getElementById('gbPublikList');
+
+  try {
+    var q;
+    if (isAdmin) {
+      q = _f.query(
+        _f.collection(window._db, 'messages'),
+        _f.orderBy('waktu', 'desc'),
+        _f.startAfter(_lastDoc),
+        _f.limit(PAGE_SIZE)
+      );
+    } else {
+      q = _f.query(
+        _f.collection(window._db, 'messages'),
+        _f.orderBy('waktu', 'desc'),
+        _f.startAfter(_lastDoc),
+        _f.limit(PAGE_SIZE)
+      );
+    }
+
+    var snap = await _f.getDocs(q);
+
+    if (snap.empty) {
+      if (btn) { btn.textContent = 'Semua pesan sudah dimuat ✨'; btn.disabled = true; }
+      _loadingMore = false;
+      return;
+    }
+
+    snap.forEach(function(doc) {
+      var item = doc.data(); item.id = doc.id;
+      item.waktuFmt = fmtTanggal(item.waktu);
+      // Insert sebelum tombol load more
+      el.insertBefore(buatKartu(item), document.getElementById('gbLoadMore'));
+    });
+
+    _lastDoc = snap.docs[snap.docs.length - 1];
+
+    if (snap.docs.length < PAGE_SIZE) {
+      if (btn) { btn.textContent = 'Semua pesan sudah dimuat ✨'; btn.disabled = true; }
+    } else {
+      if (btn) { btn.textContent = 'Muat lebih banyak 🌸'; btn.disabled = false; }
+    }
+  } catch(err) {
+    showToast('Gagal memuat 😢');
+    if (btn) { btn.textContent = 'Muat lebih banyak 🌸'; btn.disabled = false; }
+  }
+  _loadingMore = false;
+}
+
+function tampilTombolMore() {
+  var old = document.getElementById('gbLoadMore');
+  if (old) old.remove();
+  var btn = document.createElement('button');
+  btn.id = 'gbLoadMore';
+  btn.className = 'gb-send';
+  btn.style.background = 'var(--pink-1)';
+  btn.style.color = 'var(--pink-dark)';
+  btn.style.marginTop = '8px';
+  btn.textContent = 'Muat lebih banyak 🌸';
+  btn.onclick = muatLebihBanyak;
+  document.getElementById('gbPublikList').appendChild(btn);
+}
 
     function buatKartu(item) {
-      var div = document.createElement('div');
-      div.className = 'gb-card';
-      div.id = 'card-' + item.id;
+  var div = document.createElement('div');
+  div.className = 'gb-card';
+  div.id = 'card-' + item.id;
 
-      var badge = isAdmin
-        ? (item.tampil
-          ? '<span class="gb-badge gb-badge-show">Tampil</span>'
-          : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>')
-        : '';
+  var badge = isAdmin
+    ? (item.tampil
+      ? '<span class="gb-badge gb-badge-show">Tampil</span>'
+      : '<span class="gb-badge gb-badge-hide">Tersembunyi</span>')
+    : '';
 
-      var jawabanHtml = item.jawaban
-        ? '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>'
-        : '';
+  // Publik: kalau belum ada jawaban, tampilkan status menunggu
+  var jawabanHtml = '';
+  if (item.jawaban) {
+    jawabanHtml = '<div class="gb-card-a"><div class="gb-card-a-label">Jawaban Nisa</div>'+escHtml(item.jawaban)+'</div>';
+  } else if (!isAdmin) {
+    jawabanHtml = '<div class="gb-card-a" style="color:#b45a7e;font-style:italic;font-size:12.5px;">⏳ Belum dijawab Nisa~</div>';
+  }
 
-      var adminHtml = '';
-      if (isAdmin) {
-        adminHtml =
-          '<div class="gb-admin-inline show" id="ainline-'+item.id+'">' +
-            '<textarea class="gb-reply-area" id="reply-'+item.id+'" placeholder="Tulis atau edit jawaban...">'+escHtml(item.jawaban)+'</textarea>' +
-            '<div class="gb-reply-row">' +
-              '<button class="gb-reply-save" onclick="simpanJawaban(\''+item.id+'\')">💾 Simpan &amp; Tampilkan</button>' +
-              '<button class="gb-reply-hide" onclick="sembunyikan(\''+item.id+'\')">🙈 Sembunyikan</button>' +
-            '</div></div>';
-      }
+  var adminHtml = '';
+  if (isAdmin) {
+    adminHtml =
+      '<div class="gb-admin-inline show" id="ainline-'+item.id+'">' +
+        '<textarea class="gb-reply-area" id="reply-'+item.id+'" placeholder="Tulis atau edit jawaban...">'+escHtml(item.jawaban)+'</textarea>' +
+        '<div class="gb-reply-row">' +
+          '<button class="gb-reply-save" onclick="simpanJawaban(\''+item.id+'\')">💾 Simpan &amp; Tampilkan</button>' +
+          '<button class="gb-reply-hide" onclick="sembunyikan(\''+item.id+'\')">🙈 Sembunyikan</button>' +
+        '</div></div>';
+  }
 
-      div.innerHTML =
-        '<div class="gb-card-q">🙋 '+escHtml(item.pesan)+badge+'</div>' +
-        jawabanHtml +
-        '<div class="gb-card-date">📅 '+(item.waktuFmt||'')+'</div>' +
-        adminHtml;
+  div.innerHTML =
+    '<div class="gb-card-q">🙋 '+escHtml(item.pesan)+badge+'</div>' +
+    jawabanHtml +
+    '<div class="gb-card-date">📅 '+(item.waktuFmt||'')+'</div>' +
+    adminHtml;
 
-      return div;
-    }
+  return div;
+}
 
     // Admin: simpan jawaban + set tampil=true
     async function simpanJawaban(docId) {
@@ -665,9 +754,9 @@
     import { initializeApp }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
-      getFirestore, collection, addDoc, doc, updateDoc,
-      query, where, orderBy, limit, getDocs, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  getFirestore, collection, addDoc, doc, updateDoc,
+  query, where, orderBy, limit, startAfter, getDocs, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDOaG8b2eRXTYjBf77rokYk2h-_bZ5H-C4",
@@ -682,7 +771,7 @@
     const db  = getFirestore(app);
 
     window._db = db;
-    window._fb = { collection, addDoc, doc, updateDoc, query, where, orderBy, limit, getDocs, serverTimestamp };
+    window._fb = { collection, addDoc, doc, updateDoc, query, where, orderBy, limit, startAfter, getDocs, serverTimestamp };
 
     // Firebase siap → resolve promise
     window._fbReadyResolve();
