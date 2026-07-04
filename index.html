@@ -150,6 +150,8 @@
     .gb-logout-btn{padding:6px 12px;border:none;border-radius:999px;background:var(--pink-1);color:var(--pink-dark);font-weight:700;font-size:12px;cursor:pointer;}
     #gbLoginSection{margin-bottom:4px;}
     .gb-loading{text-align:center;font-size:13px;color:#b45a7e;padding:16px 0;}
+    .spark{position:fixed;pointer-events:none;font-size:18px;z-index:999;animation:sparkFly .9s ease forwards;}
+@keyframes sparkFly{0%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-150%) scale(0.3);}}
   </style>
 </head>
 <body>
@@ -159,6 +161,7 @@
     <button class="fab-btn" id="themeBtn" onclick="toggleTheme()" title="Ganti tema">🌙</button>
     <button class="fab-btn" id="musicBtn" onclick="toggleMusic()" title="Musik">🎵</button>
     <button class="fab-btn" id="shareBtn" onclick="sharePage()" title="Bagikan">🔗</button>
+    <button class="fab-btn" id="sparkBtn" onclick="toggleSpark()" title="Bintang">✨</button>
   </div>
   <div class="app">
     <div class="card">
@@ -178,6 +181,7 @@
         <div class="menu-grid">
           <button class="menu-btn" onclick="showPage('vibecoding')"><span class="ic">💻</span> Vibe Coding By Me</button>
           <button class="menu-btn" onclick="showPage('guestbook')"><span class="ic">💌</span> QnA</button>
+          <button class="menu-btn" onclick="showPage('quote')"><span class="ic">💫</span> Daily Quote</button>
         </div>
       </div>
 
@@ -302,7 +306,16 @@
         <div id="gbPublikList"><div class="gb-loading">Memuat pesan... 🌸</div></div>
         <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
       </div>
-
+      <!-- DAILY QUOTE -->
+<div id="page-quote" class="page">
+  <div class="section-title">💫 Daily Quote</div>
+  <div id="quoteBox" style="background:var(--pink-1);border-radius:18px;padding:24px 20px;margin-bottom:18px;border-left:4px solid var(--pink-3);min-height:120px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+    <div id="quoteText" style="font-size:15px;line-height:1.7;color:var(--text);margin-bottom:12px;font-style:italic;"></div>
+    <div id="quoteAuthor" style="font-size:12px;color:#b45a7e;font-weight:700;"></div>
+  </div>
+  <button class="gb-send" onclick="gantiQuote()">🔀 Ganti Quote</button>
+  <div class="back-wrap"><button class="back-btn" onclick="showPage('home')">Back to 🏠</button></div>
+</div>
       <footer>
         made with 🩷 by Nisa
         <div class="footer-date" id="footerDate"></div>
@@ -796,6 +809,75 @@ function tampilTombolMore() {
     console.error(err);
   }
 }
+// =============================================
+// RANDOM QUOTE
+// =============================================
+var quotes = [
+  {text:"The moon does not fight. It attacks no one. It does not worry. It just shines.", author:"Deng Ming-Dao"},
+  {text:"Stars can't shine without darkness.", author:"D.H. Sidebottom"},
+  {text:"어둠 속에서도 빛나는 별처럼, 너는 충분히 빛나고 있어.", author:"— 🌙"},
+  {text:"You are allowed to be both a masterpiece and a work in progress.", author:"Sophia Bush"},
+  {text:"做自己，因为那个位置没有人能替代你。", author:"— 🌸"},
+  {text:"In the middle of every difficulty lies opportunity.", author:"Albert Einstein"},
+  {text:"낮은 곳에서도 꽃은 핀다.", author:"— 🌷"},
+  {text:"She believed she could, so she did.", author:"R.S. Grey"},
+  {text:"Tidak ada yang sia-sia. Setiap prosesmu membentuk versi terbaikmu.", author:"— 💗"},
+  {text:"행복은 멀리 있지 않아. 지금 이 순간이 행복이야.", author:"— ✨"},
+  {text:"你值得被爱，也值得爱自己。", author:"— 🎀"},
+  {text:"Be patient. The best things happen unexpectedly.", author:"— 🌸"},
+  {text:"Setiap bintang punya waktunya sendiri untuk bersinar.", author:"— 🌟"},
+  {text:"살아있다는 것만으로도 충분해.", author:"— 🌙"},
+];
+var lastQuoteIdx = -1;
+function gantiQuote(){
+  var idx;
+  do { idx = Math.floor(Math.random() * quotes.length); } while (idx === lastQuoteIdx);
+  lastQuoteIdx = idx;
+  var q = quotes[idx];
+  var textEl = document.getElementById('quoteText');
+  var authEl = document.getElementById('quoteAuthor');
+  textEl.style.opacity = 0;
+  authEl.style.opacity = 0;
+  setTimeout(function(){
+    textEl.textContent = '"' + q.text + '"';
+    authEl.textContent = '— ' + q.author;
+    textEl.style.transition = 'opacity .4s';
+    authEl.style.transition = 'opacity .4s';
+    textEl.style.opacity = 1;
+    authEl.style.opacity = 1;
+  }, 200);
+}
+gantiQuote();
+
+// =============================================
+// SPARK / BINTANG INTERAKTIF
+// =============================================
+var sparkActive = false;
+var sparkEmojis = ['✨','🌟','💫','🌸','🌷','🎀','💗','⭐','🩷'];
+function toggleSpark(){
+  sparkActive = !sparkActive;
+  document.getElementById('sparkBtn').textContent = sparkActive ? '🌟' : '✨';
+  showToast(sparkActive ? 'Tap layar buat bintang! ✨' : 'Bintang dimatikan 🌙');
+}
+document.addEventListener('click', function(e){
+  if (!sparkActive) return;
+  if (e.target.closest('.fab-btn, .menu-btn, .back-btn, .gb-send, button, a, textarea, input')) return;
+  for (var i = 0; i < 4; i++) {
+    (function(delay){
+      setTimeout(function(){
+        var spark = document.createElement('div');
+        spark.className = 'spark';
+        spark.textContent = sparkEmojis[Math.floor(Math.random() * sparkEmojis.length)];
+        var offset = (Math.random() - 0.5) * 40;
+        spark.style.left = (e.clientX + offset) + 'px';
+        spark.style.top  = (e.clientY + offset) + 'px';
+        spark.style.fontSize = (14 + Math.random() * 12) + 'px';
+        document.body.appendChild(spark);
+        setTimeout(function(){ spark.remove(); }, 950);
+      }, delay);
+    })(i * 80);
+  }
+});
   </script>
 
   <!-- Firebase — load sebagai module, resolve promise saat siap -->
