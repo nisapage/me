@@ -19,7 +19,6 @@
   .btn:active{transform:scale(0.95);}
   .back-btn{padding:10px 24px;border:none;border-radius:999px;background:var(--pink-2);color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;}
   .tip{font-size:11px;color:#c17b95;text-align:center;margin-top:8px;}
-  /* Tombol loncat khusus mobile */
   #jumpBtn{display:none;width:100%;margin-top:14px;padding:20px;border:none;border-radius:18px;background:var(--pink-4);color:#fff;font-weight:700;font-size:18px;cursor:pointer;-webkit-tap-highlight-color:transparent;letter-spacing:.5px;}
   #jumpBtn:active{background:var(--pink-dark);transform:scale(0.97);}
   @media(pointer:coarse){#jumpBtn{display:block;}}
@@ -46,12 +45,42 @@ const ctx = canvas.getContext('2d');
 const W = 480, H = 160;
 canvas.width = W; canvas.height = H;
 
-const GROUND_Y = H - 30;   // garis tanah
+const GROUND_Y = H - 30;
 const DINO_H = 36, DINO_W = 28;
 const GRAVITY = 0.65;
 const JUMP_V = -13;
 
 let dino, obstacles, score, speed, frame, gameRunning, gameOver, animId;
+
+/* ── AUDIO ── */
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq, type, duration, vol) {
+  try {
+    const ac = getAudioCtx();
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, ac.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.9, ac.currentTime + duration);
+    gain.gain.setValueAtTime(vol || 0.15, ac.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + duration);
+    osc.start(ac.currentTime);
+    osc.stop(ac.currentTime + duration);
+  } catch(e) {}
+}
+function sfxJump()   { playTone(520, 'sine',   0.12, 0.13); }
+function sfxScore()  { playTone(880, 'sine',   0.08, 0.12); setTimeout(()=>playTone(1100,'sine',0.1,0.12), 80); }
+function sfxDead()   {
+  playTone(400, 'sawtooth', 0.12, 0.18);
+  setTimeout(()=>playTone(300,'sawtooth',0.12,0.18), 120);
+  setTimeout(()=>playTone(200,'sawtooth',0.2, 0.18), 240);
+}
+function sfxSpeed()  { playTone(660,'square',0.06,0.08); setTimeout(()=>playTone(780,'square',0.06,0.08),70); }
 
 /* ── INIT ── */
 function initGame() {
@@ -72,6 +101,7 @@ function jump() {
   if (dino.onGround) {
     dino.vy = JUMP_V;
     dino.onGround = false;
+    sfxJump();
   }
 }
 
@@ -80,6 +110,7 @@ function startGame() {
   document.getElementById('msg').textContent = '';
   dino.vy = JUMP_V;
   dino.onGround = false;
+  sfxJump();
   loop();
 }
 
@@ -87,12 +118,10 @@ function startGame() {
 function loop() {
   frame++;
 
-  // spawn obstacle — jarak lebih lebar
   if (!obstacles.length || obstacles[obstacles.length - 1].x < W - (260 + Math.random() * 180)) {
     if (frame > 80) spawnObstacle();
   }
 
-  // fisika dino
   dino.vy += GRAVITY;
   dino.y += dino.vy;
   if (dino.y >= GROUND_Y - DINO_H) {
@@ -101,11 +130,9 @@ function loop() {
     dino.onGround = true;
   }
 
-  // gerak obstacle
   obstacles.forEach(o => o.x -= speed);
   obstacles = obstacles.filter(o => o.x + o.w > 0);
 
-  // collision — hitbox dikecilkan 4px tiap sisi
   const dx = 4, dy = 4;
   const dLeft = dino.x + dx, dRight = dino.x + DINO_W - dx;
   const dTop  = dino.y + dy, dBot   = dino.y + DINO_H - dy;
@@ -115,11 +142,14 @@ function loop() {
     }
   }
 
-  // skor & percepat
   if (frame % 6 === 0) {
     score++;
     document.getElementById('score').textContent = '🌸 Skor: ' + score;
-    if (score % 15 === 0) speed = Math.min(11, speed + 0.4);
+    if (score % 15 === 0) {
+      speed = Math.min(11, speed + 0.4);
+      sfxSpeed();
+    }
+    if (score % 5 === 0 && score % 15 !== 0) sfxScore();
   }
 
   render();
@@ -134,36 +164,26 @@ function spawnObstacle() {
 
 /* ── RENDER ── */
 function render() {
-  // bg
   ctx.fillStyle = '#ffeef5';
   ctx.fillRect(0, 0, W, H);
-  // bintang
   ctx.fillStyle = '#ffb6d6';
   [[60,18],[150,32],[280,14],[380,26],[440,38],[100,9],[320,40]].forEach(([x,y]) => {
     ctx.beginPath(); ctx.arc(x, y, 1.8, 0, Math.PI*2); ctx.fill();
   });
-  // tanah
   ctx.fillStyle = '#ffb6d6';
   ctx.fillRect(0, GROUND_Y, W, 4);
   ctx.fillStyle = '#ff9ebb';
   for (let i = 0; i < W; i += 28) ctx.fillRect(i, GROUND_Y + 4, 14, 2);
-
-  // obstacles (jamur pink)
   obstacles.forEach(drawMushroom);
-
-  // dino
   drawCat();
 }
 
 function drawMushroom(o) {
   const cx = o.x + o.w / 2;
-  // batang
   ctx.fillStyle = '#c43569';
   ctx.beginPath(); ctx.roundRect(cx - 5, o.y + 12, 10, o.h - 12, 3); ctx.fill();
-  // topi
   ctx.fillStyle = '#ff6fa5';
   ctx.beginPath(); ctx.arc(cx, o.y + 13, 15, Math.PI, 0); ctx.fill();
-  // bintik putih
   ctx.fillStyle = 'rgba(255,255,255,0.85)';
   [[0,0],[7,5],[-7,5]].forEach(([dx, dy]) => {
     ctx.beginPath(); ctx.arc(cx + dx, o.y + 10 + dy, 3, Math.PI, 0); ctx.fill();
@@ -172,42 +192,34 @@ function drawMushroom(o) {
 
 function drawCat() {
   const x = dino.x, y = dino.y;
-  // ekor
   ctx.fillStyle = '#ff9ebb';
   ctx.beginPath(); ctx.roundRect(x - 10, y + 16, 13, 7, 4); ctx.fill();
-  // badan
   ctx.fillStyle = '#ff6fa5';
   ctx.beginPath(); ctx.roundRect(x, y + 10, DINO_W, 26, 6); ctx.fill();
-  // kepala
   ctx.fillStyle = '#ff9ebb';
   ctx.beginPath(); ctx.roundRect(x + 3, y, 22, 18, 8); ctx.fill();
-  // telinga
   ctx.fillStyle = '#ff6fa5';
   ctx.beginPath(); ctx.roundRect(x + 4, y - 7, 6, 10, 3); ctx.fill();
   ctx.beginPath(); ctx.roundRect(x + 17, y - 7, 6, 10, 3); ctx.fill();
   ctx.fillStyle = '#ffc0d8';
   ctx.beginPath(); ctx.roundRect(x + 5, y - 5, 4, 7, 2); ctx.fill();
   ctx.beginPath(); ctx.roundRect(x + 18, y - 5, 4, 7, 2); ctx.fill();
-  // mata
   ctx.fillStyle = '#fff';
   ctx.beginPath(); ctx.arc(x + 10, y + 8, 4, 0, Math.PI*2); ctx.fill();
   ctx.beginPath(); ctx.arc(x + 20, y + 8, 4, 0, Math.PI*2); ctx.fill();
   ctx.fillStyle = '#5c2a3d';
   ctx.beginPath(); ctx.arc(x + 11, y + 8, 2, 0, Math.PI*2); ctx.fill();
   ctx.beginPath(); ctx.arc(x + 21, y + 8, 2, 0, Math.PI*2); ctx.fill();
-  // hidung
   ctx.fillStyle = '#d63e79';
   ctx.beginPath(); ctx.arc(x + 14, y + 13, 2, 0, Math.PI*2); ctx.fill();
-  // kumis
   ctx.strokeStyle = '#d63e79'; ctx.lineWidth = 1;
   [[x+7, y+13, x+2, y+11],[x+7, y+14, x+2, y+15],
    [x+21, y+13, x+26, y+11],[x+21, y+14, x+26, y+15]].forEach(([x1,y1,x2,y2]) => {
     ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
   });
-  // kaki (animasi lari)
   const legOff = (dino.onGround && gameRunning) ? (Math.floor(frame / 7) % 2) * 5 : 0;
   ctx.fillStyle = '#ff6fa5';
-  ctx.beginPath(); ctx.roundRect(x + 4,  y + 34, 8, 8 + legOff, 3);     ctx.fill();
+  ctx.beginPath(); ctx.roundRect(x + 4,  y + 34, 8, 8 + legOff, 3); ctx.fill();
   ctx.beginPath(); ctx.roundRect(x + 16, y + 34, 8, 8 + (5 - legOff), 3); ctx.fill();
 }
 
@@ -215,7 +227,7 @@ function drawCat() {
 function endGame() {
   gameRunning = false; gameOver = true;
   cancelAnimationFrame(animId);
-  // gambar X di mata
+  sfxDead();
   render();
   const x = dino.x, y = dino.y;
   ctx.strokeStyle = '#d63e79'; ctx.lineWidth = 2;
@@ -226,11 +238,8 @@ function endGame() {
   document.getElementById('msg').textContent = '💔 Aduh! Skor: ' + score + ' — Tap Loncat / Spasi untuk main lagi~';
 }
 
-function restartGame() {
-  initGame();
-}
+function restartGame() { initGame(); }
 
-/* ── INPUT ── keyboard saja untuk PC; tombol #jumpBtn untuk HP ── */
 document.addEventListener('keydown', e => {
   if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump(); }
 });
