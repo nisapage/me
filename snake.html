@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Snake Nisa 🌸</title>
+<title>Snake Choquette 🌸</title>
 <style>
   :root{--pink-1:#fff0f5;--pink-2:#ffd6e8;--pink-3:#ff9ebb;--pink-4:#ff6fa5;--pink-dark:#d63e79;--text:#5c2a3d;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -18,15 +18,14 @@
   .btn{padding:10px 20px;border:none;border-radius:999px;background:var(--pink-4);color:#fff;font-weight:700;font-size:13px;cursor:pointer;transition:transform .15s;}
   .btn:active{transform:scale(0.95);}
   .back-btn{padding:10px 20px;border:none;border-radius:999px;background:var(--pink-2);color:var(--pink-dark);font-weight:700;font-size:13px;cursor:pointer;}
-  /* D-pad */
-  .dpad{display:grid;grid-template-areas:'. u .' 'l . r' '. d .';grid-template-columns:44px 44px 44px;grid-template-rows:44px 44px 44px;gap:4px;margin:14px auto 0;width:fit-content;}
-  .dpad button{width:44px;height:44px;border:none;border-radius:10px;background:var(--pink-2);color:var(--pink-dark);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+  .dpad{display:grid;grid-template-areas:'. u .' 'l . r' '. d .';grid-template-columns:52px 52px 52px;grid-template-rows:52px 52px 52px;gap:4px;margin:14px auto 0;width:fit-content;}
+  .dpad button{width:52px;height:52px;border:none;border-radius:12px;background:var(--pink-2);color:var(--pink-dark);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
   .dpad button:active{background:var(--pink-3);}
   .du{grid-area:u;}.dd{grid-area:d;}.dl{grid-area:l;}.dr{grid-area:r;}
 </style>
 </head>
 <body>
-<h1>🐍 Ular Nokia 🌸</h1>
+<h1>🐍 Snake Coquette 🌸</h1>
 <p class="sub">Makan bunga sebanyak-banyaknya dan jangan sampai nabrak!</p>
 <div id="gameWrap">
   <canvas id="c"></canvas>
@@ -54,6 +53,47 @@ const FOODS = ['🌸','🌷','🎀','💗','⭐','🍓'];
 
 let snake, dir, nextDir, food, score, gameRunning, gameOver, timer;
 
+/* ── AUDIO ── */
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq, type, duration, vol, startFreq) {
+  try {
+    const ac = getAudioCtx();
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(startFreq || freq, ac.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(freq, ac.currentTime + duration * 0.5);
+    gain.gain.setValueAtTime(vol || 0.15, ac.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + duration);
+    osc.start(ac.currentTime);
+    osc.stop(ac.currentTime + duration);
+  } catch(e) {}
+}
+function sfxEat() {
+  // nada manis naik — plink!
+  playTone(880, 'sine', 0.07, 0.14, 660);
+  setTimeout(() => playTone(1100, 'sine', 0.07, 0.1, 880), 70);
+}
+function sfxTurn() {
+  playTone(440, 'sine', 0.05, 0.06);
+}
+function sfxSpeed() {
+  playTone(660, 'square', 0.06, 0.08);
+  setTimeout(() => playTone(780, 'square', 0.06, 0.08), 70);
+  setTimeout(() => playTone(900, 'square', 0.06, 0.08), 140);
+}
+function sfxDead() {
+  playTone(350, 'sawtooth', 0.12, 0.2);
+  setTimeout(() => playTone(260, 'sawtooth', 0.12, 0.2), 120);
+  setTimeout(() => playTone(180, 'sawtooth', 0.2,  0.2), 240);
+}
+
+/* ── INIT ── */
 function rnd(n){ return Math.floor(Math.random()*n); }
 
 function initGame(){
@@ -76,7 +116,10 @@ function placeFood(){
 function setDir(dx,dy){
   if(!gameRunning && !gameOver){ startGame(); }
   if(gameOver){ restartGame(); return; }
-  if(dx !== -dir.x || dy !== -dir.y) nextDir = {x:dx,y:dy};
+  if(dx !== -dir.x || dy !== -dir.y) {
+    nextDir = {x:dx,y:dy};
+    sfxTurn();
+  }
 }
 
 function startGame(){
@@ -89,16 +132,20 @@ function startGame(){
 function tick(){
   dir = {...nextDir};
   const head = {x: snake[0].x+dir.x, y: snake[0].y+dir.y};
-  // wall collision
   if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS){ endGame(); return; }
-  // self collision
   if(snake.some(s=>s.x===head.x&&s.y===head.y)){ endGame(); return; }
   snake.unshift(head);
   if(head.x===food.x && head.y===food.y){
     score++;
     placeFood();
     document.getElementById('score').textContent = '🌸 Skor: ' + score;
-    if(score % 5 === 0) clearInterval(timer), timer = setInterval(tick, Math.max(60, 130 - score*4));
+    if(score % 5 === 0) {
+      clearInterval(timer);
+      timer = setInterval(tick, Math.max(60, 130 - score*4));
+      sfxSpeed();
+    } else {
+      sfxEat();
+    }
   } else {
     snake.pop();
   }
@@ -106,17 +153,13 @@ function tick(){
 }
 
 function draw(){
-  // background grid
   for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
     ctx.fillStyle = (r+c)%2===0 ? '#fff8fb' : '#fff0f5';
     ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
   }
-  // food
   ctx.font = (CELL-2)+'px serif';
   ctx.textAlign='center'; ctx.textBaseline='middle';
   ctx.fillText(food.emoji, food.x*CELL+CELL/2, food.y*CELL+CELL/2);
-
-  // snake
   snake.forEach((s,i)=>{
     const x=s.x*CELL, y=s.y*CELL;
     ctx.fillStyle = i===0 ? '#d63e79' : (i%2===0 ? '#ff6fa5' : '#ff9ebb');
@@ -124,7 +167,6 @@ function draw(){
     ctx.roundRect(x+1, y+1, CELL-2, CELL-2, i===0?6:4);
     ctx.fill();
     if(i===0){
-      // mata
       ctx.fillStyle='#fff';
       ctx.beginPath(); ctx.arc(x+5,y+5,2.5,0,Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.arc(x+11,y+5,2.5,0,Math.PI*2); ctx.fill();
@@ -138,6 +180,7 @@ function draw(){
 function endGame(){
   clearInterval(timer);
   gameRunning = false; gameOver = true;
+  sfxDead();
   document.getElementById('msg').textContent = '💔 Game over! Skor: ' + score + ' — Tap arah untuk main lagi~';
 }
 
